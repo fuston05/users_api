@@ -8,12 +8,12 @@
 const express = require('express');
 const router = express.Router();
 const posts = require('./postDb');
+//custom middleware
 const middleware= require('../common/middleWare');
 const validateId= middleware.validateId;
-const  scottsLogger= middleware. scottsLogger;
 
 //get all posts
-router.get('/', scottsLogger, (req, res) => {
+router.get('/', (req, res) => {
   posts.get()
     .then(postsRes => {
       res.status(200).json(postsRes)
@@ -24,7 +24,7 @@ router.get('/', scottsLogger, (req, res) => {
 })//end router
 
 //get post by ID
-router.get('/:id', scottsLogger, validateId, (req, res) => {
+router.get('/:id', validateId, (req, res) => {
   const postId = parseInt(req.params.id);
   posts.getById(postId)
     .then(postIdRes => {
@@ -36,7 +36,7 @@ router.get('/:id', scottsLogger, validateId, (req, res) => {
 })//end router
 
 //add new post
-router.post('/', scottsLogger, (req, res) => {
+router.post('/', (req, res) => {
   const newPost = req.body;
   posts.insert(newPost)
     .then(newPostRes => {
@@ -48,7 +48,7 @@ router.post('/', scottsLogger, (req, res) => {
 })//end router
 
 //update a post by ID
-router.put('/:id', scottsLogger, validateId, (req, res) => {
+router.put('/:id', validateId, (req, res) => {
   const updatePostId = parseInt(req.params.id);
   const updatePostInfo = req.body;
   posts.update(updatePostId, updatePostInfo)
@@ -61,7 +61,7 @@ router.put('/:id', scottsLogger, validateId, (req, res) => {
 })//end router
 
 //delete a post by ID
-router.delete('/:id', scottsLogger, validateId, (req, res) => {
+router.delete('/:id', validateId, (req, res) => {
   const delPostId= parseInt(req.params.id);
   posts.remove(delPostId)
     .then(delPostRes => {

@@ -5,12 +5,16 @@ const server = express();
 const usersRouter = require('../users/usersRouter');
 const postsRouter = require('../posts/postsRouter');
 
+const middleware= require('../common/middleWare');
+const scottsLogger= middleware.scottsLogger;
+
 //middleware
 server.use(cors());
 server.use(helmet());
 server.use(express.json());
 
 //custom middleware
+server.use(scottsLogger);
 
 //routers
 server.use('/api/users', usersRouter);
