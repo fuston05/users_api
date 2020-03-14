@@ -1,16 +1,16 @@
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
-const morgan = require('morgan');
 const server = express();
 const usersRouter = require('../users/usersRouter');
 const postsRouter = require('../posts/postsRouter');
 
-
+//middleware
 server.use(cors());
 server.use(helmet());
-server.use(morgan());
 server.use(express.json());
+
+//custom middleware
 
 //routers
 server.use('/api/users', usersRouter);
