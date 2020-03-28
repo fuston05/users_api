@@ -1,33 +1,29 @@
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
-const server = express();
-const usersRouter = require('../users/usersRouter');
-const postsRouter = require('../posts/postsRouter');
-
-const middleware= require('../common/middleWare');
-const scottsLogger= middleware.scottsLogger;
+const express= require('express');
+const server= express();
+const cors= require('cors');
+const helmet= require('helmet');
 
 //middleware
 server.use(cors());
 server.use(helmet());
 server.use(express.json());
 
-//custom middleware
-server.use(scottsLogger);
+//define routers
+const usersRouter= require('../data/usersRouter');
+const authRouter= require('../auth/authRouter');
 
-//routers
+//assign routers
 server.use('/api/users', usersRouter);
-server.use('/api/posts', postsRouter);
+server.use('/api/auth', authRouter);
 
-//root case
 server.get('/', (req, res) => {
-  res.send(` <h1>Welcome to my practice API!</h1> `);
+  res.status(200).json('<h1>Welcome to my humble server!</h1>');
 });
 
-//fallback case
-server.use((req, res) => {
-  res.status(404).json({ error: "We were unable to process your request" });
+//fallback
+server.use(function notFound(req, res, next){
+  res.status(500).json({message: "Could not find what you are looking for"});
 });
 
-module.exports = server;
+
+module.exports= server;

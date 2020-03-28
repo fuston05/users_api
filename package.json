@@ -1,23 +1,12 @@
 {
   "name": "api-parctice",
   "version": "1.0.0",
-  "description": "Extra Back-End/API practice for Lambda School",
+  "description": "",
   "main": "index.js",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "helmet": "^3.21.3",
-    "knex": "^0.20.11",
-    "moment": "^2.24.0",
-    "sqlite3": "^4.1.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.2"
-  },
   "scripts": {
-    "server": "nodemon index.js",
-    "start": "node index.js"
+    "test": "DB_ENV=testing jest --watch",
+    "start": "node index.js",
+    "server": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -29,5 +18,19 @@
   "bugs": {
     "url": "https://github.com/fuston05/api-parctice/issues"
   },
-  "homepage": "https://github.com/fuston05/api-parctice#readme"
+  "homepage": "https://github.com/fuston05/api-parctice#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^3.22.0",
+    "knex": "^0.20.13",
+    "pg": "^7.18.2",
+    "sqlite3": "^4.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
 }
