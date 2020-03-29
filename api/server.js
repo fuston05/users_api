@@ -10,11 +10,11 @@ server.use(express.json());
 
 //define routers
 const usersRouter= require('../data/usersRouter');
-const authRouter= require('../auth/authRouter');
+// const authRouter= require('../auth/authRouter');
 
 //assign routers
 server.use('/api/users', usersRouter);
-server.use('/api/auth', authRouter);
+// server.use('/api/auth', authRouter);
 
 server.get('/', (req, res) => {
   res.status(200).json('<h1>Welcome to my humble server!</h1>');
