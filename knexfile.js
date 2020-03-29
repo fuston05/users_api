@@ -21,13 +21,14 @@ module.exports = {
   testing: {
     client: 'sqlite3',
     connection: {
-      filename: './test_database/test_db.db3'
+      filename: './__test__/test_database/test_db.db3'
     },
+    useNullAsDefault: true,
     migrations: {
-      directory: './test_database/migrations'
+      directory: './__test__/test_database/migrations'
     },
-    seed: {
-      directory: './test_database/seeds'
+    seeds: {
+      directory: './__test__/test_database/seeds'
     }
   },
 

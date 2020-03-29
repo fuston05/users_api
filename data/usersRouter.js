@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
   })
 });//end findById
 
-//delete a user
+//delete a user, returns a success message containing the username that was deleted
 router.delete('/:id', (req, res) => {
   const id= parseInt(req.params.id);
   users.remove(id)
@@ -49,7 +49,7 @@ router.delete('/:id', (req, res) => {
   })
 });//end findById
 
-//edit a user
+//edit user, returns updated username in a success message
 router.put('/:id', (req, res) => {
   const id= parseInt(req.params.id);
   const userInfo= req.body;

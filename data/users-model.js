@@ -8,22 +8,25 @@ module.exports= {
   remove
 }
 
+//find all users, returns all info
 function find(){
   return db('users').select(
     '*'
     // 'user_id', 
     // 'username'
     );
-}//end  
+}//end find
 
+// find a user by whatever filter is passed in, returns id and username
 function findBy(filter){
   return db('users')
   .where(filter)
   .select(
     'user_id', 
     'username');
-}//end
+}//end findBy
 
+//find a user by id, returns id and username
 function findById(id){
   return db('users')
   .where({'user_id': id})
@@ -31,7 +34,7 @@ function findById(id){
     'user_id', 
     'username'
     );
-}//end
+}//end findById
 
 //edit user, returns updated username in a success message
 async function edit(id, userInfo){
