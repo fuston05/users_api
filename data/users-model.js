@@ -5,8 +5,21 @@ module.exports= {
   findBy,
   findById,
   edit,
-  remove
+  remove,
+  add
 }
+
+//add/register uer
+function add(newUserInfo){
+  const name= newUserInfo.username;
+  //return username
+  return db('users')
+    .insert(newUserInfo)
+    .then(() => {
+      return name;
+    })
+
+}// end add user/register
 
 //find all users, returns all info
 function find(){
