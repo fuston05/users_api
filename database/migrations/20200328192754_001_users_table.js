@@ -2,35 +2,37 @@
 exports.up = function(knex) {
   return knex.schema.createTable('users', tbl => {
 
-    tbl.increments('user_id');
+    tbl.increments('user_id')
 
     tbl.string('username')
       .unique()
       .index()
-      .notNullable();
+      .notNullable()
 
     tbl.string('first_name')
       .index()
-      .notNullable();
+      .notNullable()
 
     tbl.string('last_name')
       .index()
-      .notNullable();
+      .notNullable()
 
     tbl.string('email')
       .unique()
-      .notNullable();
+      .notNullable()
 
     tbl.string('phone')
-      .unique();
+      .defaultTo('Not provided')
 
-    tbl.string('address');
+    tbl.string('address')
+      .defaultTo('Not provided')
+      .notNullable()
 
     tbl.string('password')
-      .notNullable();
+      .notNullable()
 
     tbl.string('role')
-      .notNullable();
+      .defaultTo('user')
 
   });//end users
 };

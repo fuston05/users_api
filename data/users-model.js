@@ -1,6 +1,6 @@
-const db= require('../config/db_config');
+const db = require('../config/db_config');
 
-module.exports= {
+module.exports = {
   find,
   findBy,
   findById,
@@ -10,65 +10,64 @@ module.exports= {
 }
 
 //add/register uer
-function add(newUserInfo){
-  const name= newUserInfo.username;
+function add(newUserInfo) {
+  const name = newUserInfo.username;
   //return username
   return db('users')
     .insert(newUserInfo)
     .then(() => {
       return name;
     })
-
 }// end add user/register
 
 //find all users, returns all info
-function find(){
+function find() {
   return db('users').select(
     '*'
     // 'user_id', 
     // 'username'
-    );
+  );
 }//end find
 
 // find a user by whatever filter is passed in, returns id and username
-function findBy(filter){
+function findBy(filter) {
   return db('users')
-  .where(filter)
-  .select(
-    'user_id', 
-    'username');
+    .where(filter)
+    .select(
+      'user_id',
+      'username');
 }//end findBy
 
 //find a user by id, returns id and username
-function findById(id){
+function findById(id) {
   return db('users')
-  .where({'user_id': id})
-  .select(
-    'user_id', 
-    'username'
+    .where({ 'user_id': id })
+    .select(
+      'user_id',
+      'username'
     );
 }//end findById
 
 //edit user, returns updated username in a success message
-async function edit(id, userInfo){
-  const {user_id}= await findById(id);
+async function edit(id, userInfo) {
+  const { user_id } = await findById(id);
   return db('users')
-  .where({'user_id': id})
-  .update(userInfo, 'user_id')
-  .then(() => {
-    return userInfo;
-  })
+    .where({ 'user_id': id })
+    .update(userInfo, 'user_id')
+    .then(() => {
+      return userInfo;
+    })
 }//end edit
 
 //delete a user, returns a success message containing the username that was deleted
-async function remove(id){
-  const delUser= await findById(id);
+async function remove(id) {
+  const delUser = await findById(id);
   return db('users')
-  .where({'user_id': id})
-  .del()
-  .then(() => {
-    return delUser[0];
-  })
+    .where({ 'user_id': id })
+    .del()
+    .then(() => {
+      return delUser[0];
+    })
 }//end delete user
 
 
