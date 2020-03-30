@@ -14,10 +14,8 @@ router.post('/register', (req, res) => {
     users.findBy({ username })
       .then(user => {
         if (user && user.email === userInfo.email) {
-          console.log('user found')
           return true;
         } else {
-          console.log('user not found')
           return false;
         }
       })
@@ -55,9 +53,7 @@ router.post('/register', (req, res) => {
       .catch(error => {
         res.status(500).json({ error: "That user already exists" });
       })
-
   }//end if/else validation
-
 });//end register/add
 
 //login, returns welcome w/ username, and token
@@ -71,7 +67,6 @@ router.post('/login', (req, res) => {
       ) {
         //set/send a token
         const token = generateToken(user);
-
         res.status(200).json({ message: `Welcome, ${user.username}`, token });
       } else {
         res.status(401).json({ error: "Invalid credentials" });

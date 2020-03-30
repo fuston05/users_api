@@ -1,6 +1,7 @@
 const users= require('./users-model');
 const express= require('express');
 const router= express.Router();
+const checkRole= require('../auth/checkRole');
 
 //find all users, returns all info
 router.get('/', (req, res) => {
@@ -34,7 +35,7 @@ router.get('/:id', (req, res) => {
 });//end findById
 
 //delete a user, returns a success message containing the username that was deleted
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkRole('admin'), (req, res) => {
   const id= parseInt(req.params.id);
   users.remove(id)
   .then(delUser => {
@@ -50,7 +51,7 @@ router.delete('/:id', (req, res) => {
 });//end findById
 
 //edit user, returns updated username in a success message
-router.put('/:id', (req, res) => {
+router.put('/:id', checkRole('admin'), (req, res) => {
   const id= parseInt(req.params.id);
   const userInfo= req.body;
   users.edit(id, userInfo)
@@ -65,6 +66,5 @@ router.put('/:id', (req, res) => {
     res.status(500).json({error: "Could not process your request"});
   })
 });//end edit
-
 
 module.exports= router
