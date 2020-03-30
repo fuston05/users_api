@@ -31,11 +31,7 @@ function find() {
 
 // find a user by whatever filter is passed in, returns id and username
 function findBy(filter) {
-  return db('users')
-    .where(filter)
-    .select(
-      'user_id',
-      'username');
+  return db('users').where(filter).first();
 }//end findBy
 
 //find a user by id, returns id and username
