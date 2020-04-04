@@ -6,7 +6,7 @@ module.exports = {
   findById,
   edit,
   remove,
-  add
+  add 
 }
 
 //add/register uer
@@ -29,7 +29,7 @@ function find() {
   );
 }//end find
 
-// find a user by whatever filter is passed in, returns id and username
+// find a user by whatever filter is passed in, returns user
 function findBy(filter) {
   return db('users').where(filter).first();
 }//end findBy

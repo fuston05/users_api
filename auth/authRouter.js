@@ -3,31 +3,15 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/token');
+const {registerIfNotExists}= require('../utils/userRegistration');
 
-// /add/register a new user
+//add/register a new user
 router.post('/register', (req, res) => {
   const newUserInfo = req.body;
   const password = req.body.password;
 
-  const alreadyExists = (userInfo) => {
-    const username = userInfo.username;
-    users.findBy({ username })
-      .then(user => {
-        if (user && user.email === userInfo.email) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-      .catch(error => {
-        console.log('error', error)
-      })
-  }//end alreadyExists
-
   //validation
-  if (alreadyExists(newUserInfo)===true ) {
-    res.status(400).json({ message: 'That username already exists' });
-  } else if (!newUserInfo.username) {
+  if (!newUserInfo.username) {
     res.status(400).json({ message: 'Missing required field: username' });
   } else if (!newUserInfo.first_name || !newUserInfo.last_name) {
     res.status(400).json({ message: 'Missing required field(s): first name, last name' });
@@ -44,15 +28,10 @@ router.post('/register', (req, res) => {
     const hash = bcrypt.hashSync(password, parseInt(rounds));
     //update users pass with the hashed pass
     newUserInfo.password = hash;
+    //if all is valid and username or email is not in use
+    //then register the user
+    registerIfNotExists(res, newUserInfo);
 
-    //send new user to DB
-    users.add(newUserInfo)
-      .then(newUser => {
-        res.status(201).json({ error: `Welcome, ${newUser}` });
-      })
-      .catch(error => {
-        res.status(500).json({ error: "That user already exists" });
-      })
   }//end if/else validation
 });//end register/add
 
