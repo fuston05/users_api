@@ -21,7 +21,7 @@ router.post('/register', (req, res) => {
     res.status(400).json({ message: 'Missing required field: password' });
   } else if (!newUserInfo.role) {
     res.status(400).json({ message: 'Missing required field: role' });
-  } else {// all is valid
+  } else {// ...all is valid
 
     const rounds = process.env.ROUNDS || 8;
     //hash password
