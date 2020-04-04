@@ -6,7 +6,7 @@ module.exports = {
   findById,
   edit,
   remove,
-  add 
+  add
 }
 
 //add/register uer
@@ -23,25 +23,37 @@ function add(newUserInfo) {
 //find all users, returns all info
 function find() {
   return db('users').select(
-    '*'
-    // 'user_id', 
-    // 'username'
+    'user_id', 
+    'username',
+    'first_name',
+    'last_name',
+    'email',
+    'phone',
+    'address',
+    'role'
   );
 }//end find
 
 // find a user by whatever filter is passed in, returns user
 function findBy(filter) {
-  return db('users').where(filter).first();
+  return db('users')
+  .where(filter)
+  .first();
 }//end findBy
 
 //find a user by id, returns id and username
 function findById(id) {
   return db('users')
-    .where({ 'user_id': id })
     .select(
-      'user_id',
-      'username'
-    );
+      'user_id', 
+      'username',
+      'first_name',
+      'last_name',
+      'email',
+      'phone',
+      'address',
+      'role')
+    .where({ 'user_id': id })
 }//end findById
 
 //edit user, returns updated username in a success message

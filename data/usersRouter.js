@@ -23,8 +23,8 @@ router.get('/:id', (req, res) => {
   const id= parseInt(req.params.id);
   users.findById(id)
   .then(user => {
-    if(user.length > 0){
-      res.status(200).json(user);
+    if(user.length > 0){ //hit the 404 if no ueser found
+      res.status(200).json(user[0]);
     }else{
       res.status(404).json({error: "Could not find that user"});
     }//end if
