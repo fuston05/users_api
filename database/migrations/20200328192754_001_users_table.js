@@ -32,7 +32,7 @@ exports.up = function(knex) {
       .notNullable()
 
     tbl.string('role')
-      .defaultTo('user')
+      .defaultTo('user');
 
   });//end users
 };

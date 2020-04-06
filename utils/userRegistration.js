@@ -6,6 +6,7 @@ function registerUser(res, user) {
       res.status(201).json({ message: `Welcome, ${newUser}` });
     })
     .catch(error => {
+      console.log('error: ', error)
       res.status(500).json({ error: 'Could not process your request' });
     })
 }//end registerUser
@@ -18,7 +19,6 @@ const registerIfNotExists = (res, user) => {
   users.findBy({ username })
     .then(result => {
       if (result && result.username) {
-        console.log('username taken');
         res.status(400).json({ error: 'Username already in use' });
       } else {
         console.log('username NOT taken');
@@ -26,10 +26,8 @@ const registerIfNotExists = (res, user) => {
         users.findBy({ email })
           .then(emailRes => {
             if (emailRes && emailRes.email) {
-              console.log('email taken');
               res.status(400).json({ error: 'Email already in use' });
             } else {
-              console.log('email NOT taken');
               //submit the new user to DB
               registerUser(res, user);
             }//end if/else

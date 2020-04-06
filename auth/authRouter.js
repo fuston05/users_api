@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/token');
-const {registerIfNotExists}= require('../utils/userRegistration');
+const { registerIfNotExists } = require('../utils/userRegistration');
 
 //add/register a new user
 router.post('/register', (req, res) => {
@@ -19,8 +19,6 @@ router.post('/register', (req, res) => {
     res.status(400).json({ message: 'Missing required field: email' });
   } else if (!newUserInfo.password) {
     res.status(400).json({ message: 'Missing required field: password' });
-  } else if (!newUserInfo.role) {
-    res.status(400).json({ message: 'Missing required field: role' });
   } else {// ...all is valid
 
     const rounds = process.env.ROUNDS || 8;
