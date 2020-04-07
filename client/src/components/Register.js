@@ -15,13 +15,16 @@ function Register() {
     email: '',
     phone: '',
     address: '',
-    password: ''
+    password: '',
+    role: ''
   });
+  const apiUrl= process.env.REACT_APP_API_URL;
 
   const registerSubmit = e => {
     e.preventDefault();
+
     axios
-      .post(`http://localhost:5000/api/auth/register`, formValue)
+      .post(apiUrl, formValue)
       .then(res => {
         console.log('res', res);
       })
@@ -132,16 +135,32 @@ function Register() {
           <span className='error'></span>
         </div>
 
-        <div className='inputCont '>
+        {/* <div className='inputCont '>
           <label htmlFor='cPassword'></label>
           <input
             type='text'
             name='cPassword'
             id='cPassword'
             placeholder='Confirm Password'
+            onChange= {registerChange}
+            value= {formValue.cPassword}
+          />
+          <span className='error'></span>
+        </div> */}
+
+        <div className='inputCont '>
+          <label htmlFor='role'></label>
+          <input
+            type='text'
+            name='role'
+            id='role'
+            placeholder='Role'
+            onChange= {registerChange}
+            value= {formValue.role}
           />
           <span className='error'></span>
         </div>
+
         <button type='submit'>Submit</button>
         <span>Already have an account? <Link to='/'>Log In</Link></span>
       </form>
