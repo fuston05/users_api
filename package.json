@@ -1,0 +1,29 @@
+{
+  "name": "api-parctice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fuston05/api-parctice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fuston05/api-parctice/issues"
+  },
+  "homepage": "https://github.com/fuston05/api-parctice#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "helmet": "^3.22.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
