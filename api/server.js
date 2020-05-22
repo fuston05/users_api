@@ -1,3 +1,8 @@
+/**
+ * defines and exports the server with root route, use json and use router, and fallback endpoint case
+ */
+
+
 //import express
 const express= require('express');
 
