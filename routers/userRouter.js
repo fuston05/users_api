@@ -6,7 +6,7 @@ const router= express.Router();
 //connect the model
 const users= require('../data/userModel');
 
-router.get('/users', (req, res) => {
+router.get('/', (req, res) => {
   users.find()
     .then(userRes => {
       console.log('successful find users: ', userRes);

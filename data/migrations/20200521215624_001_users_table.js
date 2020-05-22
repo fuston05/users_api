@@ -10,7 +10,14 @@ exports.up = function(knex) {
         .index()
 
       tbl.string('email')
+        .notNullable()
         .unique()
+
+      tbl.string('password')
+        .notNullable()
+
+      tbl.string('role')
+        .defaultTo('user')
 
     });//end create users table
 };

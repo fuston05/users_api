@@ -24,7 +24,7 @@ server.get('/', (req, res) => {
 });
 
 //fallback case
-server.use(function notFound(){
+server.use(function notFound(req, res){
   res.status(404).json({error: "Could not find what you're looking for"});
 })
 
