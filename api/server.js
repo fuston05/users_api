@@ -10,7 +10,7 @@ const express= require('express');
 const server= express();
 
 //point to router
-const userRouter= require('../routers/userRouter');
+const userRouter= require('../users/userRouter');
 
 //use json
 server.use(express.json());
@@ -27,7 +27,5 @@ server.get('/', (req, res) => {
 server.use(function notFound(req, res){
   res.status(404).json({error: "Could not find what you're looking for"});
 })
-
-
 
 module.exports= server;
