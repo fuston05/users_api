@@ -6,6 +6,9 @@
 //import express
 const express= require('express');
 
+const helmet= require('helmet');
+const cors= require('cors');
+
 //define server
 const server= express();
 
@@ -14,6 +17,9 @@ const userRouter= require('../users/userRouter');
 
 //use json
 server.use(express.json());
+
+server.use(helmet());
+server.use(cors());
 
 //use router path
 server.use('/api/users', userRouter);

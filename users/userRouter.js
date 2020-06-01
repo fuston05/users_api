@@ -14,11 +14,14 @@ router.get('/', (req, res) => {
   //filter user if query param exists
   users.findBy(filter)
     .then(filterRes => {
-      console.log('successful found filtered user: ', filterRes);
-      res.status(200).json(filterRes);
+      if(filterRes){
+        res.status(200).json(filterRes);
+      }else{
+        console.log('nothing found');
+        res.status(404).json({"message": "No search results"});
+      }
     })
     .catch(error => {
-      console.log('error: ', error);
       res.status(500).json({"error": "Could not process your request."});
     })
 
@@ -27,11 +30,9 @@ router.get('/', (req, res) => {
     //find all users if no query param
   users.find()
       .then(userRes => {
-        console.log('successful found users: ', userRes);
         res.status(200).json(userRes);
       })
       .catch(error => {
-        console.log('error: ', error);
         res.status(500).json({"error": "Could not process your request."});
       })
     }//end if/else
@@ -49,7 +50,6 @@ router.get('/:id', (req, res) => {
       }
     })
     .catch(error => {
-      console.log('error: ', error);
       res.status(500).json({"error": "Could not process your request"});
     })
 });//end get user by id
@@ -59,11 +59,9 @@ router.post('/', (req, res) => {
   const user= req.body;
   users.addUser(user)
     .then(addRes => {
-      console.log('addRes: ', addRes);
       res.status(201).json({"message": "User added successfully"})
     })
     .catch(error => {
-      console.log('error: ', error);
       res.status(500).json({"error": "User already exists"});
     })
 });//end add user
@@ -75,11 +73,9 @@ router.put('/:id', (req, res) => {
 
   users.updateUser(userInfo, id)
     .then(updateRes => {
-      console.log('updateRes: ', updateRes);
       res.status(200).json({"message": "User updated successfully"})
     })
     .catch(error => {
-      console.log('error: ', error);
       res.status(500).json({"error": "Could not update user"});
     })
 });//end updateUser
@@ -93,13 +89,11 @@ router.delete('/:id', (req, res) => {
     if(delRes){
       res.status(200).json({"message": "User successfully deleted"})
     }else{
-      console.log('user does not exist');
       res.status(404).json({"message": "User not found"})
     }
   })
   .catch(error => {
-    console.log('error: ', error);
-    res.status(500).json({"error": "Could not delete that user"});
+    res.status(500).json({"error": "Could not process your request"});
   })
 
 });//end delete user
