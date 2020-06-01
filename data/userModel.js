@@ -26,6 +26,7 @@ function findBy(filter){
   const result=  db('user')  
     .where('name', 'like', `%${filter}%`)
     .orWhere('email', 'like', `%${filter}%`)
+    .orWhere('role', 'like', `%${filter}%`)
     .first()
   return result;
 }//end findBy

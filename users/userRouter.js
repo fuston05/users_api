@@ -17,7 +17,6 @@ router.get('/', (req, res) => {
       if(filterRes){
         res.status(200).json(filterRes);
       }else{
-        console.log('nothing found');
         res.status(404).json({"message": "No search results"});
       }
     })
