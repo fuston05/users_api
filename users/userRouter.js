@@ -52,14 +52,15 @@ router.get('/:id', (req, res) => {
 });//end get user by id
 
 router.post('/', (req, res) => {
-  users.adduser(user)
+  const user= req.body;
+  users.addUser(user)
     .then(addRes => {
       console.log('addRes: ', addRes);
-      res.status(201).json(addRes)
+      res.status(201).json({"message": "User added successfully"})
     })
     .catch(error => {
       console.log('error: ', error);
-      res.status(500).json({"error": "Could not process your request."});
+      res.status(500).json({"error": "User already exists"});
     })
 });//end add user
 
