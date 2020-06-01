@@ -84,5 +84,25 @@ router.put('/:id', (req, res) => {
     })
 });//end updateUser
 
+//delete a user
+router.delete('/:id', (req, res) => {
+  const id= req.params.id;
+
+  users.deleteUser(id)
+  .then(delRes => {
+    if(delRes){
+      res.status(200).json({"message": "User successfully deleted"})
+    }else{
+      console.log('user does not exist');
+      res.status(404).json({"message": "User not found"})
+    }
+  })
+  .catch(error => {
+    console.log('error: ', error);
+    res.status(500).json({"error": "Could not delete that user"});
+  })
+
+});//end delete user
+
 
 module.exports= router;

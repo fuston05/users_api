@@ -5,7 +5,8 @@ module.exports= {
   findBy,
   findById,
   addUser,
-  updateUser
+  updateUser,
+  deleteUser
 }
 
 //get all users
@@ -23,9 +24,9 @@ function findById(id){
 //find user by filter
 function findBy(filter){
   const result=  db('user')  
-  .where('name', 'like', `%${filter}%`)
-  .orWhere('email', 'like', `%${filter}%`)
-  .first()
+    .where('name', 'like', `%${filter}%`)
+    .orWhere('email', 'like', `%${filter}%`)
+    .first()
   return result;
 }//end findBy
 
@@ -38,6 +39,13 @@ function addUser(user){
 //update a user
 function updateUser(userInfo, id){
   return db('user')
-  .where({user_id: id})
-  .update({...userInfo})
+    .where({user_id: id})
+    .update({...userInfo})
 }//end updateUser
+
+// delete a user
+function deleteUser(id){
+  return db('user')
+    .where({user_id: id})
+    .del()
+}//end deleteUser
