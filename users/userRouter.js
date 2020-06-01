@@ -42,15 +42,19 @@ router.get('/:id', (req, res) => {
 
   users.findById(id)
     .then(userRes => {
-      console.log('successful found user: ', userRes);
+      if(userRes){
       res.status(200).json(userRes);
+      }else{
+        res.status(404).json({"error": "Could not find that user"});
+      }
     })
     .catch(error => {
       console.log('error: ', error);
-      res.status(500).json({"error": "Could not process your request."});
+      res.status(500).json({"error": "Could not process your request"});
     })
 });//end get user by id
 
+//add a new user
 router.post('/', (req, res) => {
   const user= req.body;
   users.addUser(user)
