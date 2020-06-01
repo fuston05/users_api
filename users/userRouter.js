@@ -68,6 +68,21 @@ router.post('/', (req, res) => {
     })
 });//end add user
 
+//update user
+router.put('/:id', (req, res) => {
+  const userInfo= req.body;
+  const id= req.params.id;
+
+  users.updateUser(userInfo, id)
+    .then(updateRes => {
+      console.log('updateRes: ', updateRes);
+      res.status(200).json({"message": "User updated successfully"})
+    })
+    .catch(error => {
+      console.log('error: ', error);
+      res.status(500).json({"error": "Could not update user"});
+    })
+});//end updateUser
 
 
 module.exports= router;

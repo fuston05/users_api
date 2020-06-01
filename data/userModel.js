@@ -4,7 +4,8 @@ module.exports= {
   find,
   findBy,
   findById,
-  addUser
+  addUser,
+  updateUser
 }
 
 //get all users
@@ -33,3 +34,10 @@ function addUser(user){
   return db('user')
     .insert(user)
 }//end addUser
+
+//update a user
+function updateUser(userInfo, id){
+  return db('user')
+  .where({user_id: id})
+  .update({...userInfo})
+}//end updateUser
