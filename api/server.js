@@ -14,15 +14,16 @@ const server= express();
 
 //point to router
 const userRouter= require('../users/userRouter');
+const authRouter= require('../auth/router');
 
-//use json
+//use middleware
 server.use(express.json());
-
 server.use(helmet());
 server.use(cors());
 
-//use router path
+//use router paths
 server.use('/api/users', userRouter);
+server.use('/api/auth', authRouter);
 
 //root route
 server.get('/', (req, res) => {
