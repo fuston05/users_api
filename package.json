@@ -1,0 +1,22 @@
+{
+  "name": "api-parctice",
+  "version": "1.0.0",
+  "description": "practice express api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fuston05/api-parctice.git"
+  },
+  "author": "Scott Fuston",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fuston05/api-parctice/issues"
+  },
+  "homepage": "https://github.com/fuston05/api-parctice#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
