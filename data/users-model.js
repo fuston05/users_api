@@ -6,5 +6,5 @@ module.exports = {
 }
 
 function find() {
-  return;
+  return db('users')
 }

@@ -4,6 +4,8 @@ module.exports = {
 
   development: {
     client: 'sqlite3',
+    // sqlite thing
+    useNullAsDefault: true,
     connection: {
       filename: './data/users.db',
       tablename: 'knex_migrations',
