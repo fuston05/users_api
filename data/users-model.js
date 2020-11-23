@@ -1,5 +1,5 @@
 // users-model
-const db = require('./users.db');
+const db = require('./db-config');
 
 module.exports = {
   find,
