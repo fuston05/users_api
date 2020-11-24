@@ -4,11 +4,10 @@ const cors = require('cors');
 const server = express();
 const helmet = require('helmet');
 
+// middleware
+server.use(express.json());
 server.use(cors());
 server.use(helmet());
-server.use(express.json());
-
-
 
 // define routers
 const userRouter = require('../data/userRouter');
@@ -17,7 +16,12 @@ const userRouter = require('../data/userRouter');
 server.use('/api/users', userRouter);
 
 server.get('/', (req, res) => {
-  res.send('Hello world');
+  res.send('**** Welcome, the Server is live! ****');
 });
+
+// fall back case
+server.use('/', (req, res) => {
+  res.status(404).json({Error: 'Did not recognize that url'});
+})
 
 module.exports = server;
