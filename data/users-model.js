@@ -22,32 +22,22 @@ function findById(id) {
 
 // add a new user
 function register(user) {
-  const { userName, password} = user;
+  const { userName, password } = user;
   // returns "userId" on success
   // TODO: return user obj
-  return db
-    .insert({ userName: userName, password: password })
-    .into("users");
+  return db.insert({ userName: userName, password: password }).into("users");
 }
 
 // login
-// requires correct 'userId', userName' and 'passwordHash'
 async function login(info) {
-  const { id, userName, passwordHash } = info;
+  const { id, userName, password} = info;
   const user = await findById(id);
-  // if userId is found
+  // if user is found
   if (user.length) {
-
-    if (user[0].userName === userName && user[0].passwordHash === passwordHash) {
-      return db("users").where({
-        userName: userName,
-        passwordHash: passwordHash,
-      });
-    } else {
-      // if credentials don't match
-      return 'Error: Invalid credentials';
-    }
-
+    return db("users").where({
+      userName: userName,
+      password: password,
+    });
   } else {
     // if user not found
     return null;

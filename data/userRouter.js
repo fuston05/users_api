@@ -1,7 +1,7 @@
 // user router
 const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 const users = require("./users-model");
 
@@ -31,7 +31,7 @@ router.get("/:id", (req, res, next) => {
         res.status(200).json(users);
       } else {
         // if user not found
-        res.status(404).json({Error: 'That user does not exist'})
+        res.status(404).json({ Error: "That user does not exist" });
       }
     })
     .catch(next);
@@ -58,16 +58,20 @@ router.post("/login/:id", (req, res, next) => {
   const info = {
     id: req.params.id,
     userName: req.body.userName,
-    passwordHash: req.body.passwordHash,
+    password: req.body.password,
   };
   users
     .login(info)
-    .then(loginRes => {
+    .then((loginRes) => {
       if (loginRes !== null) {
-        res.status(200).json(loginRes)
-      }else{
-        //  if user not found
-        res.status(404).json({ Error: 'User does not exist' });
+        if (bcrypt.compareSync(password, loginRes.password)) {
+          res.status(200).json(loginRes);
+        } else {
+          //  if user not found
+          res.status(401).json({ Error: "Invalid credentials" });
+        }
+      } else {
+        res.status(404).json({ Error: "User does not exist" });
       }
     })
     .catch(next);
