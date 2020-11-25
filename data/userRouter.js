@@ -26,9 +26,14 @@ router.get("/:id", (req, res, next) => {
   users
     .findById(id)
     .then((users) => {
+      if (users.length) {
         res.status(200).json(users);
+      } else {
+        // if user not found
+        res.status(404).json({Error: 'That user does not exist'})
+      }
     })
-    .catch(next)
+    .catch(next);
 });
 
 // register a new user
@@ -36,37 +41,60 @@ router.post("/register", (req, res, next) => {
   const user = req.body;
   // TODO: return 'userName was successfully added'?? or user obj
   users
-    .addUser(user)
+    .register(user)
     .then((user) => {
       res.status(201).json(user);
     })
     .catch(next);
 });
 
-// update a user
-router.put('/:id', (req, res, next) => {
+// login
+// requires correct 'userId', 'userName' and 'passwordHash'
+router.post("/login/:id", (req, res, next) => {
   const info = {
     id: req.params.id,
     userName: req.body.userName,
-    passwordHash: req.body.passwordHash
-  }
-  // TODO: return 'userName was successfully updated? or return user obj
-  users.updateUser(info)
-    .then(user => {
-      res.status(204).json(user)
+    passwordHash: req.body.passwordHash,
+  };
+  users
+    .login(info)
+    .then(loginRes => {
+      if (loginRes !== null) {
+        res.status(200).json(loginRes)
+      }else{
+        //  if user not found
+        res.status(404).json({ Error: 'User does not exist' });
+      }
     })
-    .catch(next)
+    .catch(next);
+});
+
+// update a user
+router.put("/:id", (req, res, next) => {
+  const info = {
+    id: req.params.id,
+    userName: req.body.userName,
+    passwordHash: req.body.passwordHash,
+  };
+  // TODO: return 'userName was successfully updated? or return user obj
+  users
+    .updateUser(info)
+    .then((user) => {
+      res.status(204).json(user);
+    })
+    .catch(next);
 });
 
 // delete a user
-router.delete('/:id', (req, res, next) => {
+router.delete("/:id", (req, res, next) => {
   const { id } = req.params;
   // returns number of affected rows
-  users.deleteUser(id)
-    .then(delRes => {
-      res.status(204).json(delRes)
+  users
+    .deleteUser(id)
+    .then((delRes) => {
+      res.status(204).json(delRes);
     })
-  .catch(next)
+    .catch(next);
 });
 
 module.exports = router;

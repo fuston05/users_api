@@ -4,7 +4,8 @@ const db = require("./db-config");
 module.exports = {
   find,
   findById,
-  addUser,
+  register,
+  login,
   updateUser,
   deleteUser,
 };
@@ -20,13 +21,37 @@ function findById(id) {
 }
 
 // add a new user
-function addUser(user) {
+function register(user) {
   const { userName, passwordHash } = user;
   // returns "userId" on success
   // TODO: return user obj
   return db
     .insert({ userName: userName, passwordHash: passwordHash })
     .into("users");
+}
+
+// login
+// requires correct 'userId', userName' and 'passwordHash'
+async function login(info) {
+  const { id, userName, passwordHash } = info;
+  const user = await findById(id);
+  // if userId is found
+  if (user.length) {
+
+    if (user[0].userName === userName && user[0].passwordHash === passwordHash) {
+      return db("users").where({
+        userName: userName,
+        passwordHash: passwordHash,
+      });
+    } else {
+      // if credentials don't match
+      return 'Error: Invalid credentials';
+    }
+
+  } else {
+    // if user not found
+    return null;
+  }
 }
 
 // update a user
@@ -41,5 +66,5 @@ function updateUser(info) {
 
 function deleteUser(id) {
   // returns number of rows affected on success
-  return db("users").where({ userId: id }).del()
+  return db("users").where({ userId: id }).del();
 }
