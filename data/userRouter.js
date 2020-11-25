@@ -1,6 +1,7 @@
 // user router
 const express = require("express");
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 
 const users = require("./users-model");
 
@@ -38,7 +39,10 @@ router.get("/:id", (req, res, next) => {
 
 // register a new user
 router.post("/register", (req, res, next) => {
+  const rounds = process.env.HASH_ROUNDS;
   const user = req.body;
+  const hash = bcrypt.hashSync(user.password, rounds);
+  user.password = hash;
   // TODO: return 'userName was successfully added'?? or user obj
   users
     .register(user)

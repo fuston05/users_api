@@ -22,11 +22,11 @@ function findById(id) {
 
 // add a new user
 function register(user) {
-  const { userName, passwordHash } = user;
+  const { userName, password} = user;
   // returns "userId" on success
   // TODO: return user obj
   return db
-    .insert({ userName: userName, passwordHash: passwordHash })
+    .insert({ userName: userName, password: password })
     .into("users");
 }
 
