@@ -53,7 +53,6 @@ router.post("/register", (req, res, next) => {
 });
 
 // login
-// requires correct 'userId', 'userName' and 'passwordHash'
 router.post("/login/:id", (req, res, next) => {
   const info = {
     id: req.params.id,
@@ -64,7 +63,9 @@ router.post("/login/:id", (req, res, next) => {
     .login(info)
     .then((loginRes) => {
       if (loginRes !== null) {
-        if (bcrypt.compareSync(password, loginRes.password)) {
+        console.log("loginRes: ", loginRes);
+        // check password hash
+        if (bcrypt.compareSync(info.password, loginRes.password)) {
           res.status(200).json(loginRes);
         } else {
           //  if user not found

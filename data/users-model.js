@@ -30,14 +30,18 @@ function register(user) {
 
 // login
 async function login(info) {
-  const { id, userName, password} = info;
+  const { id, userName, password } = info;
   const user = await findById(id);
   // if user is found
   if (user.length) {
-    return db("users").where({
-      userName: userName,
-      password: password,
-    });
+    return db("users")
+      .where({
+        userName: userName,
+        password: password,
+      })
+      .then(() => {
+        return {userName, password}
+      });
   } else {
     // if user not found
     return null;
