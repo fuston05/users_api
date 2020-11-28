@@ -1,9 +1,9 @@
 // auth router
 const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
-const auth = require("./auth-model");
+const users = require("../users-model");
 
 // register a new user
 router.post("/register", (req, res, next) => {
@@ -12,7 +12,7 @@ router.post("/register", (req, res, next) => {
   // hash user password
   const hash = bcrypt.hashSync(user.password, rounds);
   user.password = hash;
-  auth
+  users
     .register(user)
     .then((user) => {
       res.status(201).json(user);
@@ -27,7 +27,7 @@ router.post("/login/:id", (req, res, next) => {
     userName: req.body.userName,
     password: req.body.password,
   };
-  auth
+  users
     .login(info)
     .then((loginRes) => {
       if (loginRes !== null) {
