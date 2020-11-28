@@ -17,15 +17,17 @@ function find() {
 
 // get a user by id
 function findById(id) {
-  return db("users").where({ userId: id }).select('userId', 'userName', 'password');
+  return db("users")
+    .where({ userId: id })
+    .select("userId", "userName", "password");
 }
 
 // add a new user
 async function register(user) {
   const { userName, password } = user;
   // check if username already exists
-  if (await db('users').where({ userName: user.userName })) {
-    return 'Error: that user already exists'
+  if (await db("users").where({ userName: user.userName })) {
+    return "Error: that user already exists";
   }
   // returns "userId" on success
   return db.insert({ userName: userName, password: password }).into("users");
@@ -33,11 +35,11 @@ async function register(user) {
 
 // login
 async function login(info) {
-  const { id} = info;
+  const { id } = info;
   const user = await findById(id);
   // if user is found
   if (user.length) {
-    return user[0]
+    return user[0];
   } else {
     // if user not found
     return null;

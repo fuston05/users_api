@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const users = require("./users-model");
 
 // get all users
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
   users
     .find()
     .then((users) => {
@@ -16,9 +16,7 @@ router.get("/", (req, res) => {
         res.status(200).json("[] No users found");
       }
     })
-    .catch((err) => {
-      res.status(500).json({ error: "server error" });
-    });
+    .catch(next);
 });
 
 // get user by id
@@ -41,6 +39,7 @@ router.get("/:id", (req, res, next) => {
 router.post("/register", (req, res, next) => {
   const rounds = process.env.HASH_ROUNDS;
   const user = req.body;
+  // hash user password
   const hash = bcrypt.hashSync(user.password, rounds);
   user.password = hash;
   users
