@@ -62,17 +62,23 @@ router.post("/login/:id", (req, res, next) => {
     .login(info)
     .then((loginRes) => {
       if (loginRes !== null) {
+        // database results info
         const hashedPass = loginRes.password;
+        const userId = loginRes.userId;
+        const userName = loginRes.userName;
+        // user passed info
         const password = info.password;
 
         // check password hash and username
-        if (bcrypt.compareSync(password, hashedPass) && info.userName === loginRes.userName) {
-          res.status(200).json({userId: loginRes.userId, userName: loginRes.userName});
+        if (bcrypt.compareSync(password, hashedPass) && info.userName === userName) {
+          // return the userId, and userName
+          res.status(200).json({userId: userId, userName: userName});
         } else {
-          //  if user not found
+          //  if username and pass do not match
           res.status(401).json({ Error: "Invalid credentials" });
         }
       } else {
+        // if no results were found
         res.status(404).json({ Error: "User does not exist" });
       }
     })
