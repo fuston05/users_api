@@ -4,6 +4,7 @@ const db = require("./db-config");
 module.exports = {
   find,
   findById,
+  getPersonalInfo,
   login,
   register,
   updateUser,
@@ -17,6 +18,13 @@ function find() {
 
 // get a user by id
 function findById(id) {
+  return db("users")
+    .where({ userId: id })
+    .select("userId", "userName");
+}
+
+// get use info (with password) by id
+function getPersonalInfo(id) {
   return db("users")
     .where({ userId: id })
     .select("userId", "userName", "password");
@@ -37,7 +45,7 @@ async function register(user) {
 // login
 async function login(info) {
   const { id } = info;
-  const user = await findById(id);
+  const user = await getPersonalInfo(id);
   // if user is found
   if (user.length) {
     return user[0];
