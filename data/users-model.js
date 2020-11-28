@@ -23,7 +23,7 @@ function findById(id) {
     .select("userId", "userName");
 }
 
-// get use info (with password) by id
+// get user info (with password) by id, for internal use in the 'login' function below
 function getPersonalInfo(id) {
   return db("users")
     .where({ userId: id })
