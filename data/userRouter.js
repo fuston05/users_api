@@ -37,7 +37,7 @@ router.get("/:id", (req, res, next) => {
 
 // register a new user
 router.post("/register", (req, res, next) => {
-  const rounds = process.env.HASH_ROUNDS;
+  const rounds = process.env.HASHING_ROUNDS;
   const user = req.body;
   // hash user password
   const hash = bcrypt.hashSync(user.password, rounds);
@@ -69,9 +69,12 @@ router.post("/login/:id", (req, res, next) => {
         const password = info.password;
 
         // check password hash and username
-        if (bcrypt.compareSync(password, hashedPass) && info.userName === userName) {
+        if (
+          bcrypt.compareSync(password, hashedPass) &&
+          info.userName === userName
+        ) {
           // return the userId, and userName
-          res.status(200).json({userId: userId, userName: userName});
+          res.status(200).json({ userId: userId, userName: userName });
         } else {
           //  if username and pass do not match
           res.status(401).json({ Error: "Invalid credentials" });
