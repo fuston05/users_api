@@ -43,7 +43,6 @@ router.post("/register", (req, res, next) => {
   const user = req.body;
   const hash = bcrypt.hashSync(user.password, rounds);
   user.password = hash;
-  // TODO: return 'userName was successfully added'?? or user obj
   users
     .register(user)
     .then((user) => {
@@ -63,9 +62,11 @@ router.post("/login/:id", (req, res, next) => {
     .login(info)
     .then((loginRes) => {
       if (loginRes !== null) {
-        console.log("loginRes: ", loginRes);
-        // check password hash
-        if (bcrypt.compareSync(info.password, loginRes.password)) {
+        const hashedPass = loginRes.password;
+        const password = info.password;
+
+        // check password hash and username
+        if (bcrypt.compareSync(password, hashedPass) && info.userName === loginRes.userName) {
           res.status(200).json(loginRes);
         } else {
           //  if user not found
