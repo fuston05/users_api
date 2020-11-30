@@ -23,9 +23,9 @@ router.get("/:id", (req, res, next) => {
   const { id } = req.params;
   users
     .findById(id)
-    .then((users) => {
-      if (users.length) {
-        res.status(200).json(users);
+    .then((user) => {
+      if (user) {
+        res.status(200).json(user);
       } else {
         // if user not found
         res.status(404).json({ Error: "That user does not exist" });
