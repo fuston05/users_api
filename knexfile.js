@@ -15,6 +15,12 @@ module.exports = {
     seeds: {
       directory: "./data/seeds",
     },
+    pool: {
+      afterCreate: (conn, done) => {
+        // runs after connection is made to sqlite engine
+        conn.run("PRAGMA foreign_key= ON", done); //turns on foreign key enforcement
+      },
+    },
   },
 
   staging: {
