@@ -1,4 +1,5 @@
 // Update with your config settings.
+const port = process.env.PORT;
 
 module.exports = {
   development: {
@@ -23,32 +24,19 @@ module.exports = {
     },
   },
 
-  staging: {
-    client: "postgresql",
-    connection: {
-      database: "my_db",
-      user: "username",
-      password: "password",
-    },
-    pool: {
-      min: 2,
-      max: 10,
-    },
-  },
-
   production: {
-    client: "postgresql",
-    connection: {
-      database: "my_db",
-      user: "username",
-      password: "password",
-    },
+    client: "pg",
+    connection: process.env.DATABASE_URL,
+    useNullAsDefault: true,
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
-      tableName: "knex_migrations",
+      directory: "./data/migrations",
+    },
+    seeds: {
+      directory: "./data/seeds",
     },
   },
 };
