@@ -66,10 +66,10 @@ function updateUser(info) {
   // returns a '1' on success
   return db("users")
     .update({ userName: userName, password: password })
-    .where({ userId: id });
+    .where({ id: id });
 }
 
 function deleteUser(id) {
   // returns number of rows affected on success
-  return db("users").where({ userId: id }).del();
+  return db("users").where({ id: id }).del();
 }
