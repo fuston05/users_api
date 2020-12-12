@@ -31,7 +31,10 @@ function findByUserName(userName) {
 }
 // get a user by email
 function findByEmail(email) {
-  return db("users").where({ email: email }).first().select("id", "userName");
+  return db("users")
+    .where({ email: email })
+    .first()
+    .select("id", "userName", "email");
 }
 
 // get user info (with password) by id, for internal use in the 'login' function below
@@ -77,15 +80,39 @@ async function login(info) {
 
 // update a user
 async function updateUser(info) {
-  const { id, userName, password } = info;
-  // returns a '1' on success
-  const user = await findByUserName(userName);
-  if (user) {
-    return null;
+  const { id, userName, password, email, role_Id } = info;
+  const name = await findByUserName(userName);
+  const userEmail = await findByEmail(email);
+
+  console.log("name: ", name);
+  console.log("userEmail: ", userEmail);
+  console.log("id: ", typeof id);
+
+  // check if NEW userName already exists
+  if (name) {
+    // and it's not the userName of the current user
+    if (name.id !== parseInt(id)) {
+      return { Error: "User name already exists" };
+    }
   }
+
+  // check if NEW email already exists
+  if (userEmail) {
+    // but it's not the email for the current user
+    if (userEmail.id !== parseInt(id)) {
+      return { Error: "Email already in use" };
+    }
+  }
+// returns user's "id" on success
   return db("users")
-    .update({ userName: userName, password: password })
-    .where({ id: id });
+    .update({
+      userName: userName,
+      password: password,
+      email: email,
+      role_Id: role_Id,
+    })
+    .where({ id: id })
+    .returning("id");
 }
 
 function deleteUser(id) {

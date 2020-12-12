@@ -40,16 +40,14 @@ router.put("/", (req, res, next) => {
     id: req.body.id,
     userName: req.body.userName,
     password: req.body.password,
+    email: req.body.email,
+    role_Id: req.body.role_Id
   };
-  // TODO: return 'userName was successfully updated? or return user obj
+
   users
     .updateUser(info)
     .then((user) => {
-      if (user !== null) {
-        res.status(200).json(user);
-      } else {
-        res.status(204).json({ Error: "That user name already exists." });
-      }
+      res.status(200).json(user);
     })
     .catch(next);
 });

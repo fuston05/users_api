@@ -18,7 +18,7 @@
 ## Endpoints
 
 - **(POST) users/auth/register**
-> Adds a new user to the database. Takes the following in the request body. **Returns** user's id on success.
+  > Adds a new user to the database. Takes the following in the request body. **Returns** user's id on success.
 
 {
 "userName": "name",
@@ -28,16 +28,20 @@
 }
 
 - **(POST) users/auth/login/**
-> Logs in a user. Requires {userName, password} in the request body. Checks first if that user exists before logging in. **Returns** error message if that user doesn't exist in the DB. **Returns** id and userName on success.
+
+  > Logs in a user. Requires {userName, password} in the request body. Checks first if that user exists before logging in. **Returns** error message if that user doesn't exist in the DB. **Returns** id and userName on success.
 
 - **(GET) /users**
+
   > Gets all users form DB. **Returns** an array of user objects on success.
 
 - **(GET) /users/id**
+
   > Gets a user by their id. Requires an 'id' parameter. **Returns** {id, userName} on success.
 
-- **(PUT) /users/id**
-  > Updates an existing user in the DB. Requires an 'id' parameter. Checks if new info already exists if it has a unique constraint before submitting the query. **Returns** an error message if the NEW userName or email is already in use. **Returns** user's id on success.
+- **(PUT) /users**
+
+  > Updates an existing user in the DB. Requires {id, userName, password, email, role_Id} in the request body. Checks if new info already exists if it has a unique constraint before submitting the query. **Returns** an error message if the NEW userName or email is already in use. **Returns** user's 'id' on success.
 
 - **(DELETE) /users/id**
   > Deletes a user form the DB. Requires an 'id' parameter.
@@ -55,4 +59,5 @@
 > 'roles' is a table of role types. The 'role_Id' field on the user is a foreign key to the roles table. Currently the roles are "user" and "Admin". This can be used for restricting access and privileges for users.
 
 ### Users
+
 ---
