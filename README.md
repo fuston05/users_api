@@ -55,9 +55,9 @@
 
 - **(PUT) /users**
 
-  > Updates an existing user in the DB.
+  > Updates an existing user in the DB. Does not update password. That will be handled elsewhere.
 
-  - **Requires** {id, userName, password, email, role_Id} in the request body. Checks if new info already exists if it has a unique constraint before submitting the query.
+  - **Requires** {id, userName, email, role_Id} in the request body. Checks if new info already exists if it has a unique constraint before submitting the query.
   - **Returns** an error message if the NEW userName or email is already in use.
   - **Returns** user's 'id' on success.
 

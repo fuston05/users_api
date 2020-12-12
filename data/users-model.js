@@ -86,7 +86,7 @@ async function login(info) {
 
 // update a user
 async function updateUser(info) {
-  const { id, userName, password, email, role_Id } = info;
+  const { id, userName, email, role_Id } = info;
   const name = await findByUserName(userName);
   const userEmail = await findByEmail(email);
 
@@ -109,7 +109,6 @@ async function updateUser(info) {
   return db("users")
     .update({
       userName: userName,
-      password: password,
       email: email,
       role_Id: role_Id,
     })

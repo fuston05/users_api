@@ -39,7 +39,6 @@ router.put("/", (req, res, next) => {
   const info = {
     id: req.body.id,
     userName: req.body.userName,
-    password: req.body.password,
     email: req.body.email,
     role_Id: req.body.role_Id
   };
