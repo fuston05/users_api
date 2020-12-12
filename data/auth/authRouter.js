@@ -34,7 +34,7 @@ router.post("/login/:id", (req, res, next) => {
       if (loginRes !== null) {
         // database results info
         const hashedPass = loginRes.password;
-        const userId = loginRes.userId;
+        const userId = loginRes.id;
         const userName = loginRes.userName;
 
         // user passed info
@@ -46,7 +46,7 @@ router.post("/login/:id", (req, res, next) => {
           info.userName === userName
         ) {
           // return the userId, and userName
-          res.status(200).json({ userId: userId, userName: userName });
+          res.status(200).json({ id: userId, userName: userName });
         } else {
           //  if username and pass do not match
           res.status(401).json({ Error: "Invalid credentials" });
