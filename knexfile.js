@@ -1,32 +1,11 @@
-// Update with your config settings.
-const port = process.env.PORT;
-
 module.exports = {
   development: {
-    client: "sqlite3",
-    // sqlite thing
-    useNullAsDefault: true,
+    client: "postgres",
     connection: {
-      filename: "./data/users.db",
-      tablename: "knex_migrations",
+      database: "users",
+      user: "Scott-MacBook",
+      password: "",
     },
-    migrations: {
-      directory: "./data/migrations",
-    },
-    seeds: {
-      directory: "./data/seeds",
-    },
-    pool: {
-      afterCreate: (conn, done) => {
-        // runs after connection is made to sqlite engine
-        conn.run("PRAGMA foreign_key= ON", done); //turns on foreign key enforcement
-      },
-    },
-  },
-
-  production: {
-    client: "pg",
-    connection: process.env.DATABASE_URL,
     useNullAsDefault: true,
     pool: {
       min: 2,
