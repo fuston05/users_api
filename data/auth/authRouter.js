@@ -22,9 +22,8 @@ router.post("/register", (req, res, next) => {
 });
 
 // login
-router.post("/login/:id", (req, res, next) => {
+router.post("/login", (req, res, next) => {
   const info = {
-    id: req.params.id,
     userName: req.body.userName,
     password: req.body.password,
   };

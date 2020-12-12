@@ -4,6 +4,8 @@ const db = require("./db-config");
 module.exports = {
   find,
   findById,
+  findByUserName,
+  findByEmail,
   getPersonalInfo,
   login,
   register,
@@ -20,10 +22,23 @@ function find() {
 function findById(id) {
   return db("users").where({ id }).first().select("id", "userName");
 }
+// get a user by userName
+function findByUserName(userName) {
+  return db("users")
+    .where({ userName: userName })
+    .first()
+    .select("id", "userName");
+}
+// get a user by email
+function findByEmail(email) {
+  return db("users").where({ email: email }).first().select("id", "userName");
+}
 
 // get user info (with password) by id, for internal use in the 'login' function below
-function getPersonalInfo(id) {
-  return db("users").where({ id: id }).select("id", "userName", "password");
+function getPersonalInfo(name) {
+  return db("users")
+    .where({ userName: name })
+    .select("id", "userName", "password");
 }
 
 // add a new user
@@ -49,8 +64,8 @@ async function register(user) {
 
 // login
 async function login(info) {
-  const { id } = info;
-  const user = await getPersonalInfo(id);
+  const { userName } = info;
+  const user = await getPersonalInfo(userName);
   // if user is found
   if (user.length) {
     return user[0];
@@ -61,9 +76,13 @@ async function login(info) {
 }
 
 // update a user
-function updateUser(info) {
+async function updateUser(info) {
   const { id, userName, password } = info;
   // returns a '1' on success
+  const user = await findByUserName(userName);
+  if (user) {
+    return null;
+  }
   return db("users")
     .update({ userName: userName, password: password })
     .where({ id: id });

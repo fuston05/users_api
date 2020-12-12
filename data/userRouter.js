@@ -35,17 +35,21 @@ router.get("/:id", (req, res, next) => {
 });
 
 // update a user
-router.put("/:id", (req, res, next) => {
+router.put("/", (req, res, next) => {
   const info = {
-    id: req.params.id,
+    id: req.body.id,
     userName: req.body.userName,
-    passwordHash: req.body.passwordHash,
+    password: req.body.password,
   };
   // TODO: return 'userName was successfully updated? or return user obj
   users
     .updateUser(info)
     .then((user) => {
-      res.status(204).json(user);
+      if (user !== null) {
+        res.status(200).json(user);
+      } else {
+        res.status(204).json({ Error: "That user name already exists." });
+      }
     })
     .catch(next);
 });
