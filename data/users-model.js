@@ -48,12 +48,18 @@ function getPersonalInfo(name) {
 async function register(user) {
   const { userName, password, email, role_Id } = user;
   // check if username already exists
-  const userExists = await db("users").where({ userName: userName });
-  // return 'id' on success, error message if user already exists
-  if (userExists.length) {
+  const userExists = await findByUserName(userName);
+  const emailExists = await findByEmail(email);
+  // check userName not already taken
+  if (userExists) {
     return { Error: "User already exists" };
   }
+  // check email is not already taken
+  if (emailExists) {
+    return { Error: "Email is already in use" };
+  }
 
+  // return 'id' on success,
   return db
     .insert({
       userName: userName,
@@ -120,7 +126,6 @@ async function deleteUser(id) {
     console.log("database hit");
     // returns number of rows affected on success
     return db("users").where({ id: id }).del();
-    
   } else {
     console.log("database NOT hit");
     return { Error: "That user does not exist." };
