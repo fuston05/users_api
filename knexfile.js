@@ -1,5 +1,5 @@
 module.exports = {
-  development: {
+  production: {
     client: "postgres",
     connection: process.env.DATABASE_URL,
     useNullAsDefault: true,
