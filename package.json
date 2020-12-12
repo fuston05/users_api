@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "knex migrate:latest",
+    "migrate:down": "knex migrate:down",
+    "migrate:rollback": "knex migrate:rollback",
+    "seed": "knex seed:run"
   },
   "repository": {
     "type": "git",
