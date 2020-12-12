@@ -17,11 +17,8 @@ function find() {
 }
 
 // get a user by id
-function findById(userId) {
-  return db("users")
-    .where({ userId })
-    .first()
-    .select("userId", "userName");
+function findById(id) {
+  return db("users").where({ id }).first().select("id", "userName");
 }
 
 // get user info (with password) by id, for internal use in the 'login' function below
@@ -33,14 +30,23 @@ function getPersonalInfo(id) {
 
 // add a new user
 async function register(user) {
-  const { userName, password } = user;
+  const { userName, password, email, role_Id } = user;
   // check if username already exists
-  const userExists = await db("users").where({ userName: user.userName });
+  const userExists = await db("users").where({ userName: userName });
+  // return 'id' on success, error message if user already exists
   if (userExists.length) {
-    return "Error: User already exists";
+    return { Error: "User already exists" };
   }
-  // returns "userId" on success
-  return db.insert({ userName: userName, password: password }).into("users");
+
+  return db
+    .insert({
+      userName: userName,
+      password: password,
+      email: email,
+      role_Id: role_Id,
+    })
+    .into("users")
+    .returning("id");
 }
 
 // login

@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const users = require("../users-model");
 
 // register a new user
+// return 'id' on success, error message if user already exists
 router.post("/register", (req, res, next) => {
   const rounds = parseInt(process.env.HASHING_ROUNDS);
   const user = req.body;
@@ -35,7 +36,7 @@ router.post("/login/:id", (req, res, next) => {
         const hashedPass = loginRes.password;
         const userId = loginRes.userId;
         const userName = loginRes.userName;
-        
+
         // user passed info
         const password = info.password;
 

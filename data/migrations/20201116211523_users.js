@@ -10,7 +10,7 @@ exports.up = function (knex) {
       tbl.increments();
       tbl.string("userName", 128).notNullable().index().unique();
       tbl.string("password").notNullable();
-      tbl.string("email"), 128;
+      tbl.string("email", 128);
       // sets a foreign key to the 'role' table
       tbl
         .integer("role_Id")
