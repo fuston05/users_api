@@ -59,7 +59,7 @@ router.delete("/:id", (req, res, next) => {
   users
     .deleteUser(id)
     .then((delRes) => {
-      res.status(204).json(delRes);
+      res.status(200).json(delRes);
     })
     .catch(next);
 });

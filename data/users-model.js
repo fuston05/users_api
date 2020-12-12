@@ -84,10 +84,6 @@ async function updateUser(info) {
   const name = await findByUserName(userName);
   const userEmail = await findByEmail(email);
 
-  console.log("name: ", name);
-  console.log("userEmail: ", userEmail);
-  console.log("id: ", typeof id);
-
   // check if NEW userName already exists
   if (name) {
     // and it's not the userName of the current user
@@ -103,7 +99,7 @@ async function updateUser(info) {
       return { Error: "Email already in use" };
     }
   }
-// returns user's "id" on success
+  // returns user's "id" on success
   return db("users")
     .update({
       userName: userName,
@@ -115,7 +111,18 @@ async function updateUser(info) {
     .returning("id");
 }
 
-function deleteUser(id) {
-  // returns number of rows affected on success
-  return db("users").where({ id: id }).del();
+async function deleteUser(id) {
+  const userCheck = await findById(id);
+
+  console.log("userCheck: ", userCheck);
+
+  if (userCheck) {
+    console.log("database hit");
+    // returns number of rows affected on success
+    return db("users").where({ id: id }).del();
+    
+  } else {
+    console.log("database NOT hit");
+    return { Error: "That user does not exist." };
+  }
 }

@@ -16,7 +16,7 @@ router.post("/register", (req, res, next) => {
   users
     .register(user)
     .then((user) => {
-      res.status(201).json(user);
+      res.status(200).json(user);
     })
     .catch(next);
 });

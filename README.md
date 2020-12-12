@@ -18,33 +18,52 @@
 ## Endpoints
 
 - **(POST) users/auth/register**
-  > Adds a new user to the database. Takes the following in the request body. **Returns** user's id on success.
 
-{
-"userName": "name",
-"password": "1234",
-"email": "name@email.com",
-"role_Id": 1
-}
+  > Adds a new user to the database.
+
+  - **Requires** the following in the request body:
+
+    > {
+    > "userName": "name",
+    > "password": "1234",
+    > "email": "name@email.com",
+    > "role_Id": 1
+    > }
+
+  - **Returns** user's id on success.
+  - **Returns** an error message if userName or email is already in use.
 
 - **(POST) users/auth/login/**
 
-  > Logs in a user. Requires {userName, password} in the request body. Checks first if that user exists before logging in. **Returns** error message if that user doesn't exist in the DB. **Returns** id and userName on success.
+  > Logs in a user.
+
+  - **Requires** {userName, password} in the request body. Checks first if that user exists before logging in.
+  - **Returns** error message if that user doesn't exist in the DB. - - **Returns** id and userName on success.
 
 - **(GET) /users**
 
-  > Gets all users form DB. **Returns** an array of user objects on success.
+  > Gets all users form DB.
+
+  - **Returns** an array of user objects on success.
 
 - **(GET) /users/id**
 
-  > Gets a user by their id. Requires an 'id' parameter. **Returns** {id, userName} on success.
+  > Gets a user by their id.
+
+  - **Requires** an 'id' parameter.
+  - **Returns** {id, userName} on success or an error message if user doesn't exist in the DB.
 
 - **(PUT) /users**
 
-  > Updates an existing user in the DB. Requires {id, userName, password, email, role_Id} in the request body. Checks if new info already exists if it has a unique constraint before submitting the query. **Returns** an error message if the NEW userName or email is already in use. **Returns** user's 'id' on success.
+  > Updates an existing user in the DB.
+
+  - **Requires** {id, userName, password, email, role_Id} in the request body. Checks if new info already exists if it has a unique constraint before submitting the query.
+  - **Returns** an error message if the NEW userName or email is already in use.
+  - **Returns** user's 'id' on success.
 
 - **(DELETE) /users/id**
-  > Deletes a user form the DB. Requires an 'id' parameter.
+  > Deletes a user form the DB.
+  - **Requires** an 'id' parameter.
 
 ###
 
