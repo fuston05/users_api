@@ -3,8 +3,8 @@
 - server is deployed on heroku
   api base url is: https://scotts-users-api.herokuapp.com
 
-- this is just extra practice for RESTful API's using nodeJs, ExpressJs, KnexJs, PostgreSQL Database
-- uses knex cleaner library to delete seeds before re-seeding:
+- This is just extra practice for RESTful API's using nodeJs, ExpressJs, KnexJs, PostgreSQL Database
+- Since we are using foreign keys I used knex cleaner library to delete seeds before re-seeding:
   [knex cleaner](https://www.npmjs.com/package/knex-cleaner)
 
 ---
