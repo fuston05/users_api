@@ -15,7 +15,7 @@ exports.up = function (knex) {
         .unsigned()
         .index()
         .references("id")
-        .inTable("role").onDelete('CASCADE');
+        .inTable("role");
     });
 };
 
