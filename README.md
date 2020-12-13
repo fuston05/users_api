@@ -28,7 +28,7 @@
     > {
     > "userName": "name",
     > "password": "1234",
-    > "email": "name@email.com",
+    > "email": "email.com",
     > "role_Id": 1
     > }
 
