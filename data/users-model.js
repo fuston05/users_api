@@ -6,7 +6,6 @@ module.exports = {
   findById,
   findByUserName,
   findByEmail,
-  getPersonalInfo,
   login,
   register,
   updateUser,
@@ -38,6 +37,7 @@ function findByEmail(email) {
 }
 
 // get user info (with password) by id, for internal use in the 'login' function below
+// not exported
 function getPersonalInfo(name) {
   return db("users")
     .where({ userName: name })
@@ -47,10 +47,10 @@ function getPersonalInfo(name) {
 // add a new user
 async function register(user) {
   const { userName, password, email, role_Id } = user;
-  // check if username already exists
+  // check if username or email already exists
   const userExists = await findByUserName(userName);
   const emailExists = await findByEmail(email);
-  // check userName not already taken
+
   if (userExists) {
     return { Error: "User already exists" };
   }
@@ -117,6 +117,7 @@ async function updateUser(info) {
 }
 
 async function deleteUser(id) {
+  // check if user exists first
   const userCheck = await findById(id);
 
   if (userCheck) {
