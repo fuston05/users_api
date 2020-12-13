@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const users = require("../users-model");
 
@@ -35,6 +36,7 @@ router.post("/login", (req, res, next) => {
         const hashedPass = loginRes.password;
         const userId = loginRes.id;
         const userName = loginRes.userName;
+        const userRole = loginRes.role_Id;
 
         // user passed info
         const password = info.password;
@@ -44,8 +46,22 @@ router.post("/login", (req, res, next) => {
           bcrypt.compareSync(password, hashedPass) &&
           info.userName === userName
         ) {
-          // return the userId, and userName
-          res.status(200).json({ id: userId, userName: userName });
+          // json web token
+          const payload = {
+            sub: userId,
+            role: userRole,
+          };
+          const sec = process.env.JWT_SECRET;
+          const options = {
+            expiresIn: "8h",
+          };
+          const token = jwt.sign(payload, sec, options);
+
+          // return the welcome <userName> message and token
+          res.status(200).json({
+            message: `Welcome ${userName}`,
+            token: token,
+          });
         } else {
           //  if username and pass do not match
           res.status(401).json({ Error: "Invalid credentials" });
