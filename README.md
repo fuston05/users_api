@@ -3,6 +3,8 @@
 - This server is deployed on heroku
   api base url is: https://scotts-users-api.herokuapp.com
 
+- json web token for auth. [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
+
 - This is just extra practice for RESTful API's using nodeJs, ExpressJs, KnexJs, PostgreSQL Database
 - Since we are using foreign keys I used knex cleaner library to delete seeds before re-seeding:
   [knex cleaner](https://www.npmjs.com/package/knex-cleaner)
@@ -19,7 +21,7 @@
 
 - **(POST) users/auth/register**
 
-  > Adds a new user to the database.
+  > Adds a new user to the database. Stores a hashed version of the password in DB using bcryptjs library. [bcryptJs](https://www.npmjs.com/package/bcrypt)
 
   - **Requires** the following in the request body:
 
@@ -35,10 +37,10 @@
 
 - **(POST) users/auth/login/**
 
-  > Logs in a user.
+  > Logs in a user. 
 
   - **Requires** {userName, password} in the request body. Checks first if that user exists before logging in.
-  - **Returns** error message if that user doesn't exist in the DB. - - **Returns** id and userName on success.
+  - **Returns** error message if that user doesn't exist in the DB. - - **Returns** a welcome <userName> message, and a json web token on success with an 8 hour expiration by default.
 
 - **(GET) /users**
 
