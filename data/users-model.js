@@ -119,14 +119,10 @@ async function updateUser(info) {
 async function deleteUser(id) {
   const userCheck = await findById(id);
 
-  console.log("userCheck: ", userCheck);
-
   if (userCheck) {
-    console.log("database hit");
     // returns number of rows affected on success
     return db("users").where({ id: id }).del();
   } else {
-    console.log("database NOT hit");
     return { Error: "That user does not exist." };
   }
 }
