@@ -1,6 +1,6 @@
 # Node API Practice
 
-- server is deployed on heroku
+- This server is deployed on heroku
   api base url is: https://scotts-users-api.herokuapp.com
 
 - This is just extra practice for RESTful API's using nodeJs, ExpressJs, KnexJs, PostgreSQL Database
@@ -45,13 +45,15 @@
   > Gets all users form DB.
 
   - **Returns** an array of user objects on success.
+  - **Returns** an error message if there are no users in the db.
 
 - **(GET) /users/id**
 
   > Gets a user by their id.
 
   - **Requires** an 'id' parameter.
-  - **Returns** {id, userName} on success or an error message if user doesn't exist in the DB.
+  - **Returns** {id, userName} on success 
+  - **Returns** an error message if user doesn't exist in the DB.
 
 - **(PUT) /users**
 
@@ -62,11 +64,10 @@
   - **Returns** user's 'id' on success.
 
 - **(DELETE) /users/id**
-  > Deletes a user form the DB.
+  > Deletes a user form the DB by id. 
   - **Requires** an 'id' parameter.
-
-###
-
+  - **Returns** number of affected rows on success.
+  - **Returns** an error message if user doesn't exist.
 ---
 
 ## Database (Postgres)
@@ -78,5 +79,5 @@
 > 'roles' is a table of role types. The 'role_Id' field on the user is a foreign key to the roles table. Currently the roles are "user" and "Admin". This can be used for restricting access and privileges for users.
 
 ### Users
-
+> 'users' is a table of users. Currently containing a userName, password, email, and a role_Id.
 ---
