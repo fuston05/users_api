@@ -28,7 +28,7 @@
     > {
     > "userName": "name",
     > "password": "1234",
-    > "email": "email.com",
+    > "email": "email",
     > "role_Id": 1
     > }
 
@@ -37,10 +37,11 @@
 
 - **(POST) users/auth/login/**
 
-  > Logs in a user. 
+  > Logs in a user.
 
   - **Requires** {userName, password} in the request body. Checks first if that user exists before logging in.
-  - **Returns** error message if that user doesn't exist in the DB. - - **Returns** a welcome <userName> message, and a json web token on success with an 8 hour expiration by default.
+  - **Returns** error message if that user doesn't exist in the DB. 
+  - **Returns** a welcome <userName> message, and a json web token on success with an 8 hour expiration by default.
 
 - **(GET) /users**
 
@@ -54,7 +55,7 @@
   > Gets a user by their id.
 
   - **Requires** an 'id' parameter.
-  - **Returns** {id, userName} on success 
+  - **Returns** {id, userName} on success
   - **Returns** an error message if user doesn't exist in the DB.
 
 - **(PUT) /users**
@@ -66,10 +67,11 @@
   - **Returns** user's 'id' on success.
 
 - **(DELETE) /users/id**
-  > Deletes a user form the DB by id. 
+  > Deletes a user form the DB by id.
   - **Requires** an 'id' parameter.
   - **Returns** number of affected rows on success.
   - **Returns** an error message if user doesn't exist.
+
 ---
 
 ## Database (Postgres)
@@ -81,5 +83,7 @@
 > 'roles' is a table of role types. The 'role_Id' field on the user is a foreign key to the roles table. Currently the roles are "user" and "Admin". This can be used for restricting access and privileges for users.
 
 ### Users
+
 > 'users' is a table of users. Currently containing a userName, password, email, and a role_Id.
+
 ---
