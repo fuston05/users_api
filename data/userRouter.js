@@ -1,11 +1,12 @@
 // user router
 const express = require("express");
 const router = express.Router();
+const {restrict} = require('../data/middleware/restrict');
 
 const users = require("./users-model");
 
 // get all users
-router.get("/", (req, res, next) => {
+router.get("/", restrict, (req, res, next) => {
   users
     .find()
     .then((users) => {
