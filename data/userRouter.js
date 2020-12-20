@@ -1,11 +1,14 @@
 // user router
 const express = require("express");
 const router = express.Router();
+
+// middleware
 const {restrict} = require('../data/middleware/restrict');
 
 const users = require("./users-model");
 
-// get all users
+// get all users, through the 'restrict' middleware, 
+// if their role is at LEAST 2(Admin)
 router.get("/", restrict(2), (req, res, next) => {
   users
     .find()
@@ -16,6 +19,7 @@ router.get("/", restrict(2), (req, res, next) => {
         res.status(200).json("[] No users found");
       }
     })
+    // just passing errors to 'next' for now.
     .catch(next);
 });
 
@@ -32,6 +36,7 @@ router.get("/:id", (req, res, next) => {
         res.status(404).json({ Error: "That user does not exist" });
       }
     })
+    // just passing errors to 'next' for now.
     .catch(next);
 });
 
@@ -49,6 +54,7 @@ router.put("/", (req, res, next) => {
     .then((user) => {
       res.status(200).json(user);
     })
+    // just passing errors to 'next' for now.
     .catch(next);
 });
 
@@ -61,6 +67,7 @@ router.delete("/:id", (req, res, next) => {
     .then((delRes) => {
       res.status(200).json(delRes);
     })
+    // just passing errors to 'next' for now.
     .catch(next);
 });
 
