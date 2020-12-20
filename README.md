@@ -40,13 +40,14 @@
   > Logs in a user.
 
   - **Requires** {userName, password} in the request body. Checks first if that user exists before logging in.
-  - **Returns** error message if that user doesn't exist in the DB. 
+  - **Returns** error message if that user doesn't exist in the DB.
   - **Returns** a welcome <userName> message, and a json web token on success with an 8 hour expiration by default.
 
 - **(GET) /users**
 
   > Gets all users form DB.
 
+  - Currently restricted to Admin users only through the restrict.js middleware.
   - **Returns** an array of user objects on success.
   - **Returns** an error message if there are no users in the db.
 
@@ -71,6 +72,14 @@
   - **Requires** an 'id' parameter.
   - **Returns** number of affected rows on success.
   - **Returns** an error message if user doesn't exist.
+
+---
+
+## Middleware
+
+> Custom middleware descriptions. All custom middleware can be found in the '/data/middleware' folder.
+
+- **restrict.js** middleware. This is used to secure routes based on the user's role. ('User', or 'Admin' currently) which is read from the token(jwt). This is NOT a global middleware currently, it can be dropped into any route that you want to restrict and given a parameter (int) for the min user role that is allowed access. The specified role id and any higher roles will have access.
 
 ---
 
