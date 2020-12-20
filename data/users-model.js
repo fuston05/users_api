@@ -41,7 +41,7 @@ function findByEmail(email) {
 function getPersonalInfo(name) {
   return db("users")
     .where({ userName: name })
-    .select("id", "userName", "password");
+    .select("id", "userName", "password", "role_Id");
 }
 
 // add a new user
