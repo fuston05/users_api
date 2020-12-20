@@ -6,7 +6,7 @@ const {restrict} = require('../data/middleware/restrict');
 const users = require("./users-model");
 
 // get all users
-router.get("/", restrict, (req, res, next) => {
+router.get("/", restrict(2), (req, res, next) => {
   users
     .find()
     .then((users) => {
