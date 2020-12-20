@@ -13,6 +13,7 @@ router.get("/", restrict(2), (req, res, next) => {
   users
     .find()
     .then((users) => {
+      console.log('users: ', users)
       if (users.length) {
         res.status(200).json(users);
       } else {

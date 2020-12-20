@@ -14,14 +14,21 @@ module.exports = {
 
 // get all users
 function find() {
-  return db("users");
+  return db("users")
+    .join('roles', 'users.role_Id', '=', 'roles.id')
+    .select('users.id', 'users.userName', 'users.email', 'roles.roleName');
 }
 
 // get a user by id
 function findById(id) {
-  return db("users").where({ id }).first().select("id", "userName");
+  return db("users")
+    .join('roles', 'users.role_Id', '=', 'roles.id')
+    .where({ 'users.id' : id})
+    .first()
+    .select("users.id", "users.userName", "users.email", "roles.roleName");
 }
 // get a user by userName
+// internal use/helper
 function findByUserName(userName) {
   return db("users")
     .where({ userName: userName })
@@ -29,6 +36,7 @@ function findByUserName(userName) {
     .select("id", "userName");
 }
 // get a user by email
+// internal use/helper
 function findByEmail(email) {
   return db("users")
     .where({ email: email })
