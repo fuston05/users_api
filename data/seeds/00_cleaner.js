@@ -7,6 +7,5 @@ const options = {
 };
 
 exports.seed = function (knex) {
-  console.log("cleaner running!");
   return cleaner.clean(knex, options);
 };

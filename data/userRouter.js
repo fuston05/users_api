@@ -47,7 +47,7 @@ router.put("/", (req, res, next) => {
     id: req.body.id,
     userName: req.body.userName,
     email: req.body.email,
-    role_Id: req.body.role_Id
+    role_id: req.body.role_id
   };
 
   users

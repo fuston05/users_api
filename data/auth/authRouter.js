@@ -36,7 +36,7 @@ router.post("/login", (req, res, next) => {
         const hashedPass = loginRes.password;
         const userId = loginRes.id;
         const userName = loginRes.userName;
-        const userRole = loginRes.role_Id;
+        const userRole = loginRes.role_id;
 
         // user passed info
         const password = info.password;

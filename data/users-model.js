@@ -15,14 +15,14 @@ module.exports = {
 // get all users
 function find() {
   return db("users")
-    .join('roles', 'users.role_Id', '=', 'roles.id')
+    .join('roles', 'users.role_id', '=', 'roles.id')
     .select('users.id', 'users.userName', 'users.email', 'roles.roleName');
 }
 
 // get a user by id
 function findById(id) {
   return db("users")
-    .join('roles', 'users.role_Id', '=', 'roles.id')
+    .join('roles', 'users.role_id', '=', 'roles.id')
     .where({ 'users.id' : id})
     .first()
     .select("users.id", "users.userName", "users.email", "roles.roleName");
@@ -49,12 +49,12 @@ function findByEmail(email) {
 function getPersonalInfo(name) {
   return db("users")
     .where({ userName: name })
-    .select("id", "userName", "password", "role_Id");
+    .select("id", "userName", "password", "role_id");
 }
 
 // add a new user
 async function register(user) {
-  const { userName, password, email, role_Id } = user;
+  const { userName, password, email, role_id } = user;
   // check if username or email already exists
   const userExists = await findByUserName(userName);
   const emailExists = await findByEmail(email);
@@ -73,7 +73,7 @@ async function register(user) {
       userName: userName,
       password: password,
       email: email,
-      role_Id: role_Id,
+      role_id: role_id,
     })
     .into("users")
     .returning("id");
@@ -94,7 +94,7 @@ async function login(info) {
 
 // update a user
 async function updateUser(info) {
-  const { id, userName, email, role_Id } = info;
+  const { id, userName, email, role_id } = info;
   const name = await findByUserName(userName);
   const userEmail = await findByEmail(email);
 
@@ -118,7 +118,7 @@ async function updateUser(info) {
     .update({
       userName: userName,
       email: email,
-      role_Id: role_Id,
+      role_id: role_id,
     })
     .where({ id: id })
     .returning("id");
