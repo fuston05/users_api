@@ -28,7 +28,7 @@ function findById(id) {
     .select("users.id", "users.userName", "users.email", "roles.roleName");
 }
 // get a user by userName
-// internal use/helper
+// just for internal use/helper at the moment
 function findByUserName(userName) {
   return db("users")
     .where({ userName: userName })
@@ -36,7 +36,7 @@ function findByUserName(userName) {
     .select("id", "userName");
 }
 // get a user by email
-// internal use/helper
+// just for internal use/helper at the moment
 function findByEmail(email) {
   return db("users")
     .where({ email: email })
