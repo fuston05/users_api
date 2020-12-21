@@ -5,21 +5,22 @@ const jwt = require("jsonwebtoken");
 
 const restrict = (role_Id) => {
   const restFunc = (req, res, next) => {
-    if (req.headers.authorization) {
-      const token = req.headers.authorization;
-      const sec = process.env.JWT_SECRET;
-      const decoded = jwt.verify(token, sec);
-
-      // if user_role is NOT at LEAST the specified 'role_Id'
-      if (decoded.role < role_Id) {
+    const token = req.headers.authorization;
+    const sec = process.env.JWT_SECRET;
+    
+    jwt.verify(token, sec, (err, decoded) => {
+      if (err) {
         res.status(401).json({ Error: "Not authorized" });
       } else {
-        next();
+        const decToken = decoded;
+        // if user_role is NOT at LEAST the specified 'role_Id'
+        if (decToken.role < role_Id) {
+          res.status(401).json({ Error: "Not authorized" });
+        } else {
+          next();
+        }
       }
-      // if no auth header present
-    } else {
-      res.status(401).json({ Error: "Not authorized" });
-    }
+    });
   };
   return restFunc;
 };
