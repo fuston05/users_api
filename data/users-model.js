@@ -116,8 +116,14 @@ async function login(info) {
 // update a user
 async function updateUser(info) {
   const { id, userName, email, salary, role_id } = info;
+  // query DB to see if username or email exists
   const name = await findByUserName(userName);
   const userEmail = await findByEmail(email);
+
+  // if user does not exist
+  if (!name) {
+    return { Error: "That user does not exist" };
+  }
 
   // check if NEW userName already exists
   if (name) {
@@ -125,8 +131,6 @@ async function updateUser(info) {
     if (name.id !== parseInt(id)) {
       return { Error: "User name already exists" };
     }
-  } else {
-    return { Error: "That User does not exist" };
   }
 
   // check if NEW email already exists
@@ -134,8 +138,6 @@ async function updateUser(info) {
     // but it's not the email for the current user
     if (userEmail.id !== parseInt(id)) {
       return { Error: "Email already in use" };
-    } else {
-      return { Error: "That user does not exist" };
     }
   }
   // returns user's "id" on success
