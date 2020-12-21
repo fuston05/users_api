@@ -17,12 +17,12 @@
 
 ## Run this server locally:
 
-- clone to your machine.
-- run 'npm install'
-- run 'npm run server' to start up the server
+- Clone to your machine.
+- Run 'npm install'
+- Run 'npm run server' to start up the server
 - See below about running seed files once you have your postgres database set up.
-- database is named 'users' in the source code. If you call your DB something else you will need to update the knexfile.js in the root.
-- table names will be consistent if you run the migrations using knex. (see below)
+- Database is named 'users' in the source code. If you call your DB something else you will need to update the knexfile.js in the root.
+- Table names will be consistent if you run the migrations using knex. (see below)
 
 ---
 
