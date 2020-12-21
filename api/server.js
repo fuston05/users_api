@@ -10,7 +10,7 @@ server.use(cors());
 server.use(helmet());
 
 // define routers
-const userRouter = require("../data/userRouter");
+const userRouter = require("../data/users/userRouter");
 const authRouter = require("../data/auth/authRouter");
 
 // use routers

@@ -1,5 +1,5 @@
 // users-model, shared by userRouter, and authRouter
-const db = require("./db-config");
+const db = require("../db-config");
 
 module.exports = {
   find,
@@ -158,14 +158,14 @@ async function login(info) {
 }
 
 // update a user
-async function updateUser(info) {
+async function updateUser(info, curUserRoleId) {
   const { id, userName, email, salary, role_id, employment_info_id } = info;
   // query DB to see if username or email is already taken
   const name = await findByUserName(userName);
   const userEmail = await findByEmail(email);
 
   // if user does not exist
-  if (!findById(id)) {
+  if (!findById(id, curUserRoleId)) {
     return { Error: "That user does not exist" };
   }
 
@@ -191,15 +191,15 @@ async function updateUser(info) {
       email: email,
       salary: salary,
       role_id: role_id,
-      employment_info_id: employment_info_id,
+      employment_info_id: employment_info_id
     })
     .where({ id: id })
     .returning("id");
 }
 
-async function deleteUser(id) {
+async function deleteUser(id, role_id) {
   // check if user exists first
-  const userCheck = await findById(id);
+  const userCheck = await findById(id, role_id);
 
   if (userCheck) {
     // returns number of rows affected on success

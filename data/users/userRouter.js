@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 // middleware
-const { restrict } = require("../data/middleware/restrict");
+const { restrict } = require("../middleware/restrict");
 
 const users = require("./users-model");
 
@@ -45,6 +45,7 @@ router.get("/:id", restrict(1), (req, res, next) => {
 
 // update a user
 router.put("/", restrict(1), (req, res, next) => {
+  const curUserRoleId = res.locals.role_id;
   const info = {
     id: req.body.id,
     userName: req.body.userName,
@@ -55,7 +56,7 @@ router.put("/", restrict(1), (req, res, next) => {
   };
 
   users
-    .updateUser(info)
+    .updateUser(info, curUserRoleId)
     .then((user) => {
       res.status(200).json(user);
     })
@@ -66,9 +67,10 @@ router.put("/", restrict(1), (req, res, next) => {
 // delete a user
 router.delete("/:id", restrict(2), (req, res, next) => {
   const { id } = req.params;
+  const role_id = res.locals.role_id;
   // returns number of affected rows
   users
-    .deleteUser(id)
+    .deleteUser(id, role_id)
     .then((delRes) => {
       res.status(200).json(delRes);
     })
