@@ -9,7 +9,7 @@ const users = require("./users-model");
 
 // get all users, through the 'restrict' middleware, 
 // if their role is at LEAST 2(Admin)
-router.get("/", restrict(2), (req, res, next) => {
+router.get("/", restrict(1), (req, res, next) => {
   users
     .find()
     .then((users) => {
@@ -25,7 +25,7 @@ router.get("/", restrict(2), (req, res, next) => {
 });
 
 // get user by id
-router.get("/:id", (req, res, next) => {
+router.get("/:id", restrict(1), (req, res, next) => {
   const { id } = req.params;
   users
     .findById(id)
@@ -42,7 +42,7 @@ router.get("/:id", (req, res, next) => {
 });
 
 // update a user
-router.put("/", (req, res, next) => {
+router.put("/", restrict(1), (req, res, next) => {
   const info = {
     id: req.body.id,
     userName: req.body.userName,
@@ -60,7 +60,7 @@ router.put("/", (req, res, next) => {
 });
 
 // delete a user
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", restrict(2), (req, res, next) => {
   const { id } = req.params;
   // returns number of affected rows
   users
