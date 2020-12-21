@@ -7,15 +7,16 @@ const restrict = (role_Id) => {
   const restFunc = (req, res, next) => {
     if (req.headers.authorization) {
       const token = req.headers.authorization;
-
       const sec = process.env.JWT_SECRET;
       const decoded = jwt.verify(token, sec);
+
+      // if user_role is NOT at LEAST the specified 'role_Id'
       if (decoded.role < role_Id) {
-        // if user_role is NOT at LEAST the specified 'role_Id'
         res.status(401).json({ Error: "Not authorized" });
       } else {
         next();
       }
+      // if no auth header present
     } else {
       res.status(401).json({ Error: "Not authorized" });
     }
