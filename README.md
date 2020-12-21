@@ -47,7 +47,7 @@
 
   > Gets all users form DB.
 
-  - Currently restricted to Admin users only through the restrict.js middleware.
+  - **Requires** authorization header token.
   - **Returns** an array of user objects on success.
   - **Returns** an error message if there are no users in the db.
 
@@ -55,6 +55,7 @@
 
   > Gets a user by their id.
 
+  - **Requires** authorization header token.
   - **Requires** an 'id' parameter.
   - **Returns** {id, userName} on success
   - **Returns** an error message if user doesn't exist in the DB.
@@ -63,12 +64,16 @@
 
   > Updates an existing user in the DB. Does not update password. That will be handled elsewhere.
 
+  - **Requires** authorization header token.
   - **Requires** {id, userName, email, role_Id} in the request body. Checks if new info already exists if it has a unique constraint before submitting the query.
   - **Returns** an error message if the NEW userName or email is already in use.
   - **Returns** user's 'id' on success.
 
 - **(DELETE) /users/id**
+
   > Deletes a user form the DB by id.
+
+  - **Requires** authorization header token, and Admin rights.
   - **Requires** an 'id' parameter.
   - **Returns** number of affected rows on success.
   - **Returns** an error message if user doesn't exist.
