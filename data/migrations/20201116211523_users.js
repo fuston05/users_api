@@ -10,7 +10,7 @@ exports.up = function (knex) {
       tbl.increments();
       tbl.string("job_title", 128).notNullable().index();
       tbl.string("department", 128).notNullable();
-      tbl.date("hire_date", 128).notNullable();
+      tbl.date("hire_date").notNullable();
     })
 
     .createTable("users", (tbl) => {

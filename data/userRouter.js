@@ -3,17 +3,18 @@ const express = require("express");
 const router = express.Router();
 
 // middleware
-const {restrict} = require('../data/middleware/restrict');
+const { restrict } = require("../data/middleware/restrict");
 
 const users = require("./users-model");
 
-// get all users, through the 'restrict' middleware, 
+// get all users, through the 'restrict' middleware,
 // if their role is at LEAST 2(Admin)
 router.get("/", restrict(1), (req, res, next) => {
+  const role_id = res.locals.role_id;
   users
-    .find()
+    // pass in the role_id
+    .find(role_id)
     .then((users) => {
-      console.log('users: ', users)
       if (users.length) {
         res.status(200).json(users);
       } else {
@@ -27,8 +28,9 @@ router.get("/", restrict(1), (req, res, next) => {
 // get user by id
 router.get("/:id", restrict(1), (req, res, next) => {
   const { id } = req.params;
+  const role_id = res.locals.role_id;
   users
-    .findById(id)
+    .findById(id, role_id)
     .then((user) => {
       if (user) {
         res.status(200).json(user);
@@ -49,7 +51,7 @@ router.put("/", restrict(1), (req, res, next) => {
     email: req.body.email,
     salary: req.body.salary,
     role_id: req.body.role_id,
-    employment_info_id: req.body.employment_info_id
+    employment_info_id: req.body.employment_info_id,
   };
 
   users
