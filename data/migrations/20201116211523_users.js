@@ -6,11 +6,11 @@ exports.up = function (knex) {
       tbl.string("roleName", 128).notNullable();
     })
 
-    .createTable("cars", (tbl) => {
+    .createTable("employment_info", (tbl) => {
       tbl.increments();
-      tbl.string("carMake", 128).notNullable().index();
-      tbl.string("carModel", 128).notNullable();
-      tbl.string("carYear", 64).notNullable();
+      tbl.string("job_title", 128).notNullable().index();
+      tbl.string("department", 128).notNullable();
+      tbl.date("hire_date", 128).notNullable();
     })
 
     .createTable("users", (tbl) => {
@@ -18,27 +18,27 @@ exports.up = function (knex) {
       tbl.string("userName", 128).notNullable().index().unique();
       tbl.string("password", 256).notNullable();
       tbl.string("email", 128);
+      tbl.integer("salary").notNullable();
       // sets a foreign key to the 'role' table
       tbl
-        .integer("role_id", 64)
+        .integer("role_id", 128)
         .unsigned()
         .notNullable()
-        .index()
         .references("id")
         .inTable("roles");
       // sets a foreign key to the 'cars' table
       tbl
-        .integer("car_id", 64)
+        .integer("employment_info_id", 128)
         .unsigned()
-        .index()
+        .notNullable()
         .references("id")
-        .inTable("cars");
+        .inTable("employment_info");
     });
 };
 
 exports.down = function (knex) {
   return knex.schema
     .dropTableIfExists("users")
-    .dropTableIfExists("cars")
+    .dropTableIfExists("employment_info")
     .dropTableIfExists("roles");
 };

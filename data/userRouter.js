@@ -47,7 +47,9 @@ router.put("/", restrict(1), (req, res, next) => {
     id: req.body.id,
     userName: req.body.userName,
     email: req.body.email,
-    role_id: req.body.role_id
+    salary: req.body.salary,
+    role_id: req.body.role_id,
+    employment_info_id: req.body.employment_info_id
   };
 
   users

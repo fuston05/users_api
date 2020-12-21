@@ -15,17 +15,29 @@ module.exports = {
 // get all users
 function find() {
   return db("users")
-    .join('roles', 'users.role_id', '=', 'roles.id')
-    .select('users.id', 'users.userName', 'users.email', 'roles.roleName');
+    .join("roles", "users.role_id", "=", "roles.id")
+    .select(
+      "users.id",
+      "users.userName",
+      "users.email",
+      "roles.roleName",
+      "users.salary"
+    );
 }
 
 // get a user by id
 function findById(id) {
   return db("users")
-    .join('roles', 'users.role_id', '=', 'roles.id')
-    .where({ 'users.id' : id})
+    .join("roles", "users.role_id", "=", "roles.id")
+    .where({ "users.id": id })
     .first()
-    .select("users.id", "users.userName", "users.email", "roles.roleName");
+    .select(
+      "users.id",
+      "users.userName",
+      "users.email",
+      "roles.roleName",
+      "users.salary"
+    );
 }
 // get a user by userName
 // just for internal use/helper at the moment
@@ -54,7 +66,14 @@ function getPersonalInfo(name) {
 
 // add a new user
 async function register(user) {
-  const { userName, password, email, role_id } = user;
+  const {
+    userName,
+    password,
+    email,
+    salary,
+    role_id,
+    employment_info_id,
+  } = user;
   // check if username or email already exists
   const userExists = await findByUserName(userName);
   const emailExists = await findByEmail(email);
@@ -73,7 +92,9 @@ async function register(user) {
       userName: userName,
       password: password,
       email: email,
+      salary: salary,
       role_id: role_id,
+      employment_info_id: employment_info_id,
     })
     .into("users")
     .returning("id");
@@ -94,7 +115,7 @@ async function login(info) {
 
 // update a user
 async function updateUser(info) {
-  const { id, userName, email, role_id } = info;
+  const { id, userName, email, salary, role_id } = info;
   const name = await findByUserName(userName);
   const userEmail = await findByEmail(email);
 
@@ -104,6 +125,8 @@ async function updateUser(info) {
     if (name.id !== parseInt(id)) {
       return { Error: "User name already exists" };
     }
+  } else {
+    return { Error: "That User does not exist" };
   }
 
   // check if NEW email already exists
@@ -111,6 +134,8 @@ async function updateUser(info) {
     // but it's not the email for the current user
     if (userEmail.id !== parseInt(id)) {
       return { Error: "Email already in use" };
+    } else {
+      return { Error: "That user does not exist" };
     }
   }
   // returns user's "id" on success
@@ -118,6 +143,7 @@ async function updateUser(info) {
     .update({
       userName: userName,
       email: email,
+      salary: salary,
       role_id: role_id,
     })
     .where({ id: id })
