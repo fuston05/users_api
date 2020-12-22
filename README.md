@@ -13,13 +13,15 @@
 
 - [Expressjs Docs](https://expressjs.com/)
 
+- Local development server uses [nodemon](https://www.npmjs.com/package/nodemon)
+
 ---
 
 ## Run this server locally:
 
 - Clone to your machine.
 - Run 'npm install'
-- Run 'npm run server' to start up the server
+- Run 'npm run server' to start up the server (running with nodemon)
 - See below about running seed files once you have your postgres database set up.
 - Database is named 'users' in the source code. If you call your DB something else you will need to update the knexfile.js in the root.
 - Table names will be consistent if you run the migrations using knex. (see below)
