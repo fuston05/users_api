@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const users = require("../users/users-model");
+const users = require("../users-model");
 
 // register a new user
 // return 'id' on success, error message if user already exists
