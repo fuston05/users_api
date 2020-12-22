@@ -1,16 +1,22 @@
 exports.up = function (knex) {
   return knex.schema
-    .createTable("roles", (tbl) => {
+    .createTable("privileges", (tbl) => {
       // sets an auto-incrementing 'id' filed as primary key
       tbl.increments();
-      tbl.string("roleName", 128).notNullable();
+      tbl.string("privilege", 128).notNullable();
     })
 
-    .createTable("employment_info", (tbl) => {
+    .createTable("departments", (tbl) => {
+      tbl.increments();
+      tbl.string("department", 128).notNullable().index();
+      tbl.string("manager_first_name", 128).notNullable();
+      tbl.string("manager_last_name", 128).notNullable();
+    })
+
+    .createTable("job_titles", (tbl) => {
       tbl.increments();
       tbl.string("job_title", 128).notNullable().index();
-      tbl.string("department", 128).notNullable();
-      tbl.date("hire_date").notNullable();
+      tbl.integer("starting_salary").notNullable();
     })
 
     .createTable("users", (tbl) => {
@@ -18,27 +24,36 @@ exports.up = function (knex) {
       tbl.string("userName", 128).notNullable().index().unique();
       tbl.string("password", 256).notNullable();
       tbl.string("email", 128);
-      tbl.integer("salary").notNullable();
+      tbl.integer("current_salary").notNullable();
+      tbl.date("hire_date").notNullable();
       // sets a foreign key to the 'role' table
       tbl
-        .integer("role_id", 128)
+        .integer("privilege_id", 128)
         .unsigned()
         .notNullable()
         .references("id")
-        .inTable("roles");
-      // sets a foreign key to the 'cars' table
+        .inTable("privileges");
+      // sets a foreign key to the 'departments' table
       tbl
-        .integer("employment_info_id", 128)
+        .integer("department_id", 128)
         .unsigned()
         .notNullable()
         .references("id")
-        .inTable("employment_info");
+        .inTable("departments");
+      // sets a foreign key to the 'job_titles' table
+      tbl
+        .integer("job_title_id", 128)
+        .unsigned()
+        .notNullable()
+        .references("id")
+        .inTable("job_titles");
     });
 };
 
 exports.down = function (knex) {
   return knex.schema
     .dropTableIfExists("users")
-    .dropTableIfExists("employment_info")
-    .dropTableIfExists("roles");
+    .dropTableIfExists("job_titles")
+    .dropTableIfExists("departments")
+    .dropTableIfExists("privileges");
 };

@@ -13,73 +13,79 @@ module.exports = {
 };
 
 // get all users
-function find(role_id) {
-  // will only show salary information if the user is at least Admin role (>=2)
-  if (role_id >= 2) {
+function find(privilege_id) {
+  // will only show salary information if the user is at least Admin privileges (>=2)
+  if (privilege_id >= 2) {
     return db("users as u")
-      .join("roles as r", "u.role_id", "=", "r.id")
-      .join("employment_info as e", "u.employment_info_id", "=", "e.id")
+      .join("privileges as p", "u.privilege_id", "=", "p.id")
+      .join("job_titles as j", "u.job_title_id", "=", "j.id")
+      .join("departments as d", "u.department_id", "=", "d.id")
       .select(
         "u.id",
         "u.userName",
         "u.email",
-        "r.roleName",
-        "u.salary",
-        "e.job_title",
-        "e.department",
-        "e.hire_date"
+        "u.hire_date",
+        "j.job_title",
+        "d.department",
+        "j.starting_salary",
+        "u.current_salary",
+        "p.privilege"
       );
   } else {
-    // if the user is NOT at least Admin(2) role, exclude salary info
+    // if the user is NOT at least Admin(2) privileges, exclude salary info
     return db("users as u")
-      .join("roles as r", "u.role_id", "=", "r.id")
-      .join("employment_info as e", "u.employment_info_id", "=", "e.id")
+      .join("privileges as p", "u.privilege_id", "=", "p.id")
+      .join("job_titles as j", "u.job_title_id", "=", "j.id")
+      .join("departments as d", "u.department_id", "=", "d.id")
       .select(
         "u.id",
         "u.userName",
         "u.email",
-        "r.roleName",
-        "e.job_title",
-        "e.department",
-        "e.hire_date"
+        "u.hire_date",
+        "j.job_title",
+        "d.department",
+        "p.privilege"
       );
   }
 }
 
 // get a user by id
-function findById(id, role_id) {
-  // will only show salary information if the user is at least Admin role (>=2)
-  if (role_id >= 2) {
+function findById(id, privilege_id) {
+  // will only show salary information if the user is at least Admin privileges (>=2)
+  if (privilege_id >= 2) {
     return db("users as u")
-      .join("roles as r", "u.role_id", "=", "r.id")
-      .join("employment_info as e", "u.employment_info_id", "=", "e.id")
+      .join("privileges as p", "u.privilege_id", "=", "p.id")
+      .join("job_titles as j", "u.job_title_id", "=", "j.id")
+      .join("departments as d", "u.department_id", "=", "d.id")
       .where({ "u.id": id })
       .first()
       .select(
         "u.id",
         "u.userName",
         "u.email",
-        "r.roleName",
-        "u.salary",
-        "e.job_title",
-        "e.department",
-        "e.hire_date"
+        "u.hire_date",
+        "j.job_title",
+        "d.department",
+        "j.starting_salary",
+        "u.current_salary",
+        "p.privilege"
       );
   } else {
-    // if the user is NOT at least Admin(2) role, exclude salary info
+    // if the user is NOT at least Admin(2) privileges, exclude salary info
     return db("users as u")
-      .join("roles as r", "users.role_id", "=", "roles.id")
-      .join("employment_info as e", "u.employment_info_id", "=", "e.id")
+      .join("privileges as p", "u.privilege_id", "=", "p.id")
+      .join("job_titles as j", "u.job_title_id", "=", "j.id")
+      .join("departments as d", "u.department_id", "=", "d.id")
       .where({ "u.id": id })
       .first()
       .select(
         "u.id",
         "u.userName",
         "u.email",
-        "r.roleName",
-        "e.job_title",
-        "e.department",
-        "e.hire_date"
+        "u.hire_date",
+        "j.job_title",
+        "d.department",
+        "p.privilege"
       );
   }
 }
@@ -105,7 +111,7 @@ function findByEmail(email) {
 function getPersonalInfo(name) {
   return db("users")
     .where({ userName: name })
-    .select("id", "userName", "password", "role_id");
+    .select("id", "userName", "password", "privilege_id");
 }
 
 // add a new user
@@ -114,9 +120,11 @@ async function register(user) {
     userName,
     password,
     email,
-    salary,
-    role_id,
-    employment_info_id,
+    hire_date,
+    current_salary,
+    privilege_id,
+    department_id,
+    job_title_id,
   } = user;
   // check if username or email already exists
   const userExists = await findByUserName(userName);
@@ -136,9 +144,11 @@ async function register(user) {
       userName: userName,
       password: password,
       email: email,
-      salary: salary,
-      role_id: role_id,
-      employment_info_id: employment_info_id,
+      hire_date: hire_date,
+      current_salary: current_salary,
+      privilege_id: privilege_id,
+      department_id: department_id,
+      job_title_id: job_title_id,
     })
     .into("users")
     .returning("id");
@@ -158,14 +168,23 @@ async function login(info) {
 }
 
 // update a user
-async function updateUser(info, curUserRoleId) {
-  const { id, userName, email, salary, role_id, employment_info_id } = info;
+async function updateUser(info, curUserPrivilegeId) {
+  const {
+    id,
+    userName,
+    email,
+    hire_date: hire_date,
+    current_salary,
+    privilege_id,
+    department_id,
+    job_title_id,
+  } = info;
   // query DB to see if username or email is already taken
   const name = await findByUserName(userName);
   const userEmail = await findByEmail(email);
 
   // if user does not exist
-  if (!findById(id, curUserRoleId)) {
+  if (!findById(id, curUserPrivilegeId)) {
     return { Error: "That user does not exist" };
   }
 
@@ -189,17 +208,19 @@ async function updateUser(info, curUserRoleId) {
     .update({
       userName: userName,
       email: email,
-      salary: salary,
-      role_id: role_id,
-      employment_info_id: employment_info_id
+      hire_date: hire_date,
+      current_salary: current_salary,
+      privilege_id: privilege_id,
+      department_id: department_id,
+      job_title_id: job_title_id,
     })
     .where({ id: id })
     .returning("id");
 }
 
-async function deleteUser(id, role_id) {
+async function deleteUser(id, privilege_id) {
   // check if user exists first
-  const userCheck = await findById(id, role_id);
+  const userCheck = await findById(id, privilege_id);
 
   if (userCheck) {
     // returns number of rows affected on success

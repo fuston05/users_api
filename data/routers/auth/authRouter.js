@@ -36,7 +36,7 @@ router.post("/login", (req, res, next) => {
         const hashedPass = loginRes.password;
         const userId = loginRes.id;
         const userName = loginRes.userName;
-        const userRole = loginRes.role_id;
+        const userPrivilege = loginRes.privilege_id;
 
         // user passed info
         const password = info.password;
@@ -49,7 +49,7 @@ router.post("/login", (req, res, next) => {
           // json web token
           const payload = {
             sub: userId,
-            role: userRole,
+            privilege: userPrivilege,
           };
           const sec = process.env.JWT_SECRET;
           const options = {

@@ -8,12 +8,12 @@ const { restrict } = require("../middleware/restrict");
 const users = require("./users-model");
 
 // get all users, through the 'restrict' middleware,
-// if their role is at LEAST 2(Admin)
+// if their privilege is at LEAST 2(Admin)
 router.get("/", restrict(1), (req, res, next) => {
-  const role_id = res.locals.role_id;
+  const privilege_id = res.locals.privilege_id;
   users
-    // pass in the role_id
-    .find(role_id)
+    // pass in the privilege_id
+    .find(privilege_id)
     .then((users) => {
       if (users.length) {
         res.status(200).json(users);
@@ -28,9 +28,9 @@ router.get("/", restrict(1), (req, res, next) => {
 // get user by id
 router.get("/:id", restrict(1), (req, res, next) => {
   const { id } = req.params;
-  const role_id = res.locals.role_id;
+  const privilege_id = res.locals.privilege_id;
   users
-    .findById(id, role_id)
+    .findById(id, privilege_id)
     .then((user) => {
       if (user) {
         res.status(200).json(user);
@@ -45,18 +45,18 @@ router.get("/:id", restrict(1), (req, res, next) => {
 
 // update a user
 router.put("/", restrict(1), (req, res, next) => {
-  const curUserRoleId = res.locals.role_id;
+  const curUserPrivilegeId = res.locals.privilege_id;
   const info = {
     id: req.body.id,
     userName: req.body.userName,
     email: req.body.email,
     salary: req.body.salary,
-    role_id: req.body.role_id,
+    privilege_id: req.body.privilege_id,
     employment_info_id: req.body.employment_info_id,
   };
 
   users
-    .updateUser(info, curUserRoleId)
+    .updateUser(info, curUserPrivilegeId)
     .then((user) => {
       res.status(200).json(user);
     })
@@ -67,10 +67,10 @@ router.put("/", restrict(1), (req, res, next) => {
 // delete a user
 router.delete("/:id", restrict(2), (req, res, next) => {
   const { id } = req.params;
-  const role_id = res.locals.role_id;
+  const privilege_id = res.locals.privilege_id;
   // returns number of affected rows
   users
-    .deleteUser(id, role_id)
+    .deleteUser(id, privilege_id)
     .then((delRes) => {
       res.status(200).json(delRes);
     })
