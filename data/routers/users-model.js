@@ -29,7 +29,7 @@ function find(privilege_id) {
         "d.department",
         "j.starting_salary",
         "u.current_salary",
-        "p.privilege"
+        "p.privilegeName"
       );
   } else {
     // if the user is NOT at least Admin(2) privileges, exclude salary info
@@ -44,7 +44,7 @@ function find(privilege_id) {
         "u.hire_date",
         "j.job_title",
         "d.department",
-        "p.privilege"
+        "p.privilegeName"
       );
   }
 }
@@ -68,7 +68,7 @@ function findById(id, privilege_id) {
         "d.department",
         "j.starting_salary",
         "u.current_salary",
-        "p.privilege"
+        "p.privilegeName"
       );
   } else {
     // if the user is NOT at least Admin(2) privileges, exclude salary info
@@ -85,7 +85,7 @@ function findById(id, privilege_id) {
         "u.hire_date",
         "j.job_title",
         "d.department",
-        "p.privilege"
+        "p.privilegeName"
       );
   }
 }

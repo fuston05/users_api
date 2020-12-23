@@ -12,12 +12,10 @@ server.use(helmet());
 // define routers
 const userRouter = require("../data/routers/userRouter");
 const authRouter = require("../data/routers/auth/authRouter");
-const employmentRouter = require("../data/routers/employmentRouter");
 
 // use routers
 server.use("/users", userRouter);
 server.use("/users/auth", authRouter);
-server.use("/employment", employmentRouter);
 
 server.get("/", (req, res) => {
   res.send("**** Welcome, the Server is live! ****");
