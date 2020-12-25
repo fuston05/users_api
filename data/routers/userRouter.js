@@ -3,17 +3,16 @@ const express = require("express");
 const router = express.Router();
 
 // middleware
-const { restrict } = require("../middleware/restrict");
+const {isLoggedIn} = require("../middleware/isLoggedIn");
 
 const users = require("./users-model");
 
-// get all users, through the 'restrict' middleware,
-// if their privilege is at LEAST 2(Admin)
-router.get("/", restrict(1), (req, res, next) => {
-  const privilege_id = res.locals.privilege_id;
+// get all users, through the 'isLoggedIn' middleware,
+router.get("/", isLoggedIn, (req, res, next) => {
+  const privilege = res.locals.privilege;
   users
     // pass in the privilege_id
-    .find(privilege_id)
+    .find(privilege)
     .then((users) => {
       if (users.length) {
         res.status(200).json(users);
@@ -26,11 +25,11 @@ router.get("/", restrict(1), (req, res, next) => {
 });
 
 // get user by id
-router.get("/:id", restrict(1), (req, res, next) => {
+router.get("/:id", isLoggedIn, (req, res, next) => {
   const { id } = req.params;
-  const privilege_id = res.locals.privilege_id;
+  const privilege = res.locals.privilege;
   users
-    .findById(id, privilege_id)
+    .findById(id, privilege)
     .then((user) => {
       if (user) {
         res.status(200).json(user);
@@ -43,20 +42,22 @@ router.get("/:id", restrict(1), (req, res, next) => {
     .catch(next);
 });
 
+
 // update a user
-router.put("/", restrict(1), (req, res, next) => {
-  const curUserPrivilegeId = res.locals.privilege_id;
+router.put("/", isLoggedIn, (req, res, next) => {
+  const curUserPrivilege = res.locals.privilege;
   const info = {
     id: req.body.id,
     userName: req.body.userName,
     email: req.body.email,
+    hire_date: req.body.hire_date,
     salary: req.body.salary,
     privilege_id: req.body.privilege_id,
     employment_info_id: req.body.employment_info_id,
   };
 
   users
-    .updateUser(info, curUserPrivilegeId)
+    .updateUser(info, curUserPrivilege)
     .then((user) => {
       res.status(200).json(user);
     })
@@ -65,12 +66,12 @@ router.put("/", restrict(1), (req, res, next) => {
 });
 
 // delete a user
-router.delete("/:id", restrict(2), (req, res, next) => {
+router.delete("/:id", isLoggedIn, (req, res, next) => {
   const { id } = req.params;
-  const privilege_id = res.locals.privilege_id;
+  const privilege= res.locals.privilege;
   // returns number of affected rows
   users
-    .deleteUser(id, privilege_id)
+    .deleteUser(id, privilege)
     .then((delRes) => {
       res.status(200).json(delRes);
     })

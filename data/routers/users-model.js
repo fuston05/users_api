@@ -1,6 +1,8 @@
 // users-model, shared by userRouter, and authRouter
 const db = require("../db-config");
 
+let privilegesMap = {};
+
 module.exports = {
   find,
   findById,
@@ -13,9 +15,9 @@ module.exports = {
 };
 
 // get all users
-function find(privilege_id) {
+function find(privilege) {
   // will only show salary information if the user is at least Admin privileges (>=2)
-  if (privilege_id >= 2) {
+  if (privilege >= 2) {
     return db("users as u")
       .join("privileges as p", "u.privilege_id", "=", "p.id")
       .join("job_titles as j", "u.job_title_id", "=", "j.id")
