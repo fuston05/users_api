@@ -1,5 +1,8 @@
 // users-model, shared by userRouter, and authRouter
+// /////////////////////////////////////////////////
 const db = require("../db-config");
+// model_utils
+const { userCredsExist } = require('./model_utils');
 
 module.exports = {
   find,
@@ -35,38 +38,20 @@ function findByEmail(email) {
 
 // add a new user
 async function register(user) {
-  console.log("user: ", user);
   // make sure username or email not already in use
-  const regNameResp = await userNameExists(user.userName);
-  const regEmailResp = await userEmailExists(user.email);
-  console.log('regNameResp: ', regNameResp)
-  console.log('regEmailResp: ', regEmailResp)
+  const regNameResp = await userCredsExist({userName: user.userName});
+  const regEmailResp = await userCredsExist({email: user.email});
 
+  // if userName already in use
   if (regNameResp === true) {
     return {Error: 'That user name is already in use'}
   }
-
+  // if email already in use
   if (regEmailResp === true) {
     return {Error: 'That email is already in use'}
   }
   return db("users").insert({ ...user }, ['id', 'userName']);
 }
-
-const userNameExists = async (userName) => {
-  const nameResp = await db('users').where({ userName }).first()
-  if (nameResp && nameResp.id) {
-    return true;
-  }
-  return false;
-};
-
-const userEmailExists = async (email) => {
-  const emailResp = await db('users').where({ email }).first()
-  if (emailResp && emailResp.id) {
-    return true;
-  }
-  return false;
-};
 
 // login
 function login(user) {

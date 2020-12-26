@@ -3,17 +3,31 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { body, validationResult} = require('express-validator');
 
 const users = require("../users-model");
 
 // register a new user
 // return 'id' on success, error message if user already exists
-router.post("/register", (req, res, next) => {
-  const rounds = parseInt(process.env.HASHING_ROUNDS);
+router.post("/register",
+  // validation
+  body('userName').not().isEmpty(),
+  body('password').not().isEmpty(),
+  body('email').not().isEmpty(),
+  body('current_salary').not().isEmpty(),
+  (req, res, next) => {
+    // validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      errors.array().map(error => {
+        console.log('error: ', error.param)
+      })
+      return res.status(400).json({Errors: errors.array()})
+    }
+  const ROUNDS = parseInt(process.env.HASHING_ROUNDS);
   const user = req.body;
   // hash user password
-  const hash = bcrypt.hashSync(user.password, rounds);
-  user.password = hash;
+  user.password = bcrypt.hashSync(user.password, ROUNDS);
   users
     .register(user)
     .then((userRes) => {
