@@ -16,20 +16,16 @@ router.post("/register", (req, res, next) => {
   user.password = hash;
   users
     .register(user)
-    .then((user) => {
-      res.status(200).json(user);
+    .then((userRes) => {
+      res.status(200).json(userRes);
     })
     .catch(next);
 });
 
 // login
 router.post("/login", (req, res, next) => {
-  const info = {
-    userName: req.body.userName,
-    password: req.body.password,
-  };
   users
-    .login(info)
+    .login(req.body)
     .then((loginRes) => {
       if (loginRes !== null) {
         // database results info

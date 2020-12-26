@@ -7,7 +7,6 @@ exports.seed = function (knex) {
       read: true,
       update: false,
       delete: false,
-      financial: false,
     },
     {
       privilegeName: "Admin",
@@ -15,7 +14,6 @@ exports.seed = function (knex) {
       read: true,
       update: true,
       delete: false,
-      financial: true,
     },
     {
       privilegeName: "Owner",
@@ -23,7 +21,6 @@ exports.seed = function (knex) {
       read: true,
       update: true,
       delete: true,
-      financial: true,
     },
   ]);
 };

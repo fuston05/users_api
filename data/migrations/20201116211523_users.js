@@ -8,7 +8,6 @@ exports.up = function (knex) {
       tbl.boolean("read", 128).notNullable().defaultsTo(true);
       tbl.boolean("update", 128).notNullable().defaultsTo(false);
       tbl.boolean("delete", 128).notNullable().defaultsTo(false);
-      tbl.boolean("financial", 128).notNullable().defaultsTo(false);
     })
 
     .createTable("departments", (tbl) => {
