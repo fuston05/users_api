@@ -12,8 +12,7 @@ const registerValidation = [
     .notEmpty()
     .bail()
     .isAlphanumeric()
-    .escape()
-      .bail(),
+    .escape(),
   
   // custom check to see if user name already in DB
   // 0-1: userName
@@ -87,7 +86,42 @@ const registerValidation = [
     .escape(),
 ];
 
+const loginValidation = [
+  // username valid
+    body("userName", "Invalid user name")
+    .trim()
+    .toLowerCase()
+    .notEmpty()
+    .bail()
+    .isAlphanumeric()
+    .escape(),
+  
+  // custom check to see if user name already in DB
+  // userName already in use?
+    body("userName", "User name already in use").custom(async (value) => {
+    const userNameExists = await userCredsExist({ userName: value })
+    if (userNameExists) {
+      return Promise.reject();
+    }
+  }),
+
+    // password
+    body("password", "Invalid password")
+    .trim()
+    .notEmpty()
+    .bail()
+    .escape()
+    .isStrongPassword({
+      minLength: 4,
+      minLowercase: 0,
+      minUppercase: 0,
+      minNumbers: 4,
+      minSymbols: 0,
+    })
+    .escape()
+];
 
 module.exports = {
   registerValidation,
+  loginValidation
 };
