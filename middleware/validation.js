@@ -1,30 +1,30 @@
 // express-validator, validation array for authRouter
-
+const jwt = require("jsonwebtoken");
 const { body } = require("express-validator");
 // model_utils
 const { userCredsExist } = require("../utils");
 
 const registerValidation = [
   // 0-1: username
-    body("userName", "Invalid user name")
+  body("userName", "Invalid user name")
     .trim()
     .toLowerCase()
     .notEmpty()
     .bail()
     .isAlphanumeric()
     .escape(),
-  
+
   // custom check to see if user name already in DB
   // 0-1: userName
-    body("userName", "User name already in use").custom(async (value) => {
-    const userNameExists = await userCredsExist({ userName: value })
+  body("userName", "User name already in use").custom(async (value) => {
+    const userNameExists = await userCredsExist({ userName: value });
     if (userNameExists) {
       return Promise.reject();
     }
   }),
 
-    // 2: password
-    body("password", "Invalid password")
+  // 2: password
+  body("password", "Invalid password")
     .trim()
     .notEmpty()
     .bail()
@@ -41,44 +41,42 @@ const registerValidation = [
   body("email", "Invalid email")
     .trim()
     .notEmpty()
-    .toLowerCase()
     .bail()
     .isEmail()
     .bail()
     .normalizeEmail()
     .escape(),
-  
+
   // custom check to see if user email already in DB
-    body("email", "Email already in use")
-    .custom(async value => {
-    const emailExists = await userCredsExist({ email: value })
+  body("email", "Email already in use").custom(async (value) => {
+    const emailExists = await userCredsExist({ email: value });
     if (emailExists) {
-      return Promise.reject()
+      return Promise.reject();
     }
   }),
 
-    body("current_salary", "Invalid salary")
+  body("current_salary", "Invalid salary")
     .trim()
     .notEmpty()
     .bail()
     .isNumeric({ no_symbols: true, locale: "en-US" })
     .escape(),
 
-    body("hire_date", "Invalid hire date")
+  body("hire_date", "Invalid hire date")
     .trim()
     .notEmpty()
     .bail()
     .isDate()
     .escape(),
 
-    body("department_id", "Invalid department id")
+  body("department_id", "Invalid department id")
     .trim()
     .notEmpty()
     .bail()
     .isNumeric({ no_symbols: true, locale: "en-US" })
     .escape(),
 
-    body("privilege_id", "Invalid privilege id")
+  body("privilege_id", "Invalid privilege id")
     .trim()
     .notEmpty()
     .bail()
@@ -88,25 +86,25 @@ const registerValidation = [
 
 const loginValidation = [
   // username valid
-    body("userName", "Invalid user name")
+  body("userName", "Invalid user name")
     .trim()
     .toLowerCase()
     .notEmpty()
     .bail()
     .isAlphanumeric()
     .escape(),
-  
+
   // custom check to see if user name already in DB
   // userName already in use?
-    body("userName", "User name already in use").custom(async (value) => {
-    const userNameExists = await userCredsExist({ userName: value })
+  body("userName", "User name already in use").custom(async (value) => {
+    const userNameExists = await userCredsExist({ userName: value });
     if (userNameExists) {
       return Promise.reject();
     }
   }),
 
-    // password
-    body("password", "Invalid password")
+  // password
+  body("password", "Invalid password")
     .trim()
     .notEmpty()
     .bail()
@@ -118,10 +116,24 @@ const loginValidation = [
       minNumbers: 4,
       minSymbols: 0,
     })
-    .escape()
+    .escape(),
 ];
+
+const isLoggedIn = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const sec = process.env.JWT_SECRET;
+  jwt.verify(authHeader, sec, (err, decoded) => {
+    if (err) {
+      res.status(401).json({ Error: "Not authorized" });
+    } else {
+      res.locals.privilege = decoded.privilege;
+      next();
+    }
+  });
+};
 
 module.exports = {
   registerValidation,
-  loginValidation
+  loginValidation,
+  isLoggedIn,
 };

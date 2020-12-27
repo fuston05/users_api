@@ -1,8 +1,9 @@
 // middleware index
-const { isLoggedIn } = require('./middleware');
-const { registerValidation } = require('./validation');
+const { registerValidation, loginValidation, isLoggedIn } = require('./validation');
 
 module.exports = {
   isLoggedIn,
   registerValidation,
+  loginValidation,
+  isLoggedIn
 }
