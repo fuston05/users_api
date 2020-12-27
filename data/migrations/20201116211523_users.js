@@ -4,22 +4,19 @@ exports.up = function (knex) {
       // sets an auto-incrementing 'id' filed as primary key
       tbl.increments();
       tbl.string("privilegeName", 128).notNullable().defaultsTo('User');
-      tbl.boolean("create", 128).notNullable().defaultsTo(false);
-      tbl.boolean("read", 128).notNullable().defaultsTo(true);
-      tbl.boolean("update", 128).notNullable().defaultsTo(false);
-      tbl.boolean("delete", 128).notNullable().defaultsTo(false);
+      tbl.text('privilege_description').notNullable()
     })
 
     .createTable("departments", (tbl) => {
       tbl.increments();
-      tbl.string("department", 128).notNullable().index();
+      tbl.string("department", 128).notNullable();
       tbl.string("manager_first_name", 128).notNullable();
       tbl.string("manager_last_name", 128).notNullable();
     })
 
     .createTable("job_titles", (tbl) => {
       tbl.increments();
-      tbl.string("job_title", 128).notNullable().index();
+      tbl.string("job_title", 128).notNullable();
       tbl.integer("starting_salary").notNullable();
     })
 
