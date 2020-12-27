@@ -4,8 +4,45 @@ const { body } = require("express-validator");
 // model_utils
 const { userCredsExist } = require("../utils");
 
+const minNameLength = 3;
+const maxNameLength = 20;
+
 const registerValidation = [
-  // 0-1: username
+  // first name
+  body("firstName", "Invalid first name")
+    .trim()
+    .toLowerCase()
+    .notEmpty()
+    .bail()
+    .isAlpha()
+    .bail()
+    .escape(),
+
+  // first name length
+  body("firstName", `First name must be ${minNameLength} - ${maxNameLength} characters`).custom((value) => {
+    if (value.length < maxNameLength && value.length > minNameLength) {
+      return true;
+    }
+  }),
+
+  // last name
+  body("lastName", "Invalid last name")
+    .trim()
+    .toLowerCase()
+    .notEmpty()
+    .bail()
+    .isAlpha()
+    .bail()
+    .escape(),
+  
+  // last name length
+  body("lastName", `Last name must be ${minNameLength} - ${maxNameLength} characters`).custom((value) => {
+    if (value.length < maxNameLength && value.length > minNameLength) {
+      return true;
+    }
+  }),
+
+  // username
   body("userName", "Invalid user name")
     .trim()
     .toLowerCase()
@@ -13,9 +50,17 @@ const registerValidation = [
     .bail()
     .isAlphanumeric()
     .escape(),
+  
+  // username length
+  body("userName", `User name must be ${minNameLength} - ${maxNameLength} characters`)
+    .custom((value) => {
+      if (value.length < maxNameLength && value.length > minNameLength) {
+        return true
+      }
+    }),
 
   // custom check to see if user name already in DB
-  // 0-1: userName
+  // userName
   body("userName", "User name already in use").custom(async (value) => {
     const userNameExists = await userCredsExist({ userName: value });
     if (userNameExists) {
@@ -23,7 +68,7 @@ const registerValidation = [
     }
   }),
 
-  // 2: password
+  // password
   body("password", "Invalid password")
     .trim()
     .notEmpty()

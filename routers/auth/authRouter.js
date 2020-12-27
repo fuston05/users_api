@@ -19,6 +19,8 @@ router.post("/register", registerValidation, (req, res) => {
     return res.status(400).json(errors);
   }
 
+  // remove the 'confirm password' from the req.body
+
   // if no validation errors proceed
   // hash user password
   const ROUNDS = parseInt(process.env.HASHING_ROUNDS);
@@ -30,9 +32,10 @@ router.post("/register", registerValidation, (req, res) => {
     .then((userRes) => {
       userRes[0].message = `Welcome, ${userRes[0].userName}`;
       res.status(201).json(userRes[0]);
+      // TODO: email confirmation
     })
     .catch((err) => {
-      res.status(500).json(err);
+      res.status(500).json({Error: 'Server error'});
     });
 });
 

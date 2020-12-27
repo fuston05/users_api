@@ -3,24 +3,15 @@ exports.seed = function (knex) {
   return knex("privileges").insert([
     {
       privilegeName: "User",
-      create: false,
-      read: true,
-      update: false,
-      delete: false,
+      privilege_description: "This is the default user. This user can only 'read' data, they cannot add or create any new users to the system. They cannot view any financial information and certain other sensitive information or delete any information."
     },
     {
       privilegeName: "Admin",
-      create: true,
-      read: true,
-      update: true,
-      delete: false,
+      privilege_description: "This is the Admin user. This user can view user information including sensitive information, create new users, and view/edit financial information. This user has no 'delete' rights."
     },
     {
       privilegeName: "Owner",
-      create: true,
-      read: true,
-      update: true,
-      delete: true,
+      privilege_description: "This is the Admin user. This user can view user information including sensitive information, create new users, and view/edit financial information. This user also has 'delete' rights, and full data access."
     },
   ]);
 };
