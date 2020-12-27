@@ -3,11 +3,13 @@ const express = require("express");
 const cors = require("cors");
 const server = express();
 const helmet = require("helmet");
+const morgan = require('morgan');
 
-// middleware
-server.use(express.json());
-server.use(cors());
+// global middleware
 server.use(helmet());
+server.use(cors());
+server.use(express.json());
+server.use(morgan('combined'));
 
 // define routers
 const userRouter = require("../routers/userRouter");
