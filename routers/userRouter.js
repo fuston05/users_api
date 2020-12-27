@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 
-const {isLoggedIn} = require("../middleware");
+const {isLoggedIn} = require("../middleware/middleware");
 
 const users = require("./users-model");
 

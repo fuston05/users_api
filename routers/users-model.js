@@ -1,8 +1,6 @@
 // users-model, shared by userRouter, and authRouter
 // /////////////////////////////////////////////////
 const db = require("../data/db-config");
-// model_utils
-const { userCredsExist } = require('./model_utils');
 
 module.exports = {
   find,
@@ -38,28 +36,20 @@ function findByEmail(email) {
 
 // add a new user
 async function register(user) {
-  // make sure username or email not already in use
-  // const regNameResp = await userCredsExist({userName: user.userName});
-  // const regEmailResp = await userCredsExist({email: user.email});
-
-  // // if userName already in use
-  // if (regNameResp === true) {
-  //   return {Error: 'That user name is already in use'}
-  // }
-  // // if email already in use
-  // if (regEmailResp === true) {
-  //   return {Error: 'That email is already in use'}
-  // }
+  // validation is handled prior in the registerValidation middleware 
+  // password is hashed in the authRouter
   return db("users").insert({ ...user }, ['id', 'userName']);
 }
 
 // login
 function login(user) {
+  // validation is handled prior in the registerValidation middleware
   return "not set up yet";
 }
 
 // update a user
 function updateUser(user) {
+  // validation is handled prior in the registerValidation middleware
   return "not set up yet";
 }
 

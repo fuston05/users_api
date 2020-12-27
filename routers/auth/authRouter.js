@@ -6,30 +6,35 @@ const jwt = require("jsonwebtoken");
 // express-validator
 const { validationResult } = require("express-validator");
 // express validator rules
-const { registerValidation } = require('../../validation/registerValidation');
+const { registerValidation } = require('../../middleware');
 
 const users = require("../users-model");
 
 // register a new user
-// return 'id' on success, error message if user already exists
+// return 'id' on success, error message if validation fails
 router.post(
   "/register", registerValidation,
-  (req, res, next) => {
+  (req, res) => {
     // check validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json(errors);
     }
+
+    // if no validation errors proceed
+    // hash user password
     const ROUNDS = parseInt(process.env.HASHING_ROUNDS);
     const user = req.body;
-    // hash user password
     user.password = bcrypt.hashSync(user.password, ROUNDS);
+
     users
       .register(user)
       .then((userRes) => {
-        res.status(200).json(userRes);
+        res.status(201).json(userRes);
       })
-      .catch(next);
+      .catch(err => {
+        
+      });
   }
 );
 

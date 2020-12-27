@@ -2,7 +2,8 @@
 
 const { body } = require("express-validator");
 // model_utils
-const { userCredsExist } = require("../routers/model_utils");
+const { userCredsExist } = require("../routers/utils");
+
 const registerValidation = [
   // 0-1: username
     body("userName", "Invalid user name")
