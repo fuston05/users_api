@@ -6,7 +6,6 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const { assignId } = require("../logs/morgan_tokens");
 const rfs = require("rotating-file-stream");
-const path = require("path");
 
 // global middleware
 server.use(helmet());
@@ -15,7 +14,7 @@ server.use(express.json());
 // assignId is used in the morgan token 'id'
 server.use(assignId);
 
-// writes morgan logs to file
+// writes morgan logs to 'rotating' log file
 let accessLogStream = rfs.createStream("./logs/access.log", {
   interval: "1d",
 });
