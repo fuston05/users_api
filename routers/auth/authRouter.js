@@ -28,7 +28,8 @@ router.post("/register", registerValidation, (req, res) => {
   users
     .register(user)
     .then((userRes) => {
-      res.status(201).json(userRes);
+      userRes[0].message = `Welcome, ${userRes[0].userName}`;
+      res.status(201).json(userRes[0]);
     })
     .catch((err) => {
       res.status(500).json(err);
