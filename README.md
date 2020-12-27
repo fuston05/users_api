@@ -1,17 +1,34 @@
 # Node API Practice
 
+## About this project
+
 - This server is deployed on heroku
   api base url is: https://scotts-users-api.herokuapp.com
 
-- json web token for auth. [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
+- My role in this project was sole developer as a full-stack developer. This is just extra practice for RESTful API's using nodeJs, ExpressJs, KnexJs, PostgreSQL Database.
 
-- This is just extra practice for RESTful API's using nodeJs, ExpressJs, KnexJs, PostgreSQL Database
+---
+
+## Tech used
+
 - Since we are using foreign keys I used knex cleaner library to delete seeds before re-seeding:
   [knex cleaner](https://www.npmjs.com/package/knex-cleaner)
+
+- json web token for auth. [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 
 - Used [knexjs](http://knexjs.org/) for db queries.
 
 - [Expressjs Docs](https://expressjs.com/)
+
+- [bcryptJs](https://www.npmjs.com/package/bcrypt) for hashing.
+
+- [uuid](https://www.npmjs.com/package/uuid) for assigning unique id's to http request logs in Morgan Logger.
+
+- [morgan](https://www.npmjs.com/package/morgan) for logging errors
+
+- [express-validator](https://express-validator.github.io/docs/) for user input validation
+
+- Currently set up for use with [postgres database](https://www.postgresql.org/), you can change this to use any database by editing the knexfile.js
 
 - Local development server uses [nodemon](https://www.npmjs.com/package/nodemon)
 
@@ -39,14 +56,14 @@
 
 ## Endpoints
 
-- **(POST) users/auth/register**
+- **(POST) /auth/register**
 
-  > Adds a new user to the database. Stores a hashed version of the password in DB using bcryptjs library. [bcryptJs](https://www.npmjs.com/package/bcrypt)
+  > Adds a new user to the database after validation. Stores a hashed version of the password in DB using bcryptjs library. [bcryptJs](https://www.npmjs.com/package/bcrypt)
 
   - **Requires** the following in the request body:
 
     > {
-    > "userName": "name",
+    > "userName": "user name",
     > "password": "1234",
     > "email": "email",
     > "salary": int,
@@ -54,8 +71,8 @@
     > "employee_info_id": int foreign key to 'employee_info' table
     > }
 
-  - **Returns** user's id on success.
-  - **Returns** an error message if userName or email is already in use.
+  - **Returns** user's id on success, userName, and a welcome <userName> message.
+  - **Returns** an error message if userName or email is already in use or id any validation fails from the '/middleware/validation.js'.
 
 - **(POST) users/auth/login/**
 
@@ -107,10 +124,13 @@
 
 ## Middleware
 
-> Custom middleware descriptions. All custom middleware can be found in the '/data/middleware' folder.
+> Custom middleware descriptions. All custom middleware can be found in the '/middleware' folder exported from the index.js so you can import from the 'middleware' dir. ie. const {isLoggedIn}= require('../middleware')
 
-- **restrict.js** middleware. This is used to secure routes based on the user's role. ('User', or 'Admin' currently) which is read from the token(jwt). This is NOT a global middleware currently, it can be dropped into any route that you want to restrict and given a parameter (int) for the min user role that is allowed access. The specified role id and any higher roles will have access.
-- Passes the current logged in user's role_id to res.locals, so it can be used in the router to determine what sensitive information will be returned from GET requests. ie. 'User' will not see the employee's salary, they must be an 'Admin' or greater in order to see salary information in the GET queries.
+- **isLoggedIn** middleware/validation.js.
+
+- **registerValidation** middleware/validation.js. The express validator rules are exported from this for inline use as middleware in route handlers
+
+- **loginValidation** middleware/validation.js. middleware/validation.js. The express validator rules are exported from this for inline use as middleware in route handlers
 
 ---
 
@@ -118,16 +138,20 @@
 
 > See the migrations (/data/migrations) for more schema details.
 
-### Roles:
+### Privileges:
 
-> 'roles' is a table of role types. The 'role_Id' field on the user is a foreign key to the roles table. Currently the roles are "user" and "Admin". This can be used for restricting access and privileges for users in the 'restrict.js' middleware. There is a seed file for this in the 'data/seeds' dir.
+> 'privileges' is a table of role types. The 'role_Id' field on the user is a foreign key to the privileges table. There is a seed file for this in the 'data/seeds' dir.
 
 ### Users
 
-> 'users' is a table of users. Currently containing a userName, password, email, salary, role_id, and employee_info_id.
+> 'users' is a table of users. Currently containing a userName, password, email, current_salary, hire_date, privilege_id, department_id, and job_title_id.
 
-### employee_info
+### Departments
 
-> 'employee_info' is a table of employee information. It contains a job_title, department, and hire_date. The employee_info_id field on the users is a foreign key to this table's id field. There is a seed file for this in the 'data/seeds' dir.
+> 'departments is a table of work departments. Currently contains an id, department, manager_first_name, manager_last_name columns.
+
+### Job_titles
+
+> 'job_titles is a table of different available job titles. Currently contains an id, job_title, starting_salary
 
 ---
