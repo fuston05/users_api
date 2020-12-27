@@ -36,9 +36,38 @@ function findByEmail(email) {
 
 // add a new user
 async function register(user) {
-  // validation is handled prior in the registerValidation middleware 
+  // validation is handled prior in the registerValidation middleware
   // password is hashed in the authRouter
-  return db("users").insert({ ...user }, ['id', 'userName']);
+
+  // remove the 'confirm password' from the req.body before inserting to DB
+  const {
+    firstName,
+    lastName,
+    userName,
+    password,
+    email,
+    current_salary,
+    hire_date,
+    department_id,
+    job_title_id,
+    privilege_id,
+  } = user;
+
+  return db("users").insert(
+    {
+      firstName,
+      lastName,
+      userName,
+      password,
+      email,
+      current_salary,
+      hire_date,
+      department_id,
+      job_title_id,
+      privilege_id,
+    },
+    ["id", "userName"]
+  );
 }
 
 // login

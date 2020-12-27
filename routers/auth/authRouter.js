@@ -19,8 +19,6 @@ router.post("/register", registerValidation, (req, res) => {
     return res.status(400).json(errors);
   }
 
-  // remove the 'confirm password' from the req.body
-
   // if no validation errors proceed
   // hash user password
   const ROUNDS = parseInt(process.env.HASHING_ROUNDS);
