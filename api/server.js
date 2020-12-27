@@ -4,12 +4,16 @@ const cors = require("cors");
 const server = express();
 const helmet = require("helmet");
 const morgan = require('morgan');
+const { assignId } = require('../logs/morgan_tokens');
 
 // global middleware
 server.use(helmet());
 server.use(cors());
 server.use(express.json());
-server.use(morgan('combined'));
+// assignId is used in the morgan token 'id'
+server.use(assignId);
+// logger
+server.use(morgan('id: :id, method: :method, date: :date(iso), remoteAddr: :remote-addr, url: :url, status: :status, userAgent: :user-agent, resTime: :response-time'));
 
 // define routers
 const userRouter = require("../routers/userRouter");
