@@ -3,38 +3,36 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { body, validationResult} = require('express-validator');
+// express-validator
+const { validationResult } = require("express-validator");
+// express validator rules
+const { registerValidation } = require('../../../validation/registerValidation');
 
 const users = require("../users-model");
 
 // register a new user
 // return 'id' on success, error message if user already exists
-router.post("/register",
-  // validation
-  body('userName').not().isEmpty(),
-  body('password').not().isEmpty(),
-  body('email').not().isEmpty(),
-  body('current_salary').not().isEmpty(),
+router.post(
+  "/register", registerValidation,
   (req, res, next) => {
-    // validation errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      errors.array().map(error => {
-        console.log('error: ', error.param)
-      })
-      return res.status(400).json({Errors: errors.array()})
+    // check validation errors
+    try {
+      validationResult(req).throw();
+    } catch (error) {
+      return res.status(400).json(error);
     }
-  const ROUNDS = parseInt(process.env.HASHING_ROUNDS);
-  const user = req.body;
-  // hash user password
-  user.password = bcrypt.hashSync(user.password, ROUNDS);
-  users
-    .register(user)
-    .then((userRes) => {
-      res.status(200).json(userRes);
-    })
-    .catch(next);
-});
+    const ROUNDS = parseInt(process.env.HASHING_ROUNDS);
+    const user = req.body;
+    // hash user password
+    user.password = bcrypt.hashSync(user.password, ROUNDS);
+    users
+      .register(user)
+      .then((userRes) => {
+        res.status(200).json(userRes);
+      })
+      .catch(next);
+  }
+);
 
 // login
 router.post("/login", (req, res, next) => {
