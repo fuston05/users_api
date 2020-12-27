@@ -1,6 +1,6 @@
 // helper functions for models
 
-const db = require("../db-config");
+const db = require("../data/db-config");
 
 // checks if userName or email thats passed in is already in use
 const userCredsExist = async (userCreds) => {

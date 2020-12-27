@@ -1,6 +1,6 @@
 // users-model, shared by userRouter, and authRouter
 // /////////////////////////////////////////////////
-const db = require("../db-config");
+const db = require("../data/db-config");
 // model_utils
 const { userCredsExist } = require('./model_utils');
 

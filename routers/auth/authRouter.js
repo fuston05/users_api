@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // express-validator
 const { validationResult } = require("express-validator");
 // express validator rules
-const { registerValidation } = require('../../../validation/registerValidation');
+const { registerValidation } = require('../../validation/registerValidation');
 
 const users = require("../users-model");
 
