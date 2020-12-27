@@ -16,10 +16,9 @@ router.post(
   "/register", registerValidation,
   (req, res, next) => {
     // check validation errors
-    try {
-      validationResult(req).throw();
-    } catch (error) {
-      return res.status(400).json(error);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors);
     }
     const ROUNDS = parseInt(process.env.HASHING_ROUNDS);
     const user = req.body;
