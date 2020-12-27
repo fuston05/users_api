@@ -19,12 +19,8 @@ server.use(assignId);
 let accessLogStream = rfs.createStream("./logs/access.log", {
   interval: "1d",
 });
-// logger
-server.use(
-  morgan(
-    "id: :id, method: :method, date: :date(iso), remoteAddr: :remote-addr, url: :url, status: :status, userAgent: :user-agent, resTime: :response-time"
-  )
-);
+
+// logs to '/logs/access.log' file
 server.use(
   morgan(
     "id: :id, method: :method, date: :date(iso), remoteAddr: :remote-addr, url: :url, status: :status, userAgent: :user-agent, resTime: :response-time \n\n",
