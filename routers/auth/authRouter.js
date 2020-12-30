@@ -3,30 +3,25 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+// middleware
 // express-validator
 const { validationResult } = require("express-validator");
 // express validator rules
-const { registerValidation } = require("../../middleware");
+const { registerValidation, passwordHash} = require("../../middleware");
 
 const users = require("../users-model");
 
 // register a new user
 // return 'id' on success, error message if validation fails
-router.post("/register", registerValidation, (req, res) => {
+router.post("/register", registerValidation, passwordHash, (req, res) => {
   // check validation errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json(errors);
   }
 
-  // if no validation errors proceed
-  // hash user password
-  const ROUNDS = parseInt(process.env.HASHING_ROUNDS);
-  const user = req.body;
-  user.password = bcrypt.hashSync(user.password, ROUNDS);
-
   users
-    .register(user)
+    .register(req.body)
     .then((userRes) => {
       userRes[0].message = `Welcome, ${userRes[0].userName}`;
       res.status(201).json(userRes[0]);

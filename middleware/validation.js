@@ -20,7 +20,7 @@ const registerValidation = [
 
   // first name length
   body("firstName", `First name must be ${minNameLength} - ${maxNameLength} characters`).custom((value) => {
-    if (value.length < maxNameLength && value.length > minNameLength) {
+    if (value.length < maxNameLength && value.length >= minNameLength) {
       return true;
     }
   }),
@@ -37,7 +37,7 @@ const registerValidation = [
   
   // last name length
   body("lastName", `Last name must be ${minNameLength} - ${maxNameLength} characters`).custom((value) => {
-    if (value.length < maxNameLength && value.length > minNameLength) {
+    if (value.length < maxNameLength && value.length >= minNameLength) {
       return true;
     }
   }),
@@ -54,7 +54,7 @@ const registerValidation = [
   // username length
   body("userName", `User name must be ${minNameLength} - ${maxNameLength} characters`)
     .custom((value) => {
-      if (value.length < maxNameLength && value.length > minNameLength) {
+      if (value.length < maxNameLength && value.length >= minNameLength) {
         return true
       }
     }),
