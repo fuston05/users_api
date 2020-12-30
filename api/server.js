@@ -4,7 +4,7 @@ const cors = require("cors");
 const server = express();
 const helmet = require("helmet");
 const morgan = require("morgan");
-const { assignId } = require("../logs/morgan_tokens");
+const { assignId } = require("../middleware/morgan_tokens");
 const rfs = require("rotating-file-stream");
 
 // global middleware

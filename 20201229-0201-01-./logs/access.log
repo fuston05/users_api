@@ -1,6 +1,0 @@
-id: 995fecf0-434c-40d2-a631-f42a5a0e791e, method: POST, date: Tue, 29 Dec 2020 02:00:22 GMT(iso), remoteAddr: ::1, url: /auth/register, status: 400, userAgent: PostmanRuntime/7.26.8, resTime: 140.038 
-
-
-id: 9ee5a568-7170-4fe7-905b-a4f91893a202, method: POST, date: Tue, 29 Dec 2020 02:00:42 GMT(iso), remoteAddr: ::1, url: /auth/register, status: 400, userAgent: PostmanRuntime/7.26.8, resTime: 119.734 
-
-
