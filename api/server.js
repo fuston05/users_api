@@ -15,8 +15,9 @@ server.use(express.json());
 server.use(assignId);
 
 // writes morgan logs to 'rotating' log file
-let accessLogStream = rfs.createStream("./logs/access.log", {
-  interval: "1d",
+let accessLogStream = rfs.createStream(".access.log", {
+  interval: "5s",
+  path: './logs',
 });
 
 // logs to '/logs/access.log' file

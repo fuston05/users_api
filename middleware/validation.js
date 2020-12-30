@@ -2,7 +2,7 @@
 const jwt = require("jsonwebtoken");
 const { body } = require("express-validator");
 // model_utils
-const { userCredsExist } = require("../utils");
+const { userCredsExist } = require("../data/db_utils");
 
 const minNameLength = 3;
 const maxNameLength = 20;
