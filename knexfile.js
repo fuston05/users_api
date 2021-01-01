@@ -1,5 +1,3 @@
-
-
 module.exports = {
   development: {
     client: "postgres",

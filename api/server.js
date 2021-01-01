@@ -37,7 +37,7 @@ server.use("/users", userRouter);
 server.use("/auth", authRouter);
 
 server.get("/", (req, res) => {
-  res.send("**** Welcome, the Server is live! ****");
+  res.status(200).json("**** Welcome, the Server is live! ****");
 });
 
 // fall back case
