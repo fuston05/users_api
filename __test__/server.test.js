@@ -1,4 +1,4 @@
-// test root route
+// test root route integration tests
 
 const request = require('supertest');
 const server = require('../api/server');

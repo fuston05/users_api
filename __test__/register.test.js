@@ -1,3 +1,5 @@
+// auth/register integration tests
+
 const request = require("supertest");
 const server = require("../api/server");
 const db = require("../data/db-config");
@@ -30,7 +32,7 @@ describe("POST /auth/register", () => {
     const response = await request(server)
       .post("/auth/register")
       .send(userData);
-
+    // check status, format, data
     expect(response.status).toBe(201);
     expect(response.type).toBe("application/json");
     expect(response.body).toBe(1);
