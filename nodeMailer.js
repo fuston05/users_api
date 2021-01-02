@@ -1,15 +1,12 @@
-// for sending the email verification up regristration
+// for sending the email verification up registration
+const nodemailer = require("nodemailer");
 
-const name = "Scott Fuston";
 const username = process.env.NODEMAILER_USER;
 const pass = process.env.NODEMAILER_PASS;
 ("use strict");
-const nodemailer = require("nodemailer");
 
 // async..await is not allowed in global scope, must use a wrapper
 async function mailer(mailInfo) {
-  // Generate test SMTP service account from ethereal.email
-  // Only needed if you don't have a real mail account for testing
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
