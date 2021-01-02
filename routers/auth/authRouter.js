@@ -25,7 +25,7 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
   // attach emailToken to the req.body
   // mailer obj 
   const mailInfo= {
-    from: `"Scott Fuston" <fuston2012@gmail.com>`, // sender address
+    from: `"Scott Fuston" <process.env.NODEMAILER_USER>`, // sender address
     to: 'fuston05@yahoo.com', // list of receivers
     subject: "Hello ✔", // Subject line
     text: "This is a test email", // plain text body

@@ -1,8 +1,8 @@
 // for sending the email verification up regristration
 
-const name = "Enos Hahn";
-const username = "enos62@ethereal.email;";
-const pass = "NAJ4MA7p9CatGE5JPA";
+const name = "Scott Fuston";
+const username = process.env.NODEMAILER_USER;
+const pass = process.env.NODEMAILER_PASS;
 ("use strict");
 const nodemailer = require("nodemailer");
 
@@ -17,8 +17,8 @@ async function mailer(mailInfo) {
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: "fuston2012@gmail.com", // generated ethereal user
-      pass: "Release123!", // generated ethereal password
+      user: username, // generated ethereal user
+      pass: pass, // generated ethereal password
     },
     authMethod: 'PLAIN'
   });
