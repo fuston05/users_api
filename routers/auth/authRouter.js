@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mailer = require('../../nodeMailer');
 // middleware
 // express-validator
 const { validationResult } = require("express-validator");
@@ -14,21 +15,39 @@ const users = require("../users-model");
 // register a new user
 // return 'id' on success, error message if validation fails
 router.post("/register", registerValidation, passwordHash, (req, res) => {
-  // check validation errors
+  // check validation errors from the registerValidation middleware
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json(errors);
   }
 
+  // make an emailToken
+  // attach emailToken to the req.body
+  // mailer obj 
+  const mailInfo= {
+    from: `"Scott Fuston" <fuston2012@gmail.com>`, // sender address
+    to: 'fuston05@yahoo.com', // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "This is a test email", // plain text body
+    html: "<b>This is a test email</b>", // html body
+  }
+  mailer(mailInfo).catch(err => {
+    console.log('mailer error: ', err);
+    return res.status(400).json({error: 'email error'});
+  })
   users
     .register(req.body)
-    .then((userRes) => {
+    .then(async (userRes) => {
       userRes[0].message = `Welcome, ${userRes[0].userName}`;
-      res.status(201).json(userRes[0]);
+      // get user id from database after creation
+      const { id } = await users.findByEmail(req.body.email);
+      const emailToken = bcrypt.hashSync(id.toString(), parseInt(process.env.HASHING_ROUNDS));
       // send verification email.
-
+      
+      res.status(201).json(userRes[0]);
     })
     .catch((err) => {
+      console.log('err: ', err);
       res.status(500).json({Error: 'Server error'});
     });
 });

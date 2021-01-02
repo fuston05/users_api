@@ -51,6 +51,7 @@ async function register(user) {
     department_id,
     job_title_id,
     privilege_id,
+    emailToken
   } = user;
 
   return db("users").insert(
@@ -65,6 +66,7 @@ async function register(user) {
       department_id,
       job_title_id,
       privilege_id,
+      emailToken
     },
     ["id", "userName"]
   );
