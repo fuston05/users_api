@@ -3,14 +3,37 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const mailer = require('../../nodeMailer');
+const mailer = require("../../nodeMailer");
 // middleware
 // express-validator
 const { validationResult } = require("express-validator");
 // express validator rules
-const { registerValidation, passwordHash} = require("../../middleware");
+const { registerValidation, passwordHash } = require("../../middleware");
 
 const users = require("../users-model");
+const dbConfig = require("../../data/db-config");
+
+// verify a new registered user
+router.get("/confirmEmail", (req, res) => {
+  const { emailToken, u } = req.query;
+  users
+    .findByEmail(u)
+    .then((resp) => {
+      // compare tokens
+      if (emailToken === resp.emailToken) {
+        // if tokens match, update 'isVerified' to true in the DB
+        console.log('tokens match')
+      } else {
+        return res.status(400).json({Error: 'Could not verify your email, your link may have expired'})
+        // tokens did not match, send error
+      }
+      console.log("res: ", resp);
+    })
+    .catch((err) => {
+      console.log("err: ", err);
+    });
+  res.status(201).json({ Message: "Account verification successful" });
+});
 
 // register a new user
 // return 'id' on success, error message if validation fails
@@ -22,23 +45,28 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
   }
 
   // add emailToken to req.body
-  req.body.emailToken= bcrypt.hashSync(`${Math.random() * Date.now()}`, parseInt(process.env.HASHING_ROUNDS));
+  req.body.emailToken = bcrypt.hashSync(
+    `${Math.random() * Date.now()}`,
+    parseInt(process.env.HASHING_ROUNDS)
+  );
   users
     .register(req.body)
     .then(async (userRes) => {
       userRes[0].message = `Welcome, ${userRes[0].userName}`;
 
       // send verification email.
-      mailer(req.body.email, req.body.emailToken).catch(err => {
-        console.log('mailer error: ', err);
-        return res.status(400).json({error: 'There was a problem sending the email'});
-      })
+      mailer(req.body.email, req.body.emailToken).catch((err) => {
+        console.log("mailer error: ", err);
+        return res
+          .status(400)
+          .json({ error: "There was a problem sending the email" });
+      });
 
       res.status(201).json(userRes[0]);
     })
     .catch((err) => {
-      console.log('err: ', err);
-      res.status(500).json({Error: 'Server error'});
+      console.log("err: ", err);
+      res.status(500).json({ Error: "Server error" });
     });
 });
 
