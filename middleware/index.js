@@ -5,12 +5,14 @@ const {
   isLoggedIn,
 } = require("./validation");
 const { assignId } = require("./validation");
-const passwordHash = require('./passwordHash');
+const passwordHash = require("./passwordHash");
+const isVerified = require("./isVerified");
 
 module.exports = {
   isLoggedIn,
   registerValidation,
   loginValidation,
   assignId,
-  passwordHash
+  passwordHash,
+  isVerified,
 };

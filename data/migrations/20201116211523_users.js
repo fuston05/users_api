@@ -3,8 +3,8 @@ exports.up = function (knex) {
     .createTable("privileges", (tbl) => {
       // sets an auto-incrementing 'id' filed as primary key
       tbl.increments();
-      tbl.string("privilegeName", 128).notNullable().defaultsTo('User');
-      tbl.text('privilege_description').notNullable()
+      tbl.string("privilegeName", 128).notNullable().defaultsTo("User");
+      tbl.text("privilege_description").notNullable();
     })
 
     .createTable("departments", (tbl) => {
@@ -22,13 +22,15 @@ exports.up = function (knex) {
 
     .createTable("users", (tbl) => {
       tbl.increments();
-      tbl.string('firstName', 128).notNullable()
-      tbl.string('lastName', 128).notNullable()
+      tbl.string("firstName", 128).notNullable();
+      tbl.string("lastName", 128).notNullable();
       tbl.string("userName", 128).notNullable().index().unique();
       tbl.string("password", 256).notNullable();
       tbl.string("email", 128);
       tbl.integer("current_salary").notNullable();
       tbl.date("hire_date").notNullable();
+      tbl.string("emailToken", 128).defaultsTo(null);
+      tbl.boolean("isVerified", 128).notNullable().defaultsTo(false);
       // sets a foreign key to the 'role' table
       tbl
         .integer("privilege_id", 128)

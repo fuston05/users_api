@@ -25,7 +25,8 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
     .then((userRes) => {
       userRes[0].message = `Welcome, ${userRes[0].userName}`;
       res.status(201).json(userRes[0]);
-      // TODO: email confirmation
+      // send verification email.
+
     })
     .catch((err) => {
       res.status(500).json({Error: 'Server error'});
@@ -34,6 +35,8 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
 
 // login
 router.post("/login", (req, res, next) => {
+  // check if account NOT verified
+  // send an error
   users
     .login(req.body)
     .then((loginRes) => {
