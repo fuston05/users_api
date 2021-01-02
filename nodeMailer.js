@@ -3,10 +3,11 @@ const nodemailer = require("nodemailer");
 
 const username = process.env.NODEMAILER_USER;
 const pass = process.env.NODEMAILER_PASS;
+const API_URL = process.env.API_URL;
 ("use strict");
 
 // async..await is not allowed in global scope, must use a wrapper
-async function mailer(mailInfo) {
+async function mailer(userEmail, emailToken) {
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
@@ -21,14 +22,14 @@ async function mailer(mailInfo) {
   });
 
   // send mail with defined transport object
-  let info = await transporter.sendMail(mailInfo);
-
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-  // Preview only available when sending through an Ethereal account
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  let info = await transporter.sendMail({
+    // sender address
+    from: `"EMAIL VERIFICATION" <process.env.NODEMAILER_USER>`,
+    to: userEmail, // list of receivers
+    subject: "Email verification", // Subject line
+    text: `Thank you for registering. Please verify your account by copying the url below into your browser search bar.\n ${process.env.API_URL}/confirmEmail?emailToken=${emailToken}`, // plain text body
+    html: `<h1>Thank you for registering.</h1> <p> Please verify your account by clicking the link below.</p> <a href=${API_URL}/confirmEmail?emailToken=${emailToken}> Verify your email</a>`
+  });
 }
 
 module.exports = mailer;

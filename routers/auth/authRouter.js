@@ -21,29 +21,19 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
     return res.status(400).json(errors);
   }
 
-  // make an emailToken
-  // attach emailToken to the req.body
-  // mailer obj 
-  const mailInfo= {
-    from: `"Scott Fuston" <process.env.NODEMAILER_USER>`, // sender address
-    to: 'fuston05@yahoo.com', // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "This is a test email", // plain text body
-    html: "<b>This is a test email</b>", // html body
-  }
-  mailer(mailInfo).catch(err => {
-    console.log('mailer error: ', err);
-    return res.status(400).json({error: 'email error'});
-  })
+  // add emailToken to req.body
+  req.body.emailToken= bcrypt.hashSync(`${Math.random() * Date.now()}`, parseInt(process.env.HASHING_ROUNDS));
   users
     .register(req.body)
     .then(async (userRes) => {
       userRes[0].message = `Welcome, ${userRes[0].userName}`;
-      // get user id from database after creation
-      const { id } = await users.findByEmail(req.body.email);
-      const emailToken = bcrypt.hashSync(id.toString(), parseInt(process.env.HASHING_ROUNDS));
+
       // send verification email.
-      
+      mailer(req.body.email, req.body.emailToken).catch(err => {
+        console.log('mailer error: ', err);
+        return res.status(400).json({error: 'There was a problem sending the email'});
+      })
+
       res.status(201).json(userRes[0]);
     })
     .catch((err) => {
