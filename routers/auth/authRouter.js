@@ -11,10 +11,9 @@ const { validationResult } = require("express-validator");
 const { registerValidation, passwordHash } = require("../../middleware");
 
 const users = require("../users-model");
-const dbConfig = require("../../data/db-config");
 
 // verify a new registered user
-router.get("/confirmEmail", (req, res) => {
+router.get("/confirmEmail", (req, res, next) => {
   const { emailToken, u } = req.query;
   users
     .findByEmail(u)
@@ -22,24 +21,17 @@ router.get("/confirmEmail", (req, res) => {
       // compare tokens
       if (emailToken === resp.emailToken) {
         // if tokens match, update 'isVerified' to true in the DB
-        console.log("tokens match");
-        res
-          .status(201)
-          .send(
-            "<p style= {background-color: blue; width: 50%; margin: 0 auto;}>Email verification was Successful!</p>"
-          );
+        return res.status(201).send("<p>Email verification was Successful!</p>");
       } else {
-        return res
-          .status(400)
-          .json({
-            Error: "Could not verify your email, your link may have expired",
-          });
         // tokens did not match, send error
+        return res.status(400).json({
+          Error: "Could not verify your email, your link may have expired",
+        });
       }
-      console.log("res: ", resp);
     })
     .catch((err) => {
       console.log("err: ", err);
+      next(err);
     });
 });
 
