@@ -21,6 +21,7 @@ router.get("/confirmEmail", (req, res, next) => {
       // compare tokens
       if (emailToken === resp.emailToken) {
         // if tokens match, update 'isVerified' to true in the DB
+        // set emailToken to null
         return res.status(201).send("<p>Email verification was Successful!</p>");
       } else {
         // tokens did not match, send error
@@ -30,7 +31,6 @@ router.get("/confirmEmail", (req, res, next) => {
       }
     })
     .catch((err) => {
-      console.log("err: ", err);
       next(err);
     });
 });
@@ -54,10 +54,9 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
     .then(async (userRes) => {
       userRes[0].message = `Welcome, ${userRes[0].userName}`;
       const host = `${req.protocol}://${req.headers.host}`;
-      console.log("host: ", host);
+
       // send verification email.
       mailer(req.body.email, req.body.emailToken, host).catch((err) => {
-        console.log("mailer error: ", err);
         return res
           .status(400)
           .json({ error: "There was a problem sending the email" });

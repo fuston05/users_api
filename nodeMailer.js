@@ -24,9 +24,13 @@ async function mailer(userEmail, emailToken, host) {
   let info = await transporter.sendMail({
     // sender address
     from: `"EMAIL VERIFICATION" <process.env.NODEMAILER_USER>`,
-    to: userEmail, // list of receivers
-    subject: "Email verification", // Subject line
-    text: `Thank you for registering. Please verify your account by copying the url below into your browser search bar.\n ${host}/auth/confirmEmail?emailToken=${emailToken}&u=${userEmail}`, // plain text body
+    // list of receivers
+    to: userEmail,
+    // Subject line
+    subject: "Email verification",
+    // plain text body
+    text: `Thank you for registering. Please verify your account by copying the url below into your browser search bar.\n ${host}/auth/confirmEmail?emailToken=${emailToken}&u=${userEmail}`,
+    // html body
     html: `<h1>Thank you for registering.</h1> <p> Please verify your account by clicking the link below.</p> <a href=${host}/auth/confirmEmail?emailToken=${emailToken}&u=${userEmail}> Verify your email</a>`
   });
 }
