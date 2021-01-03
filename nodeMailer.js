@@ -3,11 +3,10 @@ const nodemailer = require("nodemailer");
 
 const username = process.env.NODEMAILER_USER;
 const pass = process.env.NODEMAILER_PASS;
-const API_URL = process.env.API_URL;
 ("use strict");
 
 // async..await is not allowed in global scope, must use a wrapper
-async function mailer(userEmail, emailToken) {
+async function mailer(userEmail, emailToken, host) {
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
@@ -27,8 +26,8 @@ async function mailer(userEmail, emailToken) {
     from: `"EMAIL VERIFICATION" <process.env.NODEMAILER_USER>`,
     to: userEmail, // list of receivers
     subject: "Email verification", // Subject line
-    text: `Thank you for registering. Please verify your account by copying the url below into your browser search bar.\n ${process.env.API_URL}/auth/confirmEmail?emailToken=${emailToken}&u=${userEmail}`, // plain text body
-    html: `<h1>Thank you for registering.</h1> <p> Please verify your account by clicking the link below.</p> <a href=${API_URL}/auth/confirmEmail?emailToken=${emailToken}&u=${userEmail}> Verify your email</a>`
+    text: `Thank you for registering. Please verify your account by copying the url below into your browser search bar.\n ${host}/auth/confirmEmail?emailToken=${emailToken}&u=${userEmail}`, // plain text body
+    html: `<h1>Thank you for registering.</h1> <p> Please verify your account by clicking the link below.</p> <a href=${host}/auth/confirmEmail?emailToken=${emailToken}&u=${userEmail}> Verify your email</a>`
   });
 }
 

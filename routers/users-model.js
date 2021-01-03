@@ -31,7 +31,7 @@ function findByUserName(userName) {
 // get a user by email
 // just for internal use/helper at the moment
 function findByEmail(email) {
-  return db("users").where({ email }).select("id", "userName", "email", "emailToken");
+  return db("users").where({ email }).select("id", "userName", "email", "emailToken").first();
 }
 
 // add a new user

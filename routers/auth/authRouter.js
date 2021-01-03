@@ -22,9 +22,18 @@ router.get("/confirmEmail", (req, res) => {
       // compare tokens
       if (emailToken === resp.emailToken) {
         // if tokens match, update 'isVerified' to true in the DB
-        console.log('tokens match')
+        console.log("tokens match");
+        res
+          .status(201)
+          .send(
+            "<p style= {background-color: blue; width: 50%; margin: 0 auto;}>Email verification was Successful!</p>"
+          );
       } else {
-        return res.status(400).json({Error: 'Could not verify your email, your link may have expired'})
+        return res
+          .status(400)
+          .json({
+            Error: "Could not verify your email, your link may have expired",
+          });
         // tokens did not match, send error
       }
       console.log("res: ", resp);
@@ -32,7 +41,6 @@ router.get("/confirmEmail", (req, res) => {
     .catch((err) => {
       console.log("err: ", err);
     });
-  res.status(201).json({ Message: "Account verification successful" });
 });
 
 // register a new user
@@ -53,9 +61,10 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
     .register(req.body)
     .then(async (userRes) => {
       userRes[0].message = `Welcome, ${userRes[0].userName}`;
-
+      const host = `${req.protocol}://${req.headers.host}`;
+      console.log("host: ", host);
       // send verification email.
-      mailer(req.body.email, req.body.emailToken).catch((err) => {
+      mailer(req.body.email, req.body.emailToken, host).catch((err) => {
         console.log("mailer error: ", err);
         return res
           .status(400)
