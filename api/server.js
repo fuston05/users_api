@@ -16,7 +16,7 @@ server.use(assignId);
 
 // writes morgan logs to 'rotating' log file
 let accessLogStream = rfs.createStream(".access.log", {
-  interval: "5s",
+  interval: "1d",
   path: "./logs",
 });
 
@@ -25,6 +25,12 @@ server.use(
   morgan(
     "id: :id, method: :method, date: :date(iso), remoteAddr: :remote-addr, url: :url, status: :status, userAgent: :user-agent, resTime: :response-time \n\n",
     { stream: accessLogStream }
+  )
+);
+
+server.use(
+  morgan(
+    "id: :id, method: :method, date: :date(iso), remoteAddr: :remote-addr, url: :url, status: :status, userAgent: :user-agent, resTime: :response-time"
   )
 );
 
