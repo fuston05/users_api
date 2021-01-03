@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {isLoggedIn} = require("../middleware");
 
-const users = require("./users-model");
+const users = require("../models");
 
 // get all users 
 //  -if logged in

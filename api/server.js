@@ -17,7 +17,7 @@ server.use(assignId);
 // writes morgan logs to 'rotating' log file
 let accessLogStream = rfs.createStream(".access.log", {
   interval: "5s",
-  path: './logs',
+  path: "./logs",
 });
 
 // logs to '/logs/access.log' file
@@ -29,8 +29,7 @@ server.use(
 );
 
 // define routers
-const userRouter = require("../routers/userRouter");
-const authRouter = require("../routers/auth/authRouter");
+const { userRouter, authRouter } = require("../routers");
 
 // use routers
 server.use("/users", userRouter);

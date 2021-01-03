@@ -10,7 +10,7 @@ const { validationResult } = require("express-validator");
 // express validator rules
 const { registerValidation, passwordHash } = require("../../middleware");
 
-const users = require("../users-model");
+const users = require("../../models/users-model");
 
 // verify a new registered user
 router.get("/confirmEmail", (req, res, next) => {
