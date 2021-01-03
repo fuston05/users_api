@@ -28,12 +28,6 @@ server.use(
   )
 );
 
-server.use(
-  morgan(
-    "id: :id, method: :method, date: :date(iso), remoteAddr: :remote-addr, url: :url, status: :status, userAgent: :user-agent, resTime: :response-time"
-  )
-);
-
 // define routers
 const { userRouter, authRouter } = require("../routers");
 
