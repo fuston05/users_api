@@ -4,8 +4,7 @@ const cors = require("cors");
 const server = express();
 const helmet = require("helmet");
 const morgan = require("morgan");
-const { assignId } = require("../middleware/morgan_tokens");
-const rfs = require("rotating-file-stream");
+const { assignId, accessLogStream } = require("../middleware");
 
 // global middleware
 server.use(helmet());
@@ -13,12 +12,6 @@ server.use(cors());
 server.use(express.json());
 // assignId is used in the morgan token 'id'
 server.use(assignId);
-
-// writes morgan logs to 'rotating' log file
-let accessLogStream = rfs.createStream(".access.log", {
-  interval: "1d",
-  path: "./logs",
-});
 
 // logs to '/logs/access.log' file
 server.use(
@@ -34,7 +27,7 @@ const { userRouter, authRouter } = require("../routers");
 // use routers
 server.use("/users", userRouter);
 server.use("/auth", authRouter);
-
+// root route
 server.get("/", (req, res) => {
   res.status(200).json("**** Welcome, the Server is live! ****");
 });
