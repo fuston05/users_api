@@ -8,21 +8,26 @@ const mailer = require("../../nodeMailer");
 // express-validator
 const { validationResult } = require("express-validator");
 // express validator rules
-const { registerValidation, passwordHash } = require("../../middleware");
+const { registerValidation, passwordHash , isVerified} = require("../../middleware");
 
 const users = require("../../models/users-model");
 
 // verify a new registered user
-router.get("/confirmEmail", (req, res, next) => {
+router.get("/confirmEmail", isVerified, (req, res, next) => {
+  // check if account has already been verified
+  if (req.body.isVerified) {
+    return res.status(401).json({Error: "You have already verified your email, please log in."})
+  }
   const { emailToken, u } = req.query;
   users
     .findByEmail(u)
-    .then((resp) => {
+    .then(async (resp) => {
       // compare tokens
       if (emailToken === resp.emailToken) {
         // if tokens match, update 'isVerified' to true in the DB
         // set emailToken to null
-        return res.status(201).send("<p>Email verification was Successful!</p>");
+        await users.updateUser({id: resp.id, isVerified: true, emailToken: null });
+        return res.status(201).send("<p>Email verification was Successful! Please log in.</p>");
       } else {
         // tokens did not match, send error
         return res.status(400).json({

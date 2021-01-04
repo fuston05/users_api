@@ -31,7 +31,7 @@ function findByUserName(userName) {
 // get a user by email
 // just for internal use/helper at the moment
 function findByEmail(email) {
-  return db("users").where({ email }).select("id", "userName", "email", "emailToken").first();
+  return db("users").where({ email }).select("id", "userName", "email", "emailToken", "isVerified").first();
 }
 
 // add a new user
@@ -81,7 +81,8 @@ function login(user) {
 // update a user
 function updateUser(user) {
   // validation is handled prior in the registerValidation middleware
-  return "not set up yet";
+  
+  return db('users').update(user, ['id', 'userName']).where({id: user.id});
 }
 
 function deleteUser(id) {
