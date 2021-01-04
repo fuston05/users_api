@@ -22,9 +22,9 @@ router.get("/confirmEmail", isVerified, (req, res, next) => {
   users
     .findByEmail(u)
     .then(async (resp) => {
-      // compare tokens
+      // check if tokens match
       if (emailToken === resp.emailToken) {
-        // if tokens match, update 'isVerified' to true in the DB
+        // update 'isVerified' to true in the DB
         // set emailToken to null
         await users.updateUser({id: resp.id, isVerified: true, emailToken: null });
         return res.status(201).send("<p>Email verification was Successful! Please log in.</p>");
@@ -41,6 +41,7 @@ router.get("/confirmEmail", isVerified, (req, res, next) => {
 });
 
 // register a new user
+// registerValidation checks to see if username or email already taken
 // return 'id' on success, error message if validation fails
 router.post("/register", registerValidation, passwordHash, (req, res) => {
   // check validation errors from the registerValidation middleware
@@ -76,9 +77,12 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
 });
 
 // login
-router.post("/login", (req, res, next) => {
+router.post("/login", isVerified, (req, res, next) => {
   // check if account NOT verified
-  // send an error
+  if (!req.body.isVerified) {
+    return res.status(401).json({Error: "Please verify your email to gain log-in access. Check your email for the verification link."})
+  }
+
   users
     .login(req.body)
     .then((loginRes) => {
