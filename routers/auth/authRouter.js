@@ -82,28 +82,28 @@ router.post("/login", isVerified, (req, res, next) => {
   if (!req.body.isVerified) {
     return res.status(401).json({Error: "Please verify your email to gain log-in access. Check your email for the verification link."})
   }
-
+  
   users
-    .login(req.body)
-    .then((loginRes) => {
-      if (loginRes !== null) {
-        // database results info
-        const hashedPass = loginRes.password;
-        const userId = loginRes.id;
-        const userName = loginRes.userName;
-        const userPrivilege = loginRes.privilege_id;
-
-        // user passed info
-        const password = info.password;
-
+  .login(req.body)
+  .then((loginRes) => {
+    if (loginRes !== null) {
+      // database results info
+      const hashedPass = loginRes.password;
+      const id = loginRes.id;
+      const userName = loginRes.userName;
+      const userPrivilege = loginRes.privilege_id;
+      
+      // user passed password
+      const password = req.body.password;
+      
         // check password hash and username
         if (
           bcrypt.compareSync(password, hashedPass) &&
-          info.userName === userName
+          req.body.userName === userName
         ) {
           // json web token
           const payload = {
-            sub: userId,
+            sub: id,
             privilege: userPrivilege,
           };
           const sec = process.env.JWT_SECRET;

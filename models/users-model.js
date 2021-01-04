@@ -26,7 +26,7 @@ function findById(id) {
 // get a user by userName
 // just for internal use/helper at the moment
 function findByUserName(userName) {
-  return db("users").where({ userName });
+  return db("users").where({ userName }).select("id", "userName", "email", "emailToken", "isVerified").first();
 }
 // get a user by email
 // just for internal use/helper at the moment
@@ -75,7 +75,7 @@ async function register(user) {
 // login
 function login(user) {
   // validation is handled prior in the registerValidation middleware
-  return "not set up yet";
+  return db('users').where({ userName: user.userName }).select('id', 'userName', 'password').first();
 }
 
 // update a user
