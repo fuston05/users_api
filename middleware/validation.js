@@ -147,6 +147,14 @@ const loginValidation = [
       return Promise.reject();
     }
   }),
+  // check if userName exists
+  body("userName", "User name does not exist").custom(async (value) => {
+    const userNameExists = await userCredsExist({ userName: value });
+    if (!userNameExists) {
+      return Promise.reject();
+    }
+  }),
+
 
   // password
   body("password", "Invalid password")
@@ -169,8 +177,9 @@ const isLoggedIn = (req, res, next) => {
   const sec = process.env.JWT_SECRET;
   jwt.verify(authHeader, sec, (err, decoded) => {
     if (err) {
-      res.status(401).json({ Error: "Not authorized" });
+      res.status(401).json({ Error: "Not authorized, please log in" });
     } else {
+      // TODO: update this role check when i decide on implimentation.
       res.locals.privilege = decoded.privilege;
       next();
     }

@@ -1,4 +1,5 @@
-// auth router
+// ///////////// auth router ///////////////
+// ////////////////////////////////////////
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -8,25 +9,28 @@ const mailer = require("../../nodeMailer");
 // express-validator
 const { validationResult } = require("express-validator");
 // express validator rules
-const { registerValidation, passwordHash , isVerified} = require("../../middleware");
+const { registerValidation, loginValidation, passwordHash , isVerified} = require("../../middleware");
 
 const users = require("../../models/users-model");
 
-// verify a new registered user
+// verify email for new registered user
 router.get("/confirmEmail", isVerified, (req, res, next) => {
   // check if account has already been verified
   if (req.body.isVerified) {
     return res.status(401).json({Error: "You have already verified your email, please log in."})
   }
+  // grab user's emailToken and email from query string
   const { emailToken, u } = req.query;
+  
   users
     .findByEmail(u)
     .then(async (resp) => {
       // check if tokens match
       if (emailToken === resp.emailToken) {
         // update 'isVerified' to true in the DB
-        // set emailToken to null
-        await users.updateUser({id: resp.id, isVerified: true, emailToken: null });
+        // set emailToken to null in DB
+        await users.updateUser({ id: resp.id, isVerified: true, emailToken: null });
+        
         return res.status(201).send("<p>Email verification was Successful! Please log in.</p>");
       } else {
         // tokens did not match, send error
@@ -77,7 +81,7 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
 });
 
 // login
-router.post("/login", isVerified, (req, res, next) => {
+router.post("/login", loginValidation, isVerified, (req, res, next) => {
   // check if account NOT verified
   if (!req.body.isVerified) {
     return res.status(401).json({Error: "Please verify your email to gain log-in access. Check your email for the verification link."})
