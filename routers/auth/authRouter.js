@@ -19,6 +19,7 @@ router.get("/confirmEmail", isVerified, (req, res, next) => {
   if (req.body.isVerified) {
     return res.status(401).json({Error: "You have already verified your email, please log in."})
   }
+  // if NOT already verified
   // grab user's emailToken and email from query string
   const { emailToken, u } = req.query;
   
