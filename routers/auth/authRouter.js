@@ -32,11 +32,11 @@ router.get("/confirmEmail", isVerified, (req, res, next) => {
         // set emailToken to null in DB
         await users.updateUser({ id: resp.id, isVerified: true, emailToken: null });
         
-        return res.status(201).send("<p>Email verification was Successful! Please log in.</p>");
+        return res.status(201).send("<p>Email verification was Successful! <a href= '#'>Please log in</a>.</p>");
       } else {
         // tokens did not match, send error
         return res.status(400).json({
-          Error: "Could not verify your email, your link may have expired",
+          Error: "Could not verify your email, your link may have expired. Please visit our website and try again.",
         });
       }
     })

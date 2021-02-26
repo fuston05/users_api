@@ -80,6 +80,7 @@ function login(user) {
 
 // update a user
 function updateUser(user) {
+  return "successful!"
   // validation is handled prior in the registerValidation middleware
   
   return db('users').update(user, ['id', 'userName']).where({id: user.id});
