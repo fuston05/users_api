@@ -13,7 +13,8 @@ const { registerValidation, loginValidation, passwordHash , isVerified} = requir
 
 const users = require("../../models/users-model");
 
-// verify email for new registered user
+// ************ EMAIL CONFIRMATION ************
+// ********************************************
 router.get("/confirmEmail", isVerified, (req, res, next) => {
   // check if account has already been verified
   if (req.body.isVerified) {
@@ -46,7 +47,8 @@ router.get("/confirmEmail", isVerified, (req, res, next) => {
     });
 });
 
-// register a new user
+// ***************** REGISTER *****************
+// ********************************************
 // registerValidation checks to see if username or email already taken
 // return 'id' on success, error message if validation fails
 router.post("/register", registerValidation, passwordHash, (req, res) => {
@@ -83,7 +85,8 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
     });
 });
 
-// login
+// ***************** LOG-IN ***************** 
+// ******************************************
 router.post("/login", loginValidation, isVerified, (req, res, next) => {
   // check if account NOT verified
   if (!req.body.isVerified) {
