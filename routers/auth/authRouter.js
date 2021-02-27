@@ -55,6 +55,7 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json(errors);
   }
+  console.log('reg body: ', req.body)
 
   // add emailToken to req.body
   req.body.emailToken = bcrypt.hashSync(
@@ -65,9 +66,10 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
   users
     .register(req.body)
     .then(async (userRes) => {
+      // attach welcome message to the userRes
       userRes[0].message = `Welcome, ${userRes[0].userName}`;
-      const host = `${req.protocol}://${req.headers.host}`;
 
+      const host = `${req.protocol}://${req.headers.host}`;
       // send verification email.
       mailer(req.body.email, req.body.userName, req.body.emailToken, host).catch((err) => {
         return res.status(400).json({ error: "There was a problem sending the email" });
