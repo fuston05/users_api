@@ -21,17 +21,17 @@ router.get("/confirmEmail", isVerified, (req, res, next) => {
   }
 
   // if NOT already verified
-  // grab user's emailToken and email from query string
+  // grab user's emailToken(t) and userName(u) from query string
   const { t, u } = req.query;
   
   users
     .findByUserName(u)
-    .then(async (resp) => {
+    .then(async (userRes) => {
       // check if tokens match
-      if (t === resp.emailToken) {
+      if (t === userRes.emailToken) {
         // update 'isVerified' to true and -
         // set emailToken to null in DB
-        await users.updateUser({ id: resp.id, isVerified: true, emailToken: null });
+        await users.updateUser({ id: userRes.id, isVerified: true, emailToken: null });
         
         return res.status(201).send("<p>Email verification was Successful! <a href= '#'>Please log in</a>.</p>");
       } else {
