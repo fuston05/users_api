@@ -19,16 +19,17 @@ router.get("/confirmEmail", isVerified, (req, res, next) => {
   if (req.body.isVerified) {
     return res.status(401).json({Error: "You have already verified your email, please log in."})
   }
+
   // if NOT already verified
   // grab user's emailToken and email from query string
-  const { emailToken, u } = req.query;
+  const { t, u } = req.query;
   
   users
-    .findByEmail(u)
+    .findByUserName(u)
     .then(async (resp) => {
       // check if tokens match
-      if (emailToken === resp.emailToken) {
-        // update 'isVerified' to true in the DB
+      if (t === resp.emailToken) {
+        // update 'isVerified' to true and -
         // set emailToken to null in DB
         await users.updateUser({ id: resp.id, isVerified: true, emailToken: null });
         
@@ -60,6 +61,7 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
     `${Math.random() * Date.now()}`,
     parseInt(process.env.HASHING_ROUNDS)
   );
+
   users
     .register(req.body)
     .then(async (userRes) => {
@@ -67,10 +69,8 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
       const host = `${req.protocol}://${req.headers.host}`;
 
       // send verification email.
-      mailer(req.body.email, req.body.emailToken, host).catch((err) => {
-        return res
-          .status(400)
-          .json({ error: "There was a problem sending the email" });
+      mailer(req.body.email, req.body.userName, req.body.emailToken, host).catch((err) => {
+        return res.status(400).json({ error: "There was a problem sending the email" });
       });
 
       res.status(201).json(userRes[0]);
