@@ -20,15 +20,15 @@
 
 - [Expressjs Docs](https://expressjs.com/)
 
-- [bcryptJs](https://www.npmjs.com/package/bcrypt) for hashing.
+- [bcryptJs](https://www.npmjs.com/package/bcrypt) for password hashing.
 
 - [uuid](https://www.npmjs.com/package/uuid) for assigning unique id's to http request logs in Morgan Logger.
 
-- [morgan](https://www.npmjs.com/package/morgan) for logging errors
+- [morgan](https://www.npmjs.com/package/morgan) for logging
 
 - [express-validator](https://express-validator.github.io/docs/) for user input validation
 
-- Currently set up for use with [postgres database](https://www.postgresql.org/), you can change this to use any database by editing the knexfile.js
+- Currently set up for use with [postgres database](https://www.postgresql.org/), you can change this to use any database by editing the knexfile.js [See knexjs docs](http://knexjs.org/)
 
 - Local development server uses [nodemon](https://www.npmjs.com/package/nodemon)
 
@@ -40,7 +40,7 @@
 - Run 'npm install'
 - Run 'npm run server' to start up the server (running with nodemon)
 - See below about running seed files once you have your postgres database set up.
-- Database is named 'users' in the source code. If you call your DB something else you will need to update the knexfile.js in the root.
+- Database is named 'users' in the source code. If you call your DB something else you will need to update DB name in the knexfile.js in the root directory.
 - Table names will be consistent if you run the migrations using knex. (see below)
 
 ---
@@ -48,8 +48,8 @@
 ## knex Seeds & Migrations
 
 - For help with knex run 'knex' in the terminal and it will display available migration and seed commands or see the [knexjs docs](http://knexjs.org/)
-- migrations must be in the correct order due to the one-to-many relationship using foreign keys. Reverse the order for the migrations 'down' function. This same order applies to the seeds as well.
-- **Run Migrations:** To run the knex migrations, run 'knex migrate:latest' to build the database tables once you have your postgres DB set up.
+- Migrations must be in the correct order due to the one-to-many relationship using foreign keys. Reverse the order for the migrations 'down' function. This same order applies to the seeds as well.
+- **Run Migrations:** To run the knex migrations, run 'knex migrate:latest' to build the database tables once you have your local postgres DB set up and running.
 - **Run seeds** with 'knex seed:run' in the terminal. See [knexjs](http://knexjs.org/) docs for more info
 
 ---
@@ -63,16 +63,20 @@
   - **Requires** the following in the request body:
 
     > {
-    > "userName": "user name",
-    > "password": "1234",
-    > "email": "email",
-    > "salary": int,
-    > "role_Id": 1, foreign key to 'roles' table
-    > "employee_info_id": int foreign key to 'employee_info' table
+    > "firstName": "users first name<string>",
+    > "lastName": "users last name<string>",
+    > "userName": "user name<string>",
+    > "password": "1234<string>",
+    > "email": "email<string>",
+    > "current_Salary": salary<integer>,
+    > "hire_date": date<date>,
+    > "department_id": departments foreign key<integer>,
+    > "job_title_id": job_titles foreign key<integer>,
+    > "privilege_id": privileges foreign key<integer>,
     > }
 
-  - **Returns** user's id on success, userName, and a welcome <userName> message.
-  - **Returns** an error message if userName or email is already in use or id any validation fails from the '/middleware/validation.js'.
+  - **Returns** On success: user's id, userName, and a Welcome userName message.
+  - **Returns** On failure: error message if userName or email is already in use or id any validation fails from the '/middleware/validation.js'.
 
 - **(POST) users/auth/login/**
 

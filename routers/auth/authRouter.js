@@ -5,7 +5,8 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mailer = require("../../nodeMailer");
-// middleware
+
+// ************** MIDDLEWARE ************** //
 // express-validator
 const { validationResult } = require("express-validator");
 // express validator rules
@@ -35,7 +36,7 @@ router.get("/confirmEmail", async (req, res, next) => {
   users
     .findByUserName(u)
     .then(async (userRes) => {
-      
+
       // check if tokens match
       if (t === userRes.emailToken) {
         // update 'isVerified' to true and -
@@ -67,7 +68,7 @@ router.get("/confirmEmail", async (req, res, next) => {
 // ***************** REGISTER *****************
 // ********************************************
 // registerValidation checks to see if username or email already taken
-// return 'id' on success, error message if validation fails
+// return 'id, userName, and welcome message' on success, error message if validation fails
 router.post("/register", registerValidation, passwordHash, (req, res) => {
   // check validation errors from the registerValidation middleware
   const errors = validationResult(req);
@@ -109,6 +110,7 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
 
 // ***************** LOG-IN *****************
 // ******************************************
+// Returns a token, and a welcome message containging the userName
 router.post("/login", loginValidation, async (req, res, next) => {
   // check validation errors from the registerValidation middleware
   const errors = validationResult(req);
@@ -126,20 +128,21 @@ router.post("/login", loginValidation, async (req, res, next) => {
     });
   }
 
+  // if account has been verified, continue with login
   users
     .login(req.body)
     .then((loginRes) => {
       if (loginRes !== null) {
-        // database results info
+        // database user results
         const hashedPass = loginRes.password;
         const id = loginRes.id;
         const userName = loginRes.userName;
         const userPrivilege = loginRes.privilege_id;
 
-        // user passed password
+        // user input password
         const password = req.body.password;
 
-        // check password hash and username
+        // check password hash and username against database
         if (
           bcrypt.compareSync(password, hashedPass) &&
           req.body.userName === userName
