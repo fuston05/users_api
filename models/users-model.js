@@ -26,12 +26,18 @@ function findById(id) {
 // get a user by userName
 // just for internal use/helper at the moment
 function findByUserName(userName) {
-  return db("users").where({ userName }).select("id", "userName", "email", "emailToken", "isVerified").first();
+  return db("users")
+    .where({ userName })
+    .select("id", "userName", "email", "emailToken", "isVerified")
+    .first();
 }
 // get a user by email
 // just for internal use/helper at the moment
 function findByEmail(email) {
-  return db("users").where({ email }).select("id", "userName", "email", "emailToken", "isVerified").first();
+  return db("users")
+    .where({ email })
+    .select("id", "userName", "email", "emailToken", "isVerified")
+    .first();
 }
 
 // add a new user
@@ -51,7 +57,7 @@ async function register(user) {
     department_id,
     job_title_id,
     privilege_id,
-    emailToken
+    emailToken,
   } = user;
 
   return db("users").insert(
@@ -66,7 +72,7 @@ async function register(user) {
       department_id,
       job_title_id,
       privilege_id,
-      emailToken
+      emailToken,
     },
     ["id", "userName"]
   );
@@ -75,13 +81,15 @@ async function register(user) {
 // login
 function login(user) {
   // validation is handled prior in the registerValidation middleware
-  return db('users').where({ userName: user.userName }).select('id', 'userName', 'password').first();
+  return db("users")
+    .where({ userName: user.userName })
+    .select("id", "userName", "password").first();
 }
 
 // update a user
 function updateUser(user) {
   // validation is handled prior in the registerValidation middleware
-  return db('users').update(user).where({id: user.id});
+  return db("users").update(user).where({ id: user.id });
 }
 
 function deleteUser(id) {

@@ -150,7 +150,8 @@ const loginValidation = [
   // check if userName exists
   body("userName", "User name does not exist").custom(async (value) => {
     const userNameExists = await userCredsExist({ userName: value });
-    if (!userNameExists) {
+
+    if (userNameExists === false) {
       return Promise.reject();
     }
   }),
@@ -167,7 +168,7 @@ const loginValidation = [
       minNumbers: 4,
       minSymbols: 0,
     })
-    .escape()
+    .escape(),
 ];
 
 const isLoggedIn = (req, res, next) => {

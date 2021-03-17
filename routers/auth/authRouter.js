@@ -20,9 +20,11 @@ const users = require("../../models/users-model");
 
 // ************ EMAIL CONFIRMATION ************
 // ********************************************
-router.get("/confirmEmail", isVerified, (req, res, next) => {
+router.get("/confirmEmail", async (req, res, next) => {
+  const user = await users.findByUserName(req.query.u);
+
   // check if account has already been verified
-  if (req.body.isVerified) {
+  if (user.isVerified === true) {
     return res
       .status(401)
       .json({ Error: "You have already verified your email, please log in." });
@@ -31,7 +33,6 @@ router.get("/confirmEmail", isVerified, (req, res, next) => {
   // if NOT already verified
   // grab user's emailToken(t) and userName(u) from query string
   const { t, u } = req.query;
-
   users
     .findByUserName(u)
     .then(async (userRes) => {
@@ -102,58 +103,47 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
       res.status(201).json(userRes[0]);
     })
     .catch((err) => {
-      console.log("err: ", err);
       res.status(500).json({ Error: "Server error" });
     });
 });
 
 // ***************** LOG-IN *****************
 // ******************************************
-router.post("/login", loginValidation, isVerified, (req, res, next) => {
-  console.log("login hit");
+router.post("/login", loginValidation, async (req, res, next) => {
   // check validation errors from the registerValidation middleware
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log("we have validation errors");
     return res.status(400).json(errors);
-  } else {
-    console.log("no validation errors");
   }
 
   // check if account NOT verified
-  if (req.body.isVerified === false) {
-    console.log("NOT verified");
+  const user = await users.findByUserName(req.body.userName);
+
+  if (user.isVerified === false) {
     return res.status(401).json({
       Error:
         "Please verify your email to gain log-in access. Check your email for the verification link.",
     });
-  } else {
-    console.log("verified");
   }
 
   users
     .login(req.body)
     .then((loginRes) => {
-      console.log("loginRes: ", loginRes);
       if (loginRes !== null) {
-
         // database results info
         const hashedPass = loginRes.password;
         const id = loginRes.id;
         const userName = loginRes.userName;
         const userPrivilege = loginRes.privilege_id;
-        
+
         // user passed password
         const password = req.body.password;
 
         // check password hash and username
-        console.log('password: ', password)
-        console.log('hashedPass: ', hashedPass)
         if (
           bcrypt.compareSync(password, hashedPass) &&
           req.body.userName === userName
         ) {
-          console.log("pass matches");
           // json web token
           const payload = {
             sub: id,
@@ -171,12 +161,10 @@ router.post("/login", loginValidation, isVerified, (req, res, next) => {
             token: token,
           });
         } else {
-          console.log("pass NOT match");
           //  if username and pass do not match
           res.status(401).json({ Error: "Invalid credentials" });
         }
       } else {
-        console.log("login res not found");
         // if no results were found
         res.status(404).json({ Error: "User does not exist" });
       }
