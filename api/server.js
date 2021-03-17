@@ -27,6 +27,7 @@ const { userRouter, authRouter } = require("../routers");
 // use routers
 server.use("/users", userRouter);
 server.use("/auth", authRouter);
+
 // root route
 server.get("/", (req, res) => {
   res.status(200).json("**** Welcome, the Server is live! ****");

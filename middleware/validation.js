@@ -19,7 +19,10 @@ const registerValidation = [
     .escape(),
 
   // first name length
-  body("firstName", `First name must be ${minNameLength} - ${maxNameLength} characters`).custom((value) => {
+  body(
+    "firstName",
+    `First name must be ${minNameLength} - ${maxNameLength} characters`
+  ).custom((value) => {
     if (value.length < maxNameLength && value.length >= minNameLength) {
       return true;
     }
@@ -34,9 +37,12 @@ const registerValidation = [
     .isAlpha()
     .bail()
     .escape(),
-  
+
   // last name length
-  body("lastName", `Last name must be ${minNameLength} - ${maxNameLength} characters`).custom((value) => {
+  body(
+    "lastName",
+    `Last name must be ${minNameLength} - ${maxNameLength} characters`
+  ).custom((value) => {
     if (value.length < maxNameLength && value.length >= minNameLength) {
       return true;
     }
@@ -50,14 +56,16 @@ const registerValidation = [
     .bail()
     .isAlphanumeric()
     .escape(),
-  
+
   // username length
-  body("userName", `User name must be ${minNameLength} - ${maxNameLength} characters`)
-    .custom((value) => {
-      if (value.length < maxNameLength && value.length >= minNameLength) {
-        return true
-      }
-    }),
+  body(
+    "userName",
+    `User name must be ${minNameLength} - ${maxNameLength} characters`
+  ).custom((value) => {
+    if (value.length < maxNameLength && value.length >= minNameLength) {
+      return true;
+    }
+  }),
 
   // custom check to see if user name already in DB
   // userName
@@ -139,14 +147,6 @@ const loginValidation = [
     .isAlphanumeric()
     .escape(),
 
-  // custom check to see if user name already in DB
-  // userName already in use?
-  body("userName", "User name already in use").custom(async (value) => {
-    const userNameExists = await userCredsExist({ userName: value });
-    if (userNameExists) {
-      return Promise.reject();
-    }
-  }),
   // check if userName exists
   body("userName", "User name does not exist").custom(async (value) => {
     const userNameExists = await userCredsExist({ userName: value });
@@ -155,13 +155,11 @@ const loginValidation = [
     }
   }),
 
-
   // password
   body("password", "Invalid password")
     .trim()
     .notEmpty()
     .bail()
-    .escape()
     .isStrongPassword({
       minLength: 4,
       minLowercase: 0,
@@ -169,7 +167,7 @@ const loginValidation = [
       minNumbers: 4,
       minSymbols: 0,
     })
-    .escape(),
+    .escape()
 ];
 
 const isLoggedIn = (req, res, next) => {

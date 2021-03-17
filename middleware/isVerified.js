@@ -5,11 +5,12 @@ const isVerified = async (req, res, next) => {
   // check database to see if account is verified or not
   let user = null;
 
+  // if request comes from the confirmation email
   if (req.query.u) {
     user = await users
       .findByUserName(req.query.u)
       .then((resp) => {
-        if (!resp.isVerified) {
+        if (resp.isVerified === false) {
           // add 'isVerified' to req.body
           req.body.isVerified = false;
           next();
@@ -22,6 +23,7 @@ const isVerified = async (req, res, next) => {
         return res.status(400).json({ Error: "User does not exist" });
       });
   }
+  next();
 };
 
 module.exports = isVerified;
