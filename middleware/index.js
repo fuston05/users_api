@@ -6,7 +6,6 @@ const {
 } = require("./validation");
 const { assignId, accessLogStream } = require("./morgan");
 const passwordHash = require("./passwordHash");
-const isVerified = require("./isVerified");
 
 module.exports = {
   isLoggedIn,
@@ -14,6 +13,5 @@ module.exports = {
   loginValidation,
   assignId,
   passwordHash,
-  isVerified,
   accessLogStream,
 };

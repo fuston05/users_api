@@ -13,7 +13,6 @@ const {
   registerValidation,
   loginValidation,
   passwordHash,
-  isVerified,
 } = require("../../middleware");
 
 const users = require("../../models/users-model");
@@ -30,12 +29,13 @@ router.get("/confirmEmail", async (req, res, next) => {
       .json({ Error: "You have already verified your email, please log in." });
   }
 
-  // if NOT already verified
+  // if NOT already verified, then verify the email
   // grab user's emailToken(t) and userName(u) from query string
   const { t, u } = req.query;
   users
     .findByUserName(u)
     .then(async (userRes) => {
+      
       // check if tokens match
       if (t === userRes.emailToken) {
         // update 'isVerified' to true and -
