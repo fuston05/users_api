@@ -24,7 +24,10 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
   users
     .findById(id)
     .then((user) => {
-      res.status(200).json(user);
+      if (user) {
+        return res.status(200).json(user);
+      }
+      res.status(401).json({Error: "User not found"});
     })
     // just passing errors to 'next' for now.
     .catch(next);

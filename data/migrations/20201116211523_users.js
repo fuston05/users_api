@@ -3,8 +3,8 @@ exports.up = function (knex) {
     .createTable("privileges", (tbl) => {
       // sets an auto-incrementing 'id' filed as primary key
       tbl.increments();
-      tbl.string("privilegeName", 128).notNullable().defaultsTo("User");
-      tbl.text("privilege_description").notNullable();
+      tbl.string("privilege", 128).notNullable().defaultsTo("User");
+      tbl.text("description").notNullable();
     })
 
     .createTable("departments", (tbl) => {

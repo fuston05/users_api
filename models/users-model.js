@@ -20,7 +20,13 @@ function find() {
 
 // get a user by id
 function findById(id) {
-  return db('users').where({id}).select('id', 'userName', 'firstName', 'lastName', 'email', 'hire_date', 'department_id', 'job_title_id').first();
+  return db('users as u')
+    .join('departments as d', 'd.id', 'u.department_id')
+    .join('job_titles as jt', 'jt.id', 'u.job_title_id')
+    .join('privileges as p', 'p.id', 'u.privilege_id')
+    .select('u.id', 'u.userName', 'u.firstName', 'u.lastName', 'u.email', 'u.hire_date', 'd.department', 'jt.job_title', 'p.privilege')
+    .where({'u.id' : id})
+    .first();
 }
 
 // get a user by userName

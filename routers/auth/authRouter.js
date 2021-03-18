@@ -105,7 +105,7 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
       res.status(201).json(userRes[0]);
     })
     .catch((err) => {
-      res.status(500).json({ Error: "Server error" });
+      res.status(500).json({ Error: err });
     });
 });
 
