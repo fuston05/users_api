@@ -91,6 +91,13 @@ const registerValidation = [
     })
     .escape(),
 
+  // cPassword
+  body("cPassword", "Passwords must match").custom((value, { req }) => {
+    if (value === req.body.password) {
+      return true;
+    }
+  }),
+
   body("email", "Invalid email")
     .trim()
     .notEmpty()

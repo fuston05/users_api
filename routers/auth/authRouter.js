@@ -76,6 +76,8 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
     return res.status(400).json(errors);
   }
 
+  // make sure pass and cPass match
+
   // add emailToken to req.body
   req.body.emailToken = bcrypt.hashSync(
     `${Math.random() * Date.now()}`,

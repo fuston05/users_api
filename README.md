@@ -80,7 +80,7 @@
   - **Returns** On success: user's id, userName, and a Welcome userName message.
   - **Returns** On failure: error message if userName or email is already in use or id any validation fails from the '/middleware/validation.js'.
 
-**(POST) users/auth/confirmEmail/**
+- **(POST) users/auth/confirmEmail/**
 
   > Validates a users email with a string token sent to their email address using nodeMailer as mentioned above. 
   > The email link will hit this endpoint with an 'emailToken'(t), and a 'userName'(u) in the query string.
@@ -147,11 +147,15 @@
 
 > Custom middleware descriptions. All custom middleware can be found in the '/middleware' folder exported from the index.js so you can import from the 'middleware' dir. ie. const {isLoggedIn}= require('../middleware')
 
-- **isLoggedIn** middleware/validation.js.
+- **isLoggedIn** middleware/validation.js. Makes sure a user is logged in.
 
-- **registerValidation** middleware/validation.js. The express validator rules are exported from this for inline use as middleware in route handlers
+- **registerValidation** middleware/validation.js. The express validator rules are exported from this for inline use as middleware in route handlers. 
+> Checks for proper input characters and lengths etc, > performs some formatting (trim, toLowercase, escape)> Checks if userName or email already exists.
 
-- **loginValidation** middleware/validation.js. middleware/validation.js. The express validator rules are exported from this for inline use as middleware in route handlers
+- **loginValidation** middleware/validation.js. middleware/validation.js. The express validator rules are exported from this for inline use as middleware in route handlers.
+> Checks for proper input characters and lengths etc, > performs some formatting (trim, toLowercase, escape)
+> Checks if userName exists.
+> Checks if password and cPassword match.
 
 ---
 
