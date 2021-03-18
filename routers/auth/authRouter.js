@@ -36,7 +36,6 @@ router.get("/confirmEmail", async (req, res, next) => {
   users
     .findByUserName(u)
     .then(async (userRes) => {
-
       // check if tokens match
       if (t === userRes.emailToken) {
         // update 'isVerified' to true and -
@@ -174,7 +173,7 @@ router.post("/login", loginValidation, async (req, res, next) => {
         res.status(404).json({ Error: "User does not exist" });
       }
     })
-    .catch((err) => console.log("error: ", err));
+    .catch(next);
 });
 
 module.exports = router;

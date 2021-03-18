@@ -15,12 +15,12 @@ module.exports = {
 
 // get all users
 function find() {
-  return "not set up yet";
+  return db('users').select('id', 'userName', 'firstName', 'lastName', 'email', 'hire_date', 'department_id', 'job_title_id').first();
 }
 
 // get a user by id
 function findById(id) {
-  return "not set up yet";
+  return db('users').where({id}).select('id', 'userName', 'firstName', 'lastName', 'email', 'hire_date', 'department_id', 'job_title_id').first();
 }
 
 // get a user by userName
