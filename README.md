@@ -28,6 +28,8 @@
 
 - [express-validator](https://express-validator.github.io/docs/) for user input validation
 
+- [nodeMailer](https://www.npmjs.com/package/nodemailer) for sending verification email to the user.
+
 - Currently set up for use with [postgres database](https://www.postgresql.org/), you can change this to use any database by editing the knexfile.js [See knexjs docs](http://knexjs.org/)
 
 - Local development server uses [nodemon](https://www.npmjs.com/package/nodemon)
@@ -58,7 +60,7 @@
 
 - **(POST) /auth/register**
 
-  > Adds a new user to the database after validation. Stores a hashed version of the password in DB using bcryptjs library. [bcryptJs](https://www.npmjs.com/package/bcrypt)
+  > Adds a new user to the database after validation. Stores a hashed version of the password in DB using bcryptjs library. [bcryptJs](https://www.npmjs.com/package/bcrypt), and sends an email confirmation link to the users email using [nodeMailer](https://www.npmjs.com/package/nodemailer)
 
   - **Requires** the following in the request body:
 
@@ -78,13 +80,28 @@
   - **Returns** On success: user's id, userName, and a Welcome userName message.
   - **Returns** On failure: error message if userName or email is already in use or id any validation fails from the '/middleware/validation.js'.
 
+**(POST) users/auth/confirmEmail/**
+
+  > Validates a users email with a string token sent to their email address using nodeMailer as mentioned above. 
+  > The email link will hit this endpoint with an 'emailToken'(t), and a 'userName'(u) in the query string.
+
+  > We first make sure they have not already verified their email by querying the DB. If they have not already verified the email, then we proceed with updating the DB and sending back a confirmation message that they have successfully verified their email.
+
+  - **Requires** {t(emailToken), u(userName)} in the request.query. 
+
+  - **Returns** if already verified:  message that user has already verified their account and should log in now.
+  - **Returns** If not already verified: successful verification message.
+  - **Returns** Error: If not email token is no longer valid: message stating that the token may have expired, and they should try again.
+
 - **(POST) users/auth/login/**
 
   > Logs in a user.
 
-  - **Requires** {userName, password} in the request body. Checks first if that user exists before logging in.
+  - **Requires** {userName, password} in the request body. Checks if email has been verified, checks if user exists, and validates user input before logging in.
   - **Returns** error message if that user doesn't exist in the DB.
-  - **Returns** a welcome <userName> message, and a json web token on success with an 8 hour expiration by default.
+  - **Returns** error message if that user email is not verified in the DB.
+  - **Returns** error messages if user input fails the validation from [express-validator](https://express-validator.github.io/docs/)
+  - **Returns** a welcome userName message, and a json web token on success with an 8 hour expiration by default.
 
 - **(GET) /users**
 
