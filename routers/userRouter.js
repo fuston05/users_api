@@ -37,9 +37,10 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
 });
 
 // update a user
-router.put("/", (req, res, next) => {
+router.put("/:id", (req, res, next) => {
+  const { id } = req.params;
   users
-    .updateUser(req.body)
+    .updateUser(id, req.body)
     .then((user) => {
       res.status(200).json(user);
     })
