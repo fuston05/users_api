@@ -42,7 +42,7 @@ router.put("/:id", (req, res, next) => {
   users
     .updateUser(id, req.body)
     .then((user) => {
-      res.status(200).json(user);
+      res.status(200).json({'user_id': user[0].id, 'message': "successully updated"});
     })
     // just passing errors to 'next' for now.
     .catch(next);
