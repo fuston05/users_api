@@ -33,23 +33,7 @@ function find() {
 }
 
 // get a user by id
-function findById(id, raw = false) {
-  if (raw) {
-    return db("users as u")
-      .select(
-        "u.id",
-        "u.userName",
-        "u.firstName",
-        "u.lastName",
-        "u.email",
-        "u.hire_date",
-        "u.department_id",
-        "u.job_title_id",
-        "u.privilege_id"
-      )
-      .where({ "u.id": id })
-      .first();
-  }
+function findById(id) {
   return db("users as u")
     .join("departments as d", "d.id", "u.department_id")
     .join("job_titles as jt", "jt.id", "u.job_title_id")
@@ -136,13 +120,10 @@ function login(user) {
 // update a user
 function updateUser(id, user) {
   // validation is handled prior in the registerValidation middleware
-  const getDepartmentId = findById(id, (raw = true));
-  console.log("getUser: ", getUser);
-  return db("users")
-    .update(user)
-    .where(id === user.id);
+  return db("users").update(user, ["id"]).where({ id });
 }
 
+// returns number of affected rows (1 on success, otherwise 0)
 function deleteUser(id) {
-  return "not set up yet";
+  return db("users").where({ id: id }).del();
 }
