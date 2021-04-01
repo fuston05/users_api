@@ -41,6 +41,7 @@
 - Clone to your machine.
 - Run 'npm install'
 - Run 'npm run server' to start up the server (running with nodemon)
+-set up your local .env file:
 - See below about running seed files once you have your postgres database set up.
 - Database is named 'users' in the source code. If you call your DB something else you will need to update DB name in the knexfile.js in the root directory.
 - Table names will be consistent if you run the migrations using knex. (see below)
