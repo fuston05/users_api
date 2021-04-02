@@ -21,21 +21,19 @@ const users = require("../../models/users-model");
 // ************ EMAIL CONFIRMATION ************
 // ********************************************
 router.get("/confirmEmail", async (req, res, next) => {
-  const user = await users.findByUserName(req.query.u);
-
-  // check if account has already been verified
-  if (user.isVerified === true) {
-    return res
-      .status(401)
-      .json({ Error: "You have already verified your email, please log in." });
-  }
-
-  // if NOT already verified, then verify the email
-  // grab user's emailToken(t) and userName(u) from query string
   const { t, u } = req.query;
   users
     .findByUserName(u)
     .then(async (userRes) => {
+      // check if account has already been verified
+      if (userRes.isVerified === true) {
+        return res
+          .status(401)
+          .json({
+            Error: "You have already verified your email, please log in.",
+          });
+      }
+
       // check if tokens match
       if (t === userRes.emailToken) {
         // update 'isVerified' to true and -
