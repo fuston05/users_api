@@ -9,7 +9,6 @@ const mailer = require("../../nodeMailer");
 // ************** MIDDLEWARE ************** //
 // express-validator
 const { validationResult } = require("express-validator");
-// express validator rules
 const {
   registerValidation,
   loginValidation,
@@ -64,7 +63,7 @@ router.get("/confirmEmail", async (req, res, next) => {
 
 // ***************** REGISTER *****************
 // ********************************************
-// registerValidation checks to see if username or email already taken
+
 // return 'id, userName, and welcome message' on success, error message if validation fails
 router.post("/register", registerValidation, passwordHash, (req, res) => {
   // check validation errors from the registerValidation middleware
@@ -72,8 +71,6 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json(errors);
   }
-
-  // make sure pass and cPass match
 
   // add emailToken to req.body
   req.body.emailToken = bcrypt.hashSync(
@@ -85,7 +82,7 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
     .register(req.body)
     .then(async (userRes) => {
       // attach welcome message to the userRes
-      userRes[0].message = `Welcome, ${userRes[0].userName}`;
+      userRes[0].message = `Welcome, ${userRes[0].userName}. Please check your email for the verification link.`;
 
       const host = `${req.protocol}://${req.headers.host}`;
       // send verification email.
@@ -97,7 +94,7 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
       ).catch((err) => {
         return res
           .status(400)
-          .json({ error: "There was a problem sending the email" });
+          .json({ error: "There was a problem sending the verification email, please try again." });
       });
 
       res.status(201).json(userRes[0]);
@@ -117,17 +114,7 @@ router.post("/login", loginValidation, async (req, res, next) => {
     return res.status(400).json(errors);
   }
 
-  // check if account NOT verified
-  const user = await users.findByUserName(req.body.userName);
-
-  if (user.isVerified === false) {
-    return res.status(401).json({
-      Error:
-        "Please verify your email to gain log-in access. Check your email for the verification link.",
-    });
-  }
-
-  // if account has been verified, continue with login
+  // continue with login
   users
     .login(req.body)
     .then((loginRes) => {
