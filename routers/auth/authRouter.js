@@ -19,18 +19,16 @@ const users = require("../../models/users-model");
 
 // ************ EMAIL CONFIRMATION ************
 // ********************************************
-router.get("/confirmEmail", async (req, res, next) => {
+router.get("/confirmEmail", (req, res, next) => {
   const { t, u } = req.query;
   users
     .findByUserName(u)
     .then(async (userRes) => {
       // check if account has already been verified
       if (userRes.isVerified === true) {
-        return res
-          .status(401)
-          .json({
-            Error: "You have already verified your email, please log in.",
-          });
+        return res.status(401).json({
+          Error: "You have already verified your email, please log in.",
+        });
       }
 
       // check if tokens match
@@ -80,7 +78,7 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
 
   users
     .register(req.body)
-    .then(async (userRes) => {
+    .then((userRes) => {
       // attach welcome message to the userRes
       userRes[0].message = `Welcome, ${userRes[0].userName}. Please check your email for the verification link.`;
 
@@ -94,7 +92,10 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
       ).catch((err) => {
         return res
           .status(400)
-          .json({ error: "There was a problem sending the verification email, please try again." });
+          .json({
+            error:
+              "There was a problem sending the verification email, please try again.",
+          });
       });
 
       res.status(201).json(userRes[0]);
@@ -107,7 +108,7 @@ router.post("/register", registerValidation, passwordHash, (req, res) => {
 // ***************** LOG-IN *****************
 // ******************************************
 // Returns a token, and a welcome message containging the userName
-router.post("/login", loginValidation, async (req, res, next) => {
+router.post("/login", loginValidation, (req, res, next) => {
   // check validation errors from the registerValidation middleware
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
