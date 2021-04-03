@@ -17,7 +17,6 @@ router.get("/", isLoggedIn, (req, res, next) => {
       }
       res.status(401).json({ Error: "No users found" });
     })
-    // just passing errors to 'next' for now.
     .catch(next);
 });
 
@@ -32,23 +31,20 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
       }
       res.status(401).json({ Error: "User not found" });
     })
-    // just passing errors to 'next' for now.
     .catch(next);
 });
 
 // update a user
-router.put("/", (req, res, next) => {
+router.put("/", isLoggedIn, (req, res, next) => {
   users
     .updateUser(req.body)
     .then((user) => {
-      console.log("user: ", user[0]);
       res.status(200).json({
         user_id: user[0].id,
         user_name: user[0].userName,
         message: "Successully updated",
       });
     })
-    // just passing errors to 'next' for now.
     .catch(next);
 });
 
@@ -61,7 +57,6 @@ router.delete("/:id", isLoggedIn, (req, res, next) => {
     .then((delRes) => {
       res.status(200).json(delRes);
     })
-    // just passing errors to 'next' for now.
     .catch(next);
 });
 
