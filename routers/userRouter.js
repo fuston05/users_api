@@ -37,12 +37,16 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
 });
 
 // update a user
-router.put("/:id", (req, res, next) => {
-  const { id } = req.params;
+router.put("/", (req, res, next) => {
   users
-    .updateUser(id, req.body)
+    .updateUser(req.body)
     .then((user) => {
-      res.status(200).json({'user_id': user[0].id, 'message': "successully updated"});
+      console.log("user: ", user[0]);
+      res.status(200).json({
+        user_id: user[0].id,
+        user_name: user[0].userName,
+        message: "Successully updated",
+      });
     })
     // just passing errors to 'next' for now.
     .catch(next);

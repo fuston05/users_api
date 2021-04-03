@@ -122,9 +122,9 @@ function login(user) {
 }
 
 // update a user
-function updateUser(user) {
+function updateUser(userInfo) {
   // validation is handled prior in the registerValidation middleware
-  return db("users").update(user, ["id"]).where({ id: user.id });
+  return db("users").update(userInfo, ["id", "userName"]).where({ id: userInfo.id });
 }
 
 // returns number of affected rows (1 on success, otherwise 0)
