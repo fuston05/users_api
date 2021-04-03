@@ -26,6 +26,8 @@ function find() {
       "u.lastName",
       "u.email",
       "u.hire_date",
+      "jt.starting_salary",
+      "u.current_salary",
       "d.department",
       "jt.job_title",
       "p.privilege"
@@ -45,6 +47,8 @@ function findById(id) {
       "u.lastName",
       "u.email",
       "u.hire_date",
+      "jt.starting_salary",
+      "u.current_salary",
       "d.department",
       "jt.job_title",
       "p.privilege"
