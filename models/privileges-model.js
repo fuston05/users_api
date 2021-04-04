@@ -3,13 +3,9 @@
 const db = require("../data/db-config");
 
 module.exports = {
-  getPrivileges,
-  getPrivilegeById,
-  createPrivilege,
-  deletePrivilege,
-  updatePrivilege,
+  find
 };
 
-function getPrivileges() {
+function find() {
   return db("users").from("privileges").select("*");
 }

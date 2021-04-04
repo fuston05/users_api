@@ -22,11 +22,12 @@ server.use(
 );
 
 // define routers
-const { userRouter, authRouter } = require("../routers");
+const { userRouter, authRouter ,privilegeRouter } = require("../routers");
 
 // use routers
 server.use("/users", userRouter);
 server.use("/auth", authRouter);
+server.use("/privileges", privilegeRouter);
 
 // root route
 server.get("/", (req, res) => {
