@@ -183,12 +183,9 @@ const isLoggedIn = (req, res, next) => {
   const sec = process.env.JWT_SECRET;
   jwt.verify(authHeader, sec, (err, decoded) => {
     if (err) {
-      res.status(401).json({ Error: "Not authorized, please log in" });
-    } else {
-      // TODO: update this role check when i decide on implimentation.
-      res.locals.privilege = decoded.privilege;
-      next();
+      return res.status(401).json({ Error: "Not authorized, please log in" });
     }
+    next();
   });
 };
 
