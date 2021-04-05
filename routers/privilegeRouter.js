@@ -63,8 +63,28 @@ router.put("/", async (req, res, next) => {
   privileges
     .updatePrivilege(req.body)
     .then((updateRes) => {
-      console.log("updateRes: ", updateRes);
       res.status(200).json(updateRes[0]);
+    })
+    .catch(next);
+});
+
+// DELETE a privilege
+router.delete("/:id", async (req, res, next) => {
+  // make sure privilege exists
+  const checkPrivExists = await privileges.findById(req.params.id);
+
+  if (!checkPrivExists) {
+    return res.status(404).json({ Error: "The privilege id does not exist" });
+  }
+
+  // Delete the privilege
+  privileges
+    .deletePrivilege(req.params.id)
+    .then((delRes) => {
+      if (delRes) {
+        checkPrivExists.message= "Successfully Deleted"
+        return res.status(200).json(checkPrivExists);
+      }
     })
     .catch(next);
 });
