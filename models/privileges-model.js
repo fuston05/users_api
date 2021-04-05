@@ -7,6 +7,7 @@ module.exports = {
   findById,
   findByName,
   createPrivilege,
+  updatePrivilege,
 };
 
 // GET All Privileges
@@ -31,4 +32,13 @@ function createPrivilege(reqBody) {
     { privilege: privilege, description: description },
     ["*"]
   );
+}
+
+// Update an Existing Privilege
+function updatePrivilege(reqBody) {
+  const {id, privilege, description } = reqBody;
+  return db("privileges").update(
+    { privilege: privilege, description: description },
+    ["*"]
+  ).where({id});
 }

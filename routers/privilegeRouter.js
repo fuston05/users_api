@@ -1,5 +1,6 @@
 // privileges Router
 const express = require("express");
+const dbConfig = require("../data/db-config");
 const router = express.Router();
 
 const { isLoggedIn } = require("../middleware");
@@ -35,17 +36,37 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
 
 // Create a New Privilege
 router.post("/", async (req, res, next) => {
-
   // if privilege name is already in use
-  const checkPrivExists = await privileges.findByName(req.body.privilege)
+  const checkPrivExists = await privileges.findByName(req.body.privilege);
 
   if (checkPrivExists) {
-    return res.status(409).json({Error: "That privilege name is already in use"})
+    return res
+      .status(409)
+      .json({ Error: "That privilege name is already in use" });
   }
-  privileges.createPrivilege(req.body).then(createRes => {
-    res.status(201).json(createRes)
+  privileges
+    .createPrivilege(req.body)
+    .then((createRes) => {
+      res.status(201).json(createRes[0]);
+    })
+    .catch(next);
+});
 
-  }).catch(next);
+// Edit Existing Privilege
+router.put("/", async (req, res, next) => {
+  // make sure the privilege exists
+  const checkPrivExists = await privileges.findById(req.body.id);
+  if (!checkPrivExists) {
+    return res.status(404).json({ Error: "The privilege id does not exist" });
+  }
+
+  privileges
+    .updatePrivilege(req.body)
+    .then((updateRes) => {
+      console.log("updateRes: ", updateRes);
+      res.status(200).json(updateRes[0]);
+    })
+    .catch(next);
 });
 
 module.exports = router;
