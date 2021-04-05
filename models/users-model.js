@@ -75,7 +75,7 @@ function findByEmail(email) {
 }
 
 // add a new user
-async function register(user) {
+function register(user) {
   // validation is handled prior in the registerValidation middleware
   // password is hashed in the authRouter
 
@@ -124,7 +124,9 @@ function login(user) {
 // update a user
 function updateUser(userInfo) {
   // validation is handled prior in the registerValidation middleware
-  return db("users").update(userInfo, ["id", "userName"]).where({ id: userInfo.id });
+  return db("users")
+    .update(userInfo, ["id", "userName"])
+    .where({ id: userInfo.id });
 }
 
 // returns number of affected rows (1 on success, otherwise 0)
