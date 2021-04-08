@@ -3,48 +3,39 @@ exports.seed = function (knex) {
   return knex("departments").insert([
     {
       department: "Product Management",
-      manager_first_name: "Annmarie",
-      manager_last_name: "Lenaghen",
+      description: "Manages products at all levels"
     },
     {
       department: "Business Development",
-      manager_first_name: "Thorndike",
-      manager_last_name: "Twells",
+      description: "Business Development department description goes here."
     },
     {
       department: "Accounting",
-      manager_first_name: "Agustin",
-      manager_last_name: "Flipsen",
+      description: "Accounting department description goes here.stin"
     },
     {
       department: "Production",
-      manager_first_name: "Hedvige",
-      manager_last_name: "Vasenkov",
+      description: "Production department description goes here."
     },
     {
       department: "Services",
-      manager_first_name: "Jolyn",
-      manager_last_name: "Adney",
+      description: "Services department description goes here."
     },
     {
       department: "Sales",
-      manager_first_name: "Aloise",
-      manager_last_name: "MacInherney",
+      description: "Sales department description goes here."
     },
     {
       department: "Support",
-      manager_first_name: "Joyan",
-      manager_last_name: "Ambrosoni",
+      description: "Support department description goes here."
     },
     {
       department: "Research and Development",
-      manager_first_name: "Olly",
-      manager_last_name: "Sproul",
+      description: "Research and Development department description goes here."
     },
     {
       department: "Training",
-      manager_first_name: "Augustus",
-      manager_last_name: "Daviot",
+      description: "Training department description goes here."
     },
   ]);
 };
