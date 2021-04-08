@@ -2,13 +2,11 @@
 const express = require("express");
 const router = express.Router();
 
-const { isLoggedIn } = require("../middleware");
-
 const { users } = require("../models");
 
 // get all users
 //  -if logged in
-router.get("/", isLoggedIn, (req, res, next) => {
+router.get("/", (req, res, next) => {
   users
     .find()
     .then((users) => {
@@ -21,7 +19,7 @@ router.get("/", isLoggedIn, (req, res, next) => {
 });
 
 // get user by id
-router.get("/:id", isLoggedIn, (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   const { id } = req.params;
   users
     .findById(id)
@@ -35,7 +33,7 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
 });
 
 // update a user
-router.put("/", isLoggedIn, (req, res, next) => {
+router.put("/", (req, res, next) => {
   users
     .updateUser(req.body)
     .then((user) => {
@@ -49,7 +47,7 @@ router.put("/", isLoggedIn, (req, res, next) => {
 });
 
 // delete a user
-router.delete("/:id", isLoggedIn, (req, res, next) => {
+router.delete("/:id", (req, res, next) => {
   const { id } = req.params;
   // returns number of affected rows
   users

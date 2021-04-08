@@ -4,7 +4,7 @@ const cors = require("cors");
 const server = express();
 const helmet = require("helmet");
 const morgan = require("morgan");
-const { assignId, accessLogStream } = require("../middleware");
+const { assignId, accessLogStream, isLoggedIn } = require("../middleware");
 
 // global middleware
 server.use(helmet());
@@ -25,7 +25,7 @@ server.use(
 const { userRouter, authRouter ,privilegeRouter } = require("../routers");
 
 // use routers
-server.use("/users", userRouter);
+server.use("/users", isLoggedIn, userRouter);
 server.use("/auth", authRouter);
 server.use("/privileges", privilegeRouter);
 

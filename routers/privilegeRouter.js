@@ -7,7 +7,7 @@ const { isLoggedIn } = require("../middleware");
 const { privileges } = require("../models");
 
 // GET all provileges info
-router.get("/", isLoggedIn, (req, res, next) => {
+router.get("/", (req, res, next) => {
   privileges
     .find()
     .then((privRes) => {
@@ -22,7 +22,7 @@ router.get("/", isLoggedIn, (req, res, next) => {
 });
 
 // GET privilege by ID
-router.get("/:id", isLoggedIn, (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   privileges
     .findById(req.params.id)
     .then((privRes) => {
@@ -63,6 +63,7 @@ router.put("/", async (req, res, next) => {
   privileges
     .updatePrivilege(req.body)
     .then((updateRes) => {
+      console.log('updateRes: ', updateRes)
       res.status(200).json(updateRes[0]);
     })
     .catch(next);
@@ -82,7 +83,7 @@ router.delete("/:id", async (req, res, next) => {
     .deletePrivilege(req.params.id)
     .then((delRes) => {
       if (delRes) {
-        checkPrivExists.message= "Successfully Deleted"
+        checkPrivExists.message = "Successfully Deleted";
         return res.status(200).json(checkPrivExists);
       }
     })
