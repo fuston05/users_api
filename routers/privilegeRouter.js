@@ -39,9 +39,9 @@ router.post("/", isLoggedIn, async (req, res, next) => {
   const checkPrivExists = await privileges.findByName(req.body.privilege);
 
   if (checkPrivExists) {
-    return res
-      .status(409)
-      .json({ Error: "That privilege name is already in use" });
+    return res.status(409).json({
+      Error: `That privilege name '${checkPrivExists.privilege}' is already in use`,
+    });
   }
   privileges
     .createPrivilege(req.body)
@@ -56,13 +56,16 @@ router.put("/", isLoggedIn, async (req, res, next) => {
   // make sure the privilege exists
   const checkPrivExists = await privileges.findById(req.body.id);
   if (!checkPrivExists) {
-    return res.status(404).json({ Error: "The privilege id does not exist" });
+    return res
+      .status(404)
+      .json({
+        Error: `The privilege id '${req.body.id}' does not exist`,
+      });
   }
 
   privileges
     .updatePrivilege(req.body)
     .then((updateRes) => {
-      console.log('updateRes: ', updateRes)
       res.status(200).json(updateRes[0]);
     })
     .catch(next);
@@ -74,7 +77,7 @@ router.delete("/:id", isLoggedIn, async (req, res, next) => {
   const checkPrivExists = await privileges.findById(req.params.id);
 
   if (!checkPrivExists) {
-    return res.status(404).json({ Error: "The privilege id does not exist" });
+    return res.status(404).json({ Error: `The privilege id '${req.params.id}' does not exist` });
   }
 
   // Delete the privilege

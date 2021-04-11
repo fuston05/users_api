@@ -5,6 +5,7 @@ const db = require("../data/db-config");
 module.exports = {
   find,
   findById,
+  findByName,
   createDept,
   updateDept,
   deleteDept,
@@ -16,6 +17,10 @@ function find() {
 
 function findById(id) {
   return db("departments").where({ id }).first();
+}
+
+function findByName(department) {
+  return db("departments").where({ department }).first();
 }
 
 function createDept(reqBody) {
