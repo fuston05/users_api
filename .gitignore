@@ -1,6 +1,9 @@
 #MAC files
 DS_Store
 
+# notes file
+*.txt
+
 # Logs
 logs
 *.log
