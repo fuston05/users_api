@@ -1,4 +1,4 @@
-// Departments Model
+// *** Departments Model ***
 
 const db = require("../data/db-config");
 

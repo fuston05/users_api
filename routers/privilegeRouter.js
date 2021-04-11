@@ -1,13 +1,14 @@
-// privileges Router
+// *** Privileges Router ***
+
 const express = require("express");
 const router = express.Router();
 
-const { privileges } = require("../models");
+const {common } = require("../models");
 
 // GET all provileges info
 router.get("/", (req, res, next) => {
-  privileges
-    .find()
+  common
+    .getAllResource('privileges')
     .then((privRes) => {
       if (privRes) {
         return res.status(200).json(privRes);
@@ -21,8 +22,8 @@ router.get("/", (req, res, next) => {
 
 // GET privilege by ID
 router.get("/:id", (req, res, next) => {
-  privileges
-    .findById(req.params.id)
+  common
+    .getResourceBy({id: req.params.id}, 'privileges')
     .then((privRes) => {
       if (privRes) {
         return res.status(200).json(privRes);
@@ -35,15 +36,15 @@ router.get("/:id", (req, res, next) => {
 // Create a New Privilege
 router.post("/", async (req, res, next) => {
   // if privilege name is already in use
-  const checkPrivExists = await privileges.findByName(req.body.privilege);
+  const checkPrivExists = await common.getResourceBy({privilege: req.body.privilege}, 'privileges');
 
   if (checkPrivExists) {
     return res.status(409).json({
       Error: `That privilege name '${checkPrivExists.privilege}' is already in use`,
     });
   }
-  privileges
-    .createPrivilege(req.body)
+  common
+    .addResource(req.body, 'privileges')
     .then((createRes) => {
       res.status(201).json(createRes[0]);
     })
@@ -53,15 +54,15 @@ router.post("/", async (req, res, next) => {
 // Edit Existing Privilege
 router.put("/", async (req, res, next) => {
   // make sure the privilege exists
-  const checkPrivExists = await privileges.findById(req.body.id);
+  const checkPrivExists = await common.getResourceBy({id: req.body.id}, 'privileges');
   if (!checkPrivExists) {
     return res.status(404).json({
       Error: `The privilege id '${req.body.id}' does not exist`,
     });
   }
 
-  privileges
-    .updatePrivilege(req.body)
+  common
+    .updateResource(req.body, 'privileges')
     .then((updateRes) => {
       res.status(200).json(updateRes[0]);
     })
@@ -70,8 +71,10 @@ router.put("/", async (req, res, next) => {
 
 // DELETE a privilege
 router.delete("/:id", async (req, res, next) => {
+  // TODO: make sure no user has this privilege, cannot delete if in use due to foriegn key constraints.
+
   // make sure privilege exists
-  const checkPrivExists = await privileges.findById(req.params.id);
+  const checkPrivExists = await common.getResourceBy({ id: req.params.id }, 'privileges');
 
   if (!checkPrivExists) {
     return res
@@ -80,8 +83,8 @@ router.delete("/:id", async (req, res, next) => {
   }
 
   // Delete the privilege
-  privileges
-    .deletePrivilege(req.params.id)
+  common
+    .deleteResource(req.params.id, 'privileges')
     .then((delRes) => {
       if (delRes) {
         checkPrivExists.message = "Successfully Deleted";

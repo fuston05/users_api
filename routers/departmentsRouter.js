@@ -1,14 +1,13 @@
-// Departments Router
+// *** Departments Router ***
 const express = require("express");
-const dbConfig = require("../data/db-config");
 const router = express.Router();
 
-const { departments } = require("../models");
+const { common } = require("../models");
 
 // GET all departments
 router.get("/", (req, res, next) => {
-  departments
-    .find()
+  common
+    .getAllResource("departments")
     .then((depRes) => {
       if (depRes) {
         return res.status(200).json(depRes);
@@ -22,8 +21,9 @@ router.get("/", (req, res, next) => {
 
 // GET department by ID
 router.get("/:id", (req, res, next) => {
-  departments
-    .findById(req.params.id)
+  const { id } = req.params;
+  common
+    .getResourceBy({ id: id }, "departments")
     .then((depIdRes) => {
       if (depIdRes) {
         return res.status(200).json(depIdRes);
@@ -36,7 +36,10 @@ router.get("/:id", (req, res, next) => {
 // Create a new department
 router.post("/", async (req, res, next) => {
   // make sure department name does not already exist
-  const checkDeptExists = await departments.findByName(req.body.department);
+  const checkDeptExists = await common.getResourceBy(
+    { department: req.body.department },
+    "departments"
+  );
 
   if (checkDeptExists) {
     return res.status(409).json({
@@ -44,8 +47,8 @@ router.post("/", async (req, res, next) => {
     });
   }
 
-  departments
-    .createDept(req.body)
+  common
+    .addResource(req.body, "departments")
     .then((createRes) => {
       res.status(201).json(createRes);
     })
@@ -55,15 +58,18 @@ router.post("/", async (req, res, next) => {
 // Update existing department
 router.put("/", async (req, res, next) => {
   // make sure department name exists
-  const checkDeptExists = await departments.findById(req.body.id);
+  const checkDeptExists = await common.getResourceBy(
+    { id: req.body.id },
+    "departments"
+  );
 
   if (!checkDeptExists) {
     return res.status(404).json({
       Error: `The Department id '${req.body.id}' does not exist`,
     });
   }
-  departments
-    .updateDept(req.body)
+  common
+    .updateResource(req.body, "departments")
     .then((updateRes) => {
       res.status(200).json(updateRes[0]);
     })
@@ -73,14 +79,19 @@ router.put("/", async (req, res, next) => {
 // Delete an existing department by ID
 router.delete("/:id", async (req, res, next) => {
   // check department id exists
-  const checkDeptExists = await departments.findById(req.params.id);
+  const checkDeptExists = await common.getResourceBy(
+    { id: req.params.id },
+    "departments"
+  );
 
   if (!checkDeptExists) {
-    return res.status(404).json({ Error: `The privilege id '${req.params.id}' does not exist` });
+    return res
+      .status(404)
+      .json({ Error: `The privilege id '${req.params.id}' does not exist` });
   }
 
-  departments
-    .deleteDept(req.params.id)
+  common
+    .deleteResource(req.params.id, "departments")
     .then((delRes) => {
       if (delRes) {
         checkDeptExists.message = "Successfully Deleted";

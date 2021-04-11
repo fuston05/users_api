@@ -1,5 +1,5 @@
-// users-model, shared by userRouter, and authRouter
-// /////////////////////////////////////////////////
+// *** Users-model, shared by userRouter, and authRouter ***
+
 const db = require("../data/db-config");
 
 module.exports = {
