@@ -10,7 +10,6 @@ module.exports = {
   login,
   register,
   updateUser,
-  // deleteUser,
 };
 
 // get all users
@@ -128,8 +127,3 @@ function updateUser(userInfo) {
     .update(userInfo, ["id", "userName"])
     .where({ id: userInfo.id });
 }
-
-// returns number of affected rows (1 on success, otherwise 0)
-// function deleteUser(id) {
-//   return db("users").where({ id: id }).del();
-// }
