@@ -1,6 +1,5 @@
 // privileges Router
 const express = require("express");
-const dbConfig = require("../data/db-config");
 const router = express.Router();
 
 const { isLoggedIn } = require("../middleware");
