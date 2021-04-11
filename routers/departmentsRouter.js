@@ -3,11 +3,10 @@ const express = require("express");
 const dbConfig = require("../data/db-config");
 const router = express.Router();
 
-const { isLoggedIn } = require("../middleware");
 const { departments } = require("../models");
 
 // GET all departments
-router.get("/", isLoggedIn, (req, res, next) => {
+router.get("/", (req, res, next) => {
   departments
     .find()
     .then((depRes) => {
@@ -22,7 +21,7 @@ router.get("/", isLoggedIn, (req, res, next) => {
 });
 
 // GET department by ID
-router.get("/:id", isLoggedIn, (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   departments
     .findById(req.params.id)
     .then((depIdRes) => {

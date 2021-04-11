@@ -27,8 +27,8 @@ const { userRouter, authRouter ,privilegeRouter, departmentsRouter } = require("
 // use routers
 server.use("/users", isLoggedIn, userRouter);
 server.use("/auth", authRouter);
-server.use("/privileges", privilegeRouter);
-server.use("/departments", departmentsRouter);
+server.use("/privileges", isLoggedIn, privilegeRouter);
+server.use("/departments", isLoggedIn, departmentsRouter);
 
 // root route
 server.get("/", (req, res) => {

@@ -2,11 +2,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { isLoggedIn } = require("../middleware");
 const { privileges } = require("../models");
 
 // GET all provileges info
-router.get("/", isLoggedIn, (req, res, next) => {
+router.get("/", (req, res, next) => {
   privileges
     .find()
     .then((privRes) => {
@@ -21,7 +20,7 @@ router.get("/", isLoggedIn, (req, res, next) => {
 });
 
 // GET privilege by ID
-router.get("/:id", isLoggedIn, (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   privileges
     .findById(req.params.id)
     .then((privRes) => {
@@ -34,7 +33,7 @@ router.get("/:id", isLoggedIn, (req, res, next) => {
 });
 
 // Create a New Privilege
-router.post("/", isLoggedIn, async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   // if privilege name is already in use
   const checkPrivExists = await privileges.findByName(req.body.privilege);
 
@@ -52,15 +51,13 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 });
 
 // Edit Existing Privilege
-router.put("/", isLoggedIn, async (req, res, next) => {
+router.put("/", async (req, res, next) => {
   // make sure the privilege exists
   const checkPrivExists = await privileges.findById(req.body.id);
   if (!checkPrivExists) {
-    return res
-      .status(404)
-      .json({
-        Error: `The privilege id '${req.body.id}' does not exist`,
-      });
+    return res.status(404).json({
+      Error: `The privilege id '${req.body.id}' does not exist`,
+    });
   }
 
   privileges
@@ -72,12 +69,14 @@ router.put("/", isLoggedIn, async (req, res, next) => {
 });
 
 // DELETE a privilege
-router.delete("/:id", isLoggedIn, async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   // make sure privilege exists
   const checkPrivExists = await privileges.findById(req.params.id);
 
   if (!checkPrivExists) {
-    return res.status(404).json({ Error: `The privilege id '${req.params.id}' does not exist` });
+    return res
+      .status(404)
+      .json({ Error: `The privilege id '${req.params.id}' does not exist` });
   }
 
   // Delete the privilege
