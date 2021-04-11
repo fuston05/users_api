@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { users } = require("../models");
+const { users, common } = require("../models");
 
 // get all users
 //  -if logged in
@@ -48,10 +48,9 @@ router.put("/", (req, res, next) => {
 
 // delete a user
 router.delete("/:id", (req, res, next) => {
-  const { id } = req.params;
   // returns number of affected rows
-  users
-    .deleteUser(id)
+  common
+    .deleteResource(req.params.id, 'users')
     .then((delRes) => {
       res.status(200).json(delRes);
     })
