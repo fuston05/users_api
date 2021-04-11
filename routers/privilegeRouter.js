@@ -6,7 +6,7 @@ const { isLoggedIn } = require("../middleware");
 const { privileges } = require("../models");
 
 // GET all provileges info
-router.get("/", (req, res, next) => {
+router.get("/", isLoggedIn, (req, res, next) => {
   privileges
     .find()
     .then((privRes) => {
@@ -21,7 +21,7 @@ router.get("/", (req, res, next) => {
 });
 
 // GET privilege by ID
-router.get("/:id", (req, res, next) => {
+router.get("/:id", isLoggedIn, (req, res, next) => {
   privileges
     .findById(req.params.id)
     .then((privRes) => {
@@ -34,7 +34,7 @@ router.get("/:id", (req, res, next) => {
 });
 
 // Create a New Privilege
-router.post("/", async (req, res, next) => {
+router.post("/", isLoggedIn, async (req, res, next) => {
   // if privilege name is already in use
   const checkPrivExists = await privileges.findByName(req.body.privilege);
 
@@ -52,7 +52,7 @@ router.post("/", async (req, res, next) => {
 });
 
 // Edit Existing Privilege
-router.put("/", async (req, res, next) => {
+router.put("/", isLoggedIn, async (req, res, next) => {
   // make sure the privilege exists
   const checkPrivExists = await privileges.findById(req.body.id);
   if (!checkPrivExists) {
@@ -69,7 +69,7 @@ router.put("/", async (req, res, next) => {
 });
 
 // DELETE a privilege
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", isLoggedIn, async (req, res, next) => {
   // make sure privilege exists
   const checkPrivExists = await privileges.findById(req.params.id);
 
