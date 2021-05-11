@@ -2,14 +2,21 @@
 const express = require("express");
 const router = express.Router();
 
-const { common } = require("../models");
+const { common, departments } = require("../models");
 
 // GET all departments
 router.get("/", (req, res, next) => {
-  common
-    .getAllResource("departments")
+  departments
+    .find()
     .then((depRes) => {
+      console.log("departments: ", depRes);
       if (depRes) {
+        depRes.map((dep) => {
+          dep.manager = `${dep.firstName} ${dep.lastName}`;
+          dep.manager_link= `localhost:5001/users/${dep.id}`
+          delete dep.firstName;
+          delete dep.lastName;
+        });
         return res.status(200).json(depRes);
       }
       res

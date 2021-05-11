@@ -1,20 +1,35 @@
 // *** Departments Model ***
 
+const { json } = require("express");
 const db = require("../data/db-config");
 
-// module.exports = {
-//   find,
-//   findById,
-//   findByName,
-//   createDept,
-//   updateDept,
-//   deleteDept,
-// };
+module.exports = {
+  find,
+  // findById,
+  // findByName,
+  // createDept,
+  // updateDept,
+  // deleteDept,
+};
 
-// // GET all departments
-// function find() {
-//   return db("departments").select("*");
-// }
+// GET all departments
+function find() {
+  return db("departments as d")
+    .join("users as u", function () {
+      this.on("u.job_title_id", "=", db.raw(1)).andOn(
+        "u.department_id",
+        "=",
+        "d.id"
+      );
+    })
+    .select(
+      "d.department",
+      "d.description",
+      "u.id as manager_id",
+      "u.firstName",
+      "u.lastName"
+    );
+}
 
 // // GET a department by ID
 // function findById(id) {

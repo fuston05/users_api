@@ -2,7 +2,7 @@ exports.seed = function (knex) {
   // Inserts seed entries
   return knex("job_titles").insert([
     {
-      job_title: "Account Coordinator",
+      job_title: "Manager",
       starting_salary: 105090,
     },
     {
