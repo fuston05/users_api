@@ -11,9 +11,15 @@ router.get("/", (req, res, next) => {
     .then((depRes) => {
       console.log("departments: ", depRes);
       if (depRes) {
+        // restructure result
         depRes.map((dep) => {
+          // add 'manager' key
           dep.manager = `${dep.firstName} ${dep.lastName}`;
-          dep.manager_link= `localhost:5001/users/${dep.id}`
+
+          // add 'manager_link' key to manager(user) resource
+          dep.manager_link = `${req.protocol}://${req.headers.host}/users/${dep.manager_id}`
+          
+          // delete, not needed anymore in the result
           delete dep.firstName;
           delete dep.lastName;
         });
